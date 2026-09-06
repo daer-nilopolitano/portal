@@ -1,0 +1,25 @@
+# Ambientes virtuais / dependências
+backend/venv/
+backend/.venv/
+**/__pycache__/
+*.pyc
+frontend/node_modules/
+
+# Variáveis de ambiente
+backend/.env
+frontend/.env.local
+
+# Django
+backend/staticfiles/
+backend/media/
+backend/db.sqlite3
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Editor / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

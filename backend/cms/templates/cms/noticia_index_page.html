@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <ul>
+        {% for noticia in noticias %}
+            <li><a href="{% pageurl noticia %}">{{ noticia.title }}</a> — {{ noticia.data_publicacao }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

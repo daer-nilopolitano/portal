@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <ul>
+        {% for evento in eventos %}
+            <li><a href="{% pageurl evento %}">{{ evento.title }}</a> — {{ evento.data_evento }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
