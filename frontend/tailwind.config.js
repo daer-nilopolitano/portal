@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
+        body: ["var(--font-body)", "system-ui", "sans-serif"],
+      },
       colors: {
         // Paleta base do DAER Nilopolitano — azul, branco e amarelo.
         // Ajustar os tons exatos a partir do logo/insígnia enviados.

@@ -1,0 +1,35 @@
+/* Correções visuais do Jazzmin 3.0.5 */
+
+/* Calendário e relógio (widget nativo do Django admin) */
+.calendarbox, .clockbox {
+    background: var(--bs-body-bg, #fff);
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .375rem;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+    padding: .5rem;
+    z-index: 1050;
+}
+.calendar caption, .calendarnav-next a, .calendarnav-previous a {
+    color: var(--bs-primary, #0d6efd);
+}
+.calendar td a, .timelist a {
+    padding: .25rem .5rem;
+    border-radius: .25rem;
+}
+.calendar td a:hover, .timelist a:hover {
+    background: var(--bs-primary, #0d6efd);
+    color: #fff;
+}
+.calendar-shortcuts, .timelist { padding-top: .25rem; }
+
+/* Ícone com fundo verde nas Ações recentes */
+.recent-actions-module .mini.icon,
+.recent-actions-module .changelist-icon {
+    background: transparent !important;
+    color: var(--bs-primary, #0d6efd);
+    width: auto;
+    height: auto;
+}
+
+/* Avatar do usuário na sidebar */
+.user-image { width: 2rem; height: 2rem; }

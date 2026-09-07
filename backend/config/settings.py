@@ -107,6 +107,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -123,6 +124,11 @@ WAGTAILADMIN_BASE_URL = os.environ.get(
     "WAGTAILADMIN_BASE_URL", "http://localhost:8000"
 )
 
+# Autenticação da API (JWT simples, sem refresh token por enquanto — ver core/auth.py).
+# Por padrão reaproveita a SECRET_KEY do Django; em produção, defina um valor próprio em JWT_SECRET_KEY no .env.
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)
+JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080"))  # 7 dias
+
 # Configuração básica do django-jazzmin (tema do Django Admin).
 # Ajustar cores/logo depois, quando o logo do DAER estiver disponível como arquivo estático.
 JAZZMIN_SETTINGS = {
@@ -131,4 +137,8 @@ JAZZMIN_SETTINGS = {
     "site_brand": "DAER Nilopolitano",
     "welcome_sign": "Administração do DAER Nilopolitano",
     "copyright": "DAER Nilopolitano",
+    "custom_css": "css/jazzmin-fixes.css",
+    "site_logo": "img/logo.png",
+    "login_logo": None,
+    "site_logo_classes": "img-fluid",
 }

@@ -10,6 +10,7 @@ por evento no futuro.
 import uuid
 from datetime import date
 
+from django.conf import settings
 from django.db import models
 
 
@@ -83,6 +84,16 @@ class Pessoa(models.Model):
     )
     ativo = models.BooleanField(default=True)
 
+    # Login da pessoa no sistema (diretoria, conselheiro ou embaixador do rei todos podem ter conta, conforme decidido).
+    # Fica nulo até alguém (Diretoria ou o próprio conselheiro da embaixada) criar o acesso via endpoint dedicado — ver core/api/pessoas.py.
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="pessoa",
+    )
+
     class Meta:
         verbose_name = "Pessoa"
         verbose_name_plural = "Pessoas"
@@ -110,6 +121,21 @@ class Pessoa(models.Model):
         if 15 <= idade <= 17:
             return "juvenil"
         return None
+
+    @property
+    def papel_atual(self) -> "Papel | None":
+        """
+        Papel vigente hoje (data_inicio <= hoje e data_fim nulo ou futuro).
+        Uma pessoa pode ter mais de um Papel ao longo do tempo (ex.: foi conselheiro e depois entrou para a diretoria).
+        Este é o que vale para checagens de permissão na API.
+        """
+        hoje = date.today()
+        return (
+            self.papeis.filter(data_inicio__lte=hoje)
+            .filter(models.Q(data_fim__isnull=True) | models.Q(data_fim__gte=hoje))
+            .order_by("-data_inicio")
+            .first()
+        )
 
 
 class Papel(models.Model):

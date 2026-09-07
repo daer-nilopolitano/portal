@@ -45,19 +45,19 @@ No Wagtail Admin, a primeira página a criar é a **Home Page** (sob "Root"), de
 
 ## Rodando sem Docker (ex.: Windows + PyCharm)
 
-Para rodar sem Docker, não precisa de alterar a lógica do projeto — só a forma de configurar o ambiente muda. O `.env` já é carregado automaticamente pelo `settings.py` via `python-dotenv`.
+Dá pra rodar tudo direto, sem alterar a lógica do projeto — só a forma de configurar o ambiente muda. O `.env` já é carregado automaticamente pelo `settings.py` via `python-dotenv`.
 
 ### Backend (Django)
 
-1. Crie e ative um ambiente virtual, depois instale as dependências:
+1. Crie e ative um ambiente virtual, depois instale as dependências (Django 5.2 LTS + Wagtail 7.x já suportam versões recentes do Python, então não precisa se preocupar em travar numa versão específica):
    ```bash
    cd backend
    python -m venv venv
    venv\Scripts\activate        # no Windows (cmd/PowerShell)
    pip install -r requirements.txt
    ```
-2. Copie o `.env.example` para `.env` (`copy .env.example .env` no Windows) e ajuste o `DATABASE_URL`.
-3. Gere e aplique as migrações:
+2. Copie o `.env.example` para `.env` (`copy .env.example .env` no Windows) e ajuste o `DATABASE_URL`. Como você não tem Postgres nem Docker instalados, o caminho mais rápido é criar agora mesmo um projeto gratuito no **Neon** ou **Supabase** e colar a connection string dele em `DATABASE_URL` — é o mesmo banco que seria usado em produção, só que já disponível hoje. (Alternativa: instalar o Postgres localmente no Windows e apontar para `localhost`.)
+3. Gere e aplique as migrações — isso ainda não foi feito neste scaffold, então o primeiro comando é `makemigrations`, não `migrate` direto:
    ```bash
    python manage.py makemigrations core cms
    python manage.py migrate
@@ -77,22 +77,45 @@ npm run dev
 ```
 Frontend disponível em http://localhost:3000.
 
+## Autenticação (JWT)
+
+A API usa JWT simples (`core/auth.py`): login por e-mail/senha devolve um `access_token`, que vai no header `Authorization: Bearer <token>` nos endpoints protegidos. Não tem refresh token por enquanto (o token dura 7 dias, configurável via `JWT_EXPIRATION_MINUTES`).
+
+Cada Django `User` precisa estar vinculado a uma `Pessoa` (campo `Pessoa.user`) para o login funcionar — é a Pessoa (e o Papel atual dela) que define o que a conta pode fazer:
+- **Diretoria**: acesso total a Embaixada/Pessoa/Papel/Carteirinha.
+- **Conselheiro**: só enxerga e edita pessoas/papéis/carteirinhas da própria embaixada; só pode atribuir o papel `embaixador_do_rei` (não pode promover ninguém a conselheiro/diretoria).
+- **Embaixador do Rei**: sem acesso aos endpoints de gestão — usa `/api/auth/me/` e `/api/carteirinhas/me/`.
+
+### Bootstrap: criando o primeiro login
+
+O endpoint `POST /api/pessoas/{id}/criar-acesso/` **exige estar autenticado** (é assim de propósito, pra só Diretoria/conselheiro darem acesso a outras pessoas). Isso significa que ele não serve pra criar o primeiro login do sistema — ninguém ainda tem token pra chamá-lo. Para o primeiro acesso (tipicamente um membro da Diretoria), faça manualmente pelo Django Admin:
+
+1. Em `/django-admin/auth/user/add/`, crie um usuário com usuário e senha (o *username* pode ser qualquer coisa aqui, mas o mais simples é usar o mesmo e-mail da Pessoa).
+2. Em `/django-admin/core/pessoa/`, edite a Pessoa da Diretoria e selecione esse usuário recém-criado no campo **user**. Salve.
+3. Teste o login em `/api/docs` ou via `POST /api/auth/login/` com `{"email": "<username escolhido>", "senha": "<senha escolhida>"}` — repare que o login usa o *username* do Django User como "email" (por isso o passo 1 recomenda usar o e-mail real da pessoa como username, pra não confundir depois).
+
+Depois desse primeiro acesso, essa pessoa da Diretoria já pode usar `POST /api/pessoas/{id}/criar-acesso/` para dar login a todo mundo (incluindo os conselheiros, que por sua vez criam acesso para os próprios embaixadores).
+
+## O que já está pronto
 
 - Models de negócio (`core/models.py`) para as entidades fechadas no planejamento: Igreja, Embaixada, Pessoa, Papel e Carteirinha, com faixa etária calculada a partir da data de nascimento.
-- Django Admin configurado para essas entidades (uso interno da diretoria/conselheiros enquanto as telas React não existem).
+- Django Admin configurado para essas entidades (uso interno da diretoria/conselheiros enquanto as telas React não existem), com tema do **django-jazzmin** já aplicado.
 - Páginas Wagtail para Home, páginas institucionais simples (Sobre/Contato), Notícias e Eventos — Evento fica como página por enquanto; o modelo Django equivalente está comentado em `core/models.py`, pronto para ativar se precisar de inscrição/confirmação de presença no futuro.
-- Router de exemplo do Django Ninja (`core/api.py`) listando as igrejas — serve de modelo para os próximos endpoints (embaixadas, pessoas, papéis, carteirinha).
-- Scaffold do Next.js com Tailwind configurado com uma paleta inicial azul/branco/amarelo (ajustar os tons exatos a partir do logo enviado).
+- API completa do Django Ninja (`core/api/`, um módulo por entidade) cobrindo Igreja (leitura pública), Embaixada, Pessoa, Papel e Carteirinha (CRUD completo, com autenticação JWT e permissão por papel), além do endpoint público de verificação por QR code em `/api/carteirinhas/verificar/{identificador}/`.
+- Site institucional como **página única**: `app/(public)/page.tsx` compõe as seções Sobre (`components/sobre-secao.tsx`, com o texto institucional real), Eventos/Cronograma (`components/eventos-secao.tsx`, timeline vertical reaproveitada da seção Sobre) e Embaixadas (`components/embaixadas-secao.tsx`, lista + mapa Leaflet buscando `/api/igrejas/`). Notícias e Contato ficaram de fora por decisão do usuário — a pasta `app/(public)/noticias/` continua existindo como placeholder, só não está mais no menu.
+- Mapa via **Leaflet + OpenStreetMap** (sem chave de API). Como o Leaflet manipula o DOM diretamente, o componente real (`embaixadas-mapa-interno.tsx`) só carrega no client via `next/dynamic` com `ssr:false` (`embaixadas-mapa.tsx`) — necessário porque a lib quebra em SSR.
+  - **Atenção**: `Igreja.latitude`/`longitude` não são preenchidos automaticamente a partir do endereço — precisa cadastrar as coordenadas manualmente pelo Django Admin (pegar no Google Maps) pra cada igreja aparecer no mapa.
+- `app/(app)/` — área logada, protegida por `AuthProvider` + `AppShell` (sidebar cujos itens mudam conforme o papel: Diretoria vê tudo, Conselheiro só Embaixadores/Carteirinha/Materiais). Rotas de gestão ficam sob `/painel/*` (`/painel/embaixadas`, `/painel/conselheiros`, `/painel/embaixadores`, `/painel/materiais`).
+- `app/login/` — formulário de login, fora dos dois grupos acima (sem header/sidebar).
+- `lib/auth-context.tsx` — contexto de autenticação (token JWT + dados da Pessoa logada via `/api/auth/me/`); token guardado em `localStorage` por simplicidade no MVP (ver TODO de segurança no próprio arquivo sobre migrar para cookie httpOnly no futuro).
 - `docker-compose.yml` já orquestrando os três serviços.
 
 ## O que falta (próximos passos de código)
 
-1. Rodar `makemigrations`/`migrate` para gerar a primeira migração das entidades de `core`.
-2. Cadastrar a primeira embaixada real (Igreja + Embaixada + Pessoa/conselheiro) via Django Admin.
-3. Criar os endpoints Ninja que faltam: Embaixada, Pessoa, Papel, Carteirinha (com as regras de permissão por papel).
-4. Implementar a autenticação (Django + JWT ou sessão, a decidir) e o controle de acesso por papel nas rotas da API.
-5. Construir as telas do Next.js seguindo o sitemap: home, sobre, notícias, eventos, mapa, área logada, minha-carteirinha, materiais.
-6. Configurar o deploy real: Vercel (frontend), Northflank (backend), Neon ou Supabase (banco) — os arquivos de ambiente já preveem isso via `DATABASE_URL`.
+1. Rodar `makemigrations`/`migrate` para gerar a migração do novo campo `Pessoa.user`, caso ainda não tenha feito.
+2. Testar a navegação: `/`, `/login` (com o usuário criado no bootstrap) e as rotas de `/painel/*` — confirmar que a sidebar muda conforme o papel de quem loga.
+3. Preencher as páginas públicas (sobre, notícias, eventos, embaixadas/mapa, contato) e as de gestão (`/painel/embaixadas`, `/painel/conselheiros`, `/painel/embaixadores`, `/painel/materiais`, `/minha-carteirinha`) com os dados reais da API — hoje são todas placeholders "Em construção".
+4. Configurar o deploy real: Vercel (frontend), Northflank (backend), Neon ou Supabase (banco) — os arquivos de ambiente já preveem isso via `DATABASE_URL`.
 
 ## Variáveis de ambiente
 
