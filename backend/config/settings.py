@@ -1,7 +1,5 @@
 """
 Configurações do backend do DAER Nilopolitano.
-
-Pensado para rodar via Docker Compose em produção, com o banco em Neon e o próprio backend hospedado no Northflank.
 """
 import os
 from pathlib import Path
@@ -129,16 +127,15 @@ WAGTAILADMIN_BASE_URL = os.environ.get(
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)
 JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080"))  # 7 dias
 
-# Configuração básica do django-jazzmin (tema do Django Admin).
-# Ajustar cores/logo depois, quando o logo do DAER estiver disponível como arquivo estático.
+# Configuração do django-jazzmin (tema do Django Admin).
 JAZZMIN_SETTINGS = {
     "site_title": "DAER Nilopolitano",
     "site_header": "DAER Nilopolitano",
     "site_brand": "DAER Nilopolitano",
     "welcome_sign": "Administração do DAER Nilopolitano",
     "copyright": "DAER Nilopolitano",
-    "custom_css": "css/jazzmin-fixes.css",
     "site_logo": "img/logo.png",
-    "login_logo": None,
+    "login_logo": "img/logo.png",
     "site_logo_classes": "img-fluid",
+    "site_icon": "img/favicon.png",
 }

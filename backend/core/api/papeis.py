@@ -4,7 +4,9 @@ conselheiro ou embaixador do rei — com cargo específico quando for diretoria)
 
 Regras de acesso:
 - Diretoria: pode criar/editar/excluir qualquer Papel.
-- Conselheiro: só pode criar Papel do tipo "embaixador_do_rei", e só para pessoas da própria embaixada.
+- Conselheiro: só pode criar Papel do tipo "embaixador_do_rei", e só para
+  pessoas da própria embaixada (não pode promover ninguém a conselheiro ou
+  diretoria — isso é decisão da Diretoria).
 """
 from datetime import date
 from typing import Optional
@@ -13,7 +15,7 @@ from django.shortcuts import get_object_or_404
 from ninja import Query, Router, Schema
 from ninja.errors import HttpError
 
-from core.auth import AuthBearer, pessoa_do_usuario
+from ..auth import AuthBearer, pessoa_do_usuario
 from ..models import Papel, Pessoa
 
 router = Router(tags=["papeis"], auth=AuthBearer())
@@ -110,7 +112,8 @@ def criar_papel(request, payload: PapelIn):
         if not (eh_conselheiro_do_alvo and payload.tipo == Papel.Tipo.EMBAIXADOR_DO_REI):
             raise HttpError(
                 403,
-                "Conselheiros só podem atribuir o papel 'embaixador_do_rei', e apenas para pessoas da própria embaixada.",
+                "Conselheiros só podem atribuir o papel 'embaixador_do_rei', "
+                "e apenas para pessoas da própria embaixada.",
             )
 
     papel = Papel.objects.create(
@@ -125,8 +128,9 @@ def criar_papel(request, payload: PapelIn):
 
 @router.put("/{papel_id}/", response=PapelOut)
 def atualizar_papel(request, papel_id: int, payload: PapelUpdate):
-    # Edição/exclusão de papel (promoções, encerramento de mandato) fica restrita à Diretoria.
-    # É uma operação mais sensível que o cadastro inicial de um embaixador.
+    # Edição/exclusão de papel (promoções, encerramento de mandato) fica
+    # restrita à Diretoria por enquanto — é uma operação mais sensível que
+    # o cadastro inicial de um embaixador.
     pessoa_logada = pessoa_do_usuario(request.auth)
     if not _pessoa_logada_eh_diretoria(pessoa_logada):
         raise HttpError(403, "Editar um papel existente é uma ação restrita à Diretoria.")

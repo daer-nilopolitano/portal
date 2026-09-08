@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -18,8 +19,11 @@ export function SiteHeader() {
   return (
     <header className="border-b border-daer-blue/15 bg-white">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-heading text-lg font-semibold text-daer-blue">
-          DAER Nilopolitano
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo-daer.png" alt="" width={36} height={39} priority />
+          <span className="font-heading text-lg font-semibold text-daer-blue">
+            DAER Nilopolitano
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

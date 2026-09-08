@@ -1,10 +1,12 @@
 """
 Autenticação e autorização da API.
 
-Abordagem: JWT simples (um único access token, sem refresh token por enquanto - TODO se o tempo de expiração de 7 dias
-se mostrar curto demais na prática). O token carrega só o id do usuário Django; a Pessoa e o papel atual são resolvidos
-a cada request a partir dele, então uma mudança de papel (ex.: promovido a diretoria) já vale no próximo request, sem
-precisar gerar um novo token.
+Abordagem: JWT simples (um único access token, sem refresh token por
+enquanto — TODO se o tempo de expiração de 7 dias se mostrar curto demais
+na prática). O token carrega só o id do usuário Django; a Pessoa e o papel
+atual são resolvidos a cada request a partir dele, então uma mudança de
+papel (ex.: promovido a diretoria) já vale no próximo request, sem precisar
+gerar um novo token.
 """
 from datetime import datetime, timedelta, timezone
 
@@ -14,7 +16,7 @@ from django.contrib.auth import get_user_model
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
-from core.models import Papel, Pessoa
+from .models import Papel, Pessoa
 
 User = get_user_model()
 
@@ -48,8 +50,9 @@ class AuthBearer(HttpBearer):
 
 def pessoa_do_usuario(user) -> Pessoa:
     """
-    Devolve a Pessoa vinculada ao usuário autenticado, ou levanta 403 se o usuário não tiver uma Pessoa associada (não
-    deveria acontecer em uso normal, mas é possível com um superusuário criado direto no Django).
+    Devolve a Pessoa vinculada ao usuário autenticado, ou levanta 403 se o
+    usuário não tiver uma Pessoa associada (não deveria acontecer em uso
+    normal, mas é possível com um superusuário criado direto no Django).
     """
     pessoa = getattr(user, "pessoa", None)
     if pessoa is None:
@@ -68,8 +71,8 @@ def exigir_diretoria(request):
 
 def exigir_diretoria_ou_conselheiro_da_embaixada(request, embaixada_id: int):
     """
-    Levanta 403 a menos que a pessoa logada seja da Diretoria, ou seja,
-    o conselheiro responsável pela embaixada em questão (cadastro descentralizado).
+    Levanta 403 a menos que a pessoa logada seja da Diretoria, ou seja, o
+    conselheiro responsável pela embaixada em questão (cadastro descentralizado).
     """
     pessoa = pessoa_do_usuario(request.auth)
     papel = pessoa.papel_atual

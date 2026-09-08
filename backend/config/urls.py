@@ -19,9 +19,7 @@ urlpatterns = [
     path("cms-admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("api/", api.urls),
-    # Notícias, eventos e páginas institucionais consumidos de forma headless pelo Next.js
     path("api/cms/", wagtail_api_router.urls),
-    # Página do Wagtail - só é usado pelo preview/admin do Wagtail, o site público real é servido pelo Next.js
     path("", include(wagtail_urls)),
 ]
 

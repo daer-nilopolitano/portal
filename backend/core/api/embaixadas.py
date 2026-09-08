@@ -10,7 +10,7 @@ from typing import Optional
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 
-from core.auth import AuthBearer, exigir_diretoria
+from ..auth import AuthBearer, exigir_diretoria
 from ..models import Embaixada, Igreja, Pessoa
 
 router = Router(tags=["embaixadas"], auth=AuthBearer())

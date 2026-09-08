@@ -3,8 +3,10 @@ Endpoints de gestão de Pessoas (diretoria, conselheiros, embaixadores do rei).
 
 Regras de acesso (cadastro descentralizado, conforme decidido no planejamento):
 - Diretoria: lê e escreve pessoas de qualquer embaixada.
-- Conselheiro: lê e escreve só pessoas da própria embaixada (a que ele é responsável).
-- Embaixador do Rei: não tem acesso a estes endpoints de gestão — usa /api/auth/me/ e /api/carteirinhas/me/ para seus dados.
+- Conselheiro: lê e escreve só pessoas da própria embaixada (a que ele é
+  responsável).
+- Embaixador do Rei: não tem acesso a estes endpoints de gestão — usa
+  /api/auth/me/ e /api/carteirinhas/me/ para ver os próprios dados.
 """
 from datetime import date
 from typing import Optional
@@ -14,7 +16,7 @@ from django.shortcuts import get_object_or_404
 from ninja import Query, Router, Schema
 from ninja.errors import HttpError
 
-from core.auth import AuthBearer, pessoa_do_usuario
+from ..auth import AuthBearer, pessoa_do_usuario
 from ..models import Embaixada, Papel, Pessoa
 
 router = Router(tags=["pessoas"], auth=AuthBearer())
@@ -69,7 +71,7 @@ class PessoaUpdate(Schema):
 class PessoaFiltros(Schema):
     embaixada_id: Optional[int] = None
     ativo: Optional[bool] = None
-    # Filtro calculado em Python (não é campo de banco).
+    # Filtro calculado em Python (não é campo de banco) — ver nota na view.
     faixa_etaria: Optional[str] = None
 
 
@@ -111,7 +113,9 @@ def listar_pessoas(request, filtros: PessoaFiltros = Query(...)):
     if filtros.ativo is not None:
         qs = qs.filter(ativo=filtros.ativo)
 
-    # faixa_etaria é uma property calculada a partir de data_nascimento, não um campo de banco, filtrando em Python.
+    # faixa_etaria é uma property calculada a partir de data_nascimento, não
+    # um campo de banco — por isso filtra em Python. Se a lista de pessoas
+    # crescer muito, vale migrar para uma annotation com Case/When no futuro.
     if filtros.faixa_etaria:
         qs = [p for p in qs if p.faixa_etaria == filtros.faixa_etaria]
 
@@ -168,9 +172,10 @@ def excluir_pessoa(request, pessoa_id: int):
 @router.post("/{pessoa_id}/criar-acesso/", response={201: dict})
 def criar_acesso(request, pessoa_id: int, payload: CriarAcessoIn):
     """
-    Cria o login (Django User) de uma Pessoa que ainda não tem conta.
-    Usado pela Diretoria ou pelo conselheiro responsável para dar acesso a um embaixador/conselheiro recém-cadastrado.
-    Requer que a Pessoa já tenha um e-mail cadastrado (vira o username).
+    Cria o login (Django User) de uma Pessoa que ainda não tem conta —
+    usado pela Diretoria ou pelo conselheiro responsável para dar acesso a
+    um embaixador/conselheiro recém-cadastrado. Requer que a Pessoa já
+    tenha um e-mail cadastrado (vira o username).
     """
     from django.contrib.auth import get_user_model
 

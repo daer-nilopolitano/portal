@@ -84,8 +84,10 @@ class Pessoa(models.Model):
     )
     ativo = models.BooleanField(default=True)
 
-    # Login da pessoa no sistema (diretoria, conselheiro ou embaixador do rei todos podem ter conta, conforme decidido).
-    # Fica nulo até alguém (Diretoria ou o próprio conselheiro da embaixada) criar o acesso via endpoint dedicado — ver core/api/pessoas.py.
+    # Login da pessoa no sistema (diretoria, conselheiro ou embaixador do rei
+    # — todos podem ter conta, conforme decidido no planejamento). Fica nulo
+    # até alguém (Diretoria ou o próprio conselheiro da embaixada) criar o
+    # acesso via endpoint dedicado — ver core/api/pessoas.py.
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -126,8 +128,9 @@ class Pessoa(models.Model):
     def papel_atual(self) -> "Papel | None":
         """
         Papel vigente hoje (data_inicio <= hoje e data_fim nulo ou futuro).
-        Uma pessoa pode ter mais de um Papel ao longo do tempo (ex.: foi conselheiro e depois entrou para a diretoria).
-        Este é o que vale para checagens de permissão na API.
+        Uma pessoa pode ter mais de um Papel ao longo do tempo (ex.: foi
+        conselheiro e depois entrou pra diretoria) — este é o que vale
+        para checagens de permissão na API.
         """
         hoje = date.today()
         return (

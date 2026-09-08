@@ -1,8 +1,9 @@
 """
 Router-mestre da API do sistema de gestão (Django Ninja).
 
-Cada entidade tem o seu próprio módulo de router aqui dentro; este arquivo só combina todos eles sob os prefixos certos.
-Registrado uma única vez em config/urls.py.
+Cada entidade tem seu próprio módulo de router aqui dentro; este arquivo só
+combina todos eles sob os prefixos certos. Registrado uma única vez em
+config/urls.py.
 """
 from ninja import Router
 

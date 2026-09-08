@@ -1,23 +1,28 @@
 """
 Endpoints de Carteirinha digital.
 
-O endpoint de verificação (`/carteirinhas/verificar/{identificador}/`) é público de propósito — é para onde o QR code da
-carteirinha aponta, então qualquer pessoa que escaneie o cartão consegue confirmar que o cadastro é válido, sem precisar
-de estar logada. Ele só devolve o mínimo necessário (nome, embaixada, validade e se está válida) — nunca dados sensíveis
-como telefone, e-mail ou contato do responsável.
+O endpoint de verificação (`/carteirinhas/verificar/{identificador}/`) é
+público de propósito — é para onde o QR code da carteirinha aponta, então
+qualquer pessoa que escaneie o cartão consegue confirmar que o cadastro é
+válido, sem precisar estar logada. Ele só devolve o mínimo necessário
+(nome, embaixada, validade e se está válida) — nunca dados sensíveis como
+telefone, e-mail ou contato do responsável.
 
-Os demais endpoints exigem login: emitir/renovar seguem a mesma regra de Embaixada/Pessoa (Diretoria ou o conselheiro
-responsável pela embaixada da pessoa); `/carteirinhas/me/` é o que a PWA usa para mostrar a carteirinha de quem está
-logado, e funciona para qualquer papel (diretoria, conselheiro ou embaixador do rei).
+Os demais endpoints exigem login: emitir/renovar seguem a mesma regra de
+Embaixada/Pessoa (Diretoria ou o conselheiro responsável pela embaixada da
+pessoa); `/carteirinhas/me/` é o que a PWA usa para mostrar a carteirinha de
+quem está logado, e funciona para qualquer papel (diretoria, conselheiro ou
+embaixador do rei).
 """
 from datetime import date
+from typing import Optional
 from uuid import UUID
 
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 from ninja.errors import HttpError
 
-from core.auth import AuthBearer, pessoa_do_usuario
+from ..auth import AuthBearer, pessoa_do_usuario
 from ..models import Carteirinha, Embaixada, Papel, Pessoa
 
 router = Router(tags=["carteirinhas"], auth=AuthBearer())

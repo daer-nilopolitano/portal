@@ -96,6 +96,18 @@ O endpoint `POST /api/pessoas/{id}/criar-acesso/` **exige estar autenticado** (�
 
 Depois desse primeiro acesso, essa pessoa da Diretoria já pode usar `POST /api/pessoas/{id}/criar-acesso/` para dar login a todo mundo (incluindo os conselheiros, que por sua vez criam acesso para os próprios embaixadores).
 
+## Identidade visual (logo e favicons)
+
+A logo original (`logo_daer_nilopolitano.png`) tinha só 307×364px — pouca resolução pra qualquer uso além de bem pequeno. Usei a versão em `WA0022.jpg` (640×640), removi o fundo quase-branco (deixando transparente) e recortei a sobra transparente, gerando:
+
+- `frontend/public/logo-daer.png` e `backend/static/img/logo.png` — a logo completa (crista + "DAER NILOPOLITANO"), usada no header do site e na sidebar do Jazzmin.
+- Favicons: como o brasão completo fica ilegível em 16×16, o favicon usa só o emblema interno "E.R." (a parte mais reconhecível e simples da logo) — é o padrão comum pra esse problema, nenhuma ferramenta de upscaling resolveria o brasão inteiro em 16px. Gerados em `frontend/app/` (favicon.ico, icon.png, apple-icon.png — convenção nativa do Next.js, sem precisar de código) e em `backend/static/img/favicon.png` (Jazzmin).
+- `frontend/public/android-chrome-192x192.png` e `-512x512.png` + `frontend/app/manifest.ts` — não usados ainda, mas deixam o terreno pronto pra quando a carteirinha virar PWA instalável.
+
+**Se quiser refazer esses recortes no futuro** (ex.: logo em melhor resolução), ferramentas gratuitas úteis: [Photopea](https://www.photopea.com/) (edição tipo Photoshop, no navegador) pra retoque manual, [Inkscape](https://inkscape.org/) (grátis, desktop) se algum dia quiser vetorizar a logo pra escalar sem perda, e [realfavicongenerator.net](https://realfavicongenerator.net/) pra gerar o conjunto completo de favicons automaticamente a partir de uma imagem.
+
+**Sobre o CSS do Jazzmin**: recriei o `jazzmin-fixes.css` que já tinha sido descrito numa conversa anterior (os arquivos nunca tinham sido criados de fato, só sugeridos) e corrigi o `STATICFILES_DIRS`, que estava faltando no `settings.py` — sem ele, o Django não achava a pasta `static/` em desenvolvimento, então o CSS/logo davam 404 mesmo existindo. Não tenho como testar esse CSS contra o Jazzmin 3.0.5 de verdade aqui (sem acesso à instalação rodando), então alguns seletores (principalmente o `.brand-image`/`.login-logo img` que ajustei agora) são uma aposta razoável, não certeza — se a logo aparecer esticada ou cortada na sidebar, me manda um print que eu ajusto.
+
 ## O que já está pronto
 
 - Models de negócio (`core/models.py`) para as entidades fechadas no planejamento: Igreja, Embaixada, Pessoa, Papel e Carteirinha, com faixa etária calculada a partir da data de nascimento.
