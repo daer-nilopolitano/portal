@@ -32,6 +32,10 @@ class CarteirinhaOut(Schema):
     id: int
     pessoa_id: int
     pessoa_nome: str
+    foto_url: Optional[str] = None
+    embaixada_nome: str
+    papel: Optional[str] = None
+    cargo_diretoria: Optional[str] = None
     identificador: UUID
     validade: date
     emitida_em: date
@@ -39,6 +43,24 @@ class CarteirinhaOut(Schema):
     @staticmethod
     def resolve_pessoa_nome(obj: Carteirinha) -> str:
         return obj.pessoa.nome
+
+    @staticmethod
+    def resolve_foto_url(obj: Carteirinha) -> Optional[str]:
+        return obj.pessoa.foto.url if obj.pessoa.foto else None
+
+    @staticmethod
+    def resolve_embaixada_nome(obj: Carteirinha) -> str:
+        return obj.pessoa.embaixada.nome
+
+    @staticmethod
+    def resolve_papel(obj: Carteirinha) -> Optional[str]:
+        papel = obj.pessoa.papel_atual
+        return papel.tipo if papel else None
+
+    @staticmethod
+    def resolve_cargo_diretoria(obj: Carteirinha) -> Optional[str]:
+        papel = obj.pessoa.papel_atual
+        return papel.cargo_diretoria if papel else None
 
 
 class CarteirinhaIn(Schema):
@@ -73,7 +95,9 @@ def _pode_gerenciar_carteirinha_de(pessoa_logada: Pessoa, pessoa_alvo: Pessoa) -
 @router.get("/me/", response=CarteirinhaOut)
 def minha_carteirinha(request):
     pessoa = pessoa_do_usuario(request.auth)
-    carteirinha = get_object_or_404(Carteirinha.objects.select_related("pessoa"), pessoa=pessoa)
+    carteirinha = get_object_or_404(
+        Carteirinha.objects.select_related("pessoa", "pessoa__embaixada"), pessoa=pessoa
+    )
     return carteirinha
 
 
@@ -87,7 +111,7 @@ def detalhar_carteirinha(request, pessoa_id: int):
         raise HttpError(403, "Sem permissão para ver a carteirinha desta pessoa.")
 
     return get_object_or_404(
-        Carteirinha.objects.select_related("pessoa"), pessoa_id=pessoa_id
+        Carteirinha.objects.select_related("pessoa", "pessoa__embaixada"), pessoa_id=pessoa_id
     )
 
 

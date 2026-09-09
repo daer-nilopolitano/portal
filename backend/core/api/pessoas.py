@@ -71,8 +71,9 @@ class PessoaUpdate(Schema):
 class PessoaFiltros(Schema):
     embaixada_id: Optional[int] = None
     ativo: Optional[bool] = None
-    # Filtro calculado em Python (não é campo de banco) — ver nota na view.
+    # Filtros calculados em Python (não são campos de banco) — ver nota na view.
     faixa_etaria: Optional[str] = None
+    papel: Optional[str] = None
 
 
 class CriarAcessoIn(Schema):
@@ -113,11 +114,12 @@ def listar_pessoas(request, filtros: PessoaFiltros = Query(...)):
     if filtros.ativo is not None:
         qs = qs.filter(ativo=filtros.ativo)
 
-    # faixa_etaria é uma property calculada a partir de data_nascimento, não
-    # um campo de banco — por isso filtra em Python. Se a lista de pessoas
-    # crescer muito, vale migrar para uma annotation com Case/When no futuro.
+    # faixa_etaria e papel são calculados em Python (não são campos de banco, faixa_etaria é property e papel_atual depende
+    # de datas) — por isso filtram em Python. Se a lista de pessoas crescer muito, vale migrar para annotations SQL no futuro.
     if filtros.faixa_etaria:
         qs = [p for p in qs if p.faixa_etaria == filtros.faixa_etaria]
+    if filtros.papel:
+        qs = [p for p in qs if p.papel_atual and p.papel_atual.tipo == filtros.papel]
 
     return qs
 

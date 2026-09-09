@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth, type Papel } from "@/lib/auth-context";
+import { ROTULO_PAPEL } from "@/lib/labels";
 
 interface ItemNav {
   href: string;
@@ -11,7 +12,6 @@ interface ItemNav {
   papeis: Papel[];
 }
 
-// Reflete o sitemap da área logada: cada papel só vê o que pode gerenciar.
 const ITENS_NAV: ItemNav[] = [
   { href: "/painel", rotulo: "Painel", papeis: ["diretoria", "conselheiro", "embaixador_do_rei"] },
   { href: "/painel/embaixadas", rotulo: "Embaixadas", papeis: ["diretoria"] },
@@ -24,12 +24,6 @@ const ITENS_NAV: ItemNav[] = [
   },
   { href: "/painel/materiais", rotulo: "Materiais", papeis: ["diretoria", "conselheiro", "embaixador_do_rei"] },
 ];
-
-const ROTULO_PAPEL: Record<Papel, string> = {
-  diretoria: "Diretoria",
-  conselheiro: "Conselheiro",
-  embaixador_do_rei: "Embaixador do Rei",
-};
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { pessoa, carregando, logout } = useAuth();
@@ -51,7 +45,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   if (!pessoa) {
-    // Redirecionamento já disparado no efeito acima — evita piscar conteúdo protegido.
     return null;
   }
 

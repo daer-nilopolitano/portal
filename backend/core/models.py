@@ -12,6 +12,7 @@ from datetime import date
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Igreja(models.Model):
@@ -106,7 +107,7 @@ class Pessoa(models.Model):
 
     @property
     def idade(self) -> int:
-        hoje = date.today()
+        hoje = timezone.localdate()
         nascimento = self.data_nascimento
         return hoje.year - nascimento.year - (
             (hoje.month, hoje.day) < (nascimento.month, nascimento.day)
@@ -132,7 +133,7 @@ class Pessoa(models.Model):
         conselheiro e depois entrou pra diretoria) — este é o que vale
         para checagens de permissão na API.
         """
-        hoje = date.today()
+        hoje = timezone.localdate()
         return (
             self.papeis.filter(data_inicio__lte=hoje)
             .filter(models.Q(data_fim__isnull=True) | models.Q(data_fim__gte=hoje))

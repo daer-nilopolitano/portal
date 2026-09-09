@@ -1,12 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
-
-const ROTULO_PAPEL: Record<string, string> = {
-  diretoria: "Diretoria",
-  conselheiro: "Conselheiro",
-  embaixador_do_rei: "Embaixador do Rei",
-};
+import { ROTULO_PAPEL } from "@/lib/labels";
 
 export default function PainelPage() {
   const { pessoa } = useAuth();
