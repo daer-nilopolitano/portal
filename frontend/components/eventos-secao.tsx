@@ -31,10 +31,10 @@ const CRONOGRAMA: TimelineItem[] = [
 
 export function EventosSecao() {
   return (
-    <section id="eventos" className="border-t border-gray-100 bg-gray-50 px-6 py-20">
+    <section id="eventos" className="border-t border-border bg-surface px-6 py-20">
       <div className="mx-auto max-w-3xl">
         <SectionTitle>Cronograma de Eventos</SectionTitle>
-        <p className="mt-4 text-center text-gray-600">
+        <p className="mt-4 text-center text-text-muted">
           Agenda de atividades do DAER Nilopolitano para o 2º semestre de 2026.
         </p>
         <Timeline items={CRONOGRAMA} className="mt-12" />

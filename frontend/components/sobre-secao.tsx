@@ -26,109 +26,109 @@ const HISTORIA: TimelineItem[] = [
 
 export function SobreSecao() {
   return (
-    <section id="sobre" className="border-t border-gray-100 bg-white px-6 py-20">
+    <section id="sobre" className="border-t border-border bg-surface px-6 py-20">
       <div className="mx-auto max-w-3xl">
         <SectionTitle>Quem Somos</SectionTitle>
 
         <div className="mt-12 space-y-4">
-          <h3 className="text-xl font-semibold text-daer-blue">O DAER Nilopolitano</h3>
-          <p className="text-gray-700">
+          <h3 className="text-xl font-semibold text-primary">O DAER Nilopolitano</h3>
+          <p className="text-text">
             O Departamento Associacional de Embaixadores do Rei (DAER) Nilopolitano é o
             órgão responsável por apoiar, orientar e fortalecer as embaixadas vinculadas
             às igrejas da Associação Batista Nilopolitana.
           </p>
-          <p className="text-gray-700">
+          <p className="text-text">
             Nossa missão é caminhar ao lado das igrejas locais, oferecendo o suporte
             necessário para que a organização Embaixadores do Rei cumpra seu papel
             transformador na vida dos meninos e jovens de Nilópolis.
           </p>
 
-          <h4 className="pt-2 font-semibold text-daer-blue">O que fazemos:</h4>
-          <ul className="space-y-2 text-gray-700">
+          <h4 className="pt-2 font-semibold text-primary">O que fazemos:</h4>
+          <ul className="space-y-2 text-text">
             <li>
-              <strong className="text-daer-blue">Eventos Associacionais:</strong>{" "}
+              <strong className="text-primary">Eventos Associacionais:</strong>{" "}
               Promovemos torneios, conclaves, congressos, mutirões evangelísticos e
               encontros que integram as embaixadas de Nilópolis.
             </li>
             <li>
-              <strong className="text-daer-blue">Treinamento e Suporte:</strong>{" "}
+              <strong className="text-primary">Treinamento e Suporte:</strong>{" "}
               Orientações, treinamentos e suporte prático para conselheiros e líderes
               locais.
             </li>
             <li>
-              <strong className="text-daer-blue">Expansão:</strong> Auxiliamos igrejas
+              <strong className="text-primary">Expansão:</strong> Auxiliamos igrejas
               locais na fundação e estruturação de novas embaixadas.
             </li>
           </ul>
         </div>
 
-        <hr className="my-14 border-dashed border-gray-200" />
+        <hr className="my-14 border-dashed border-border" />
 
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-daer-blue">
+          <h3 className="text-xl font-semibold text-primary">
             A Organização Embaixadores do Rei
           </h3>
-          <p className="text-gray-700">
+          <p className="text-text">
             Os Embaixadores do Rei (ER) é uma organização missionária das Igrejas
             Batistas voltada para meninos de 9 a 17 anos. O objetivo central é promover
             o desenvolvimento físico, moral e espiritual dos garotos, preparando-os para
             servirem a Deus e à sociedade.
           </p>
 
-          <h4 className="pt-2 font-semibold text-daer-blue">Os 5 Ideais do Embaixador:</h4>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-gray-700 sm:grid-cols-3">
-            {["Estudo da Bíblia", "Missões", "Oração", "Mordomia", "Serviço Real"].map(
-              (ideal) => (
-                <li key={ideal} className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-daer-yellow" />
-                  {ideal}
-                </li>
-              )
-            )}
-          </ul>
-
-          <div className="mt-6 border-l-4 border-daer-yellow bg-gray-50 p-5">
-            <p className="text-gray-700">
-              <strong className="text-daer-blue">Tema:</strong> &ldquo;Somos Embaixadores
+          <div className="mt-6 border-l-4 border-accent bg-surface-2 p-5">
+            <p className="text-text">
+              <strong className="text-primary">Tema:</strong> &ldquo;Somos Embaixadores
               por Cristo&rdquo;
             </p>
-            <p className="mt-2 text-gray-700">
-              <strong className="text-daer-blue">Divisa:</strong> &ldquo;De sorte que
+            <p className="mt-2 text-text">
+              <strong className="text-primary">Divisa:</strong> &ldquo;De sorte que
               somos embaixadores por Cristo, como se Deus por nós vos exortasse.
               Rogamo-vos, pois, por Cristo que vos reconcilieis com Deus.&rdquo; (II
               Coríntios 5:20)
             </p>
           </div>
 
-          <h4 className="pt-4 font-semibold text-daer-blue">Identidade e Requisitos:</h4>
-          <dl className="space-y-3 text-gray-700">
+          <h4 className="pt-4 font-semibold text-primary">Identidade e Requisitos:</h4>
+          <dl className="space-y-3 text-text">
             <div>
-              <dt className="font-medium text-daer-blue">Hino Oficial</dt>
-              <dd>Firmando Propósitos</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-daer-blue">Cores</dt>
-              <dd>Azul, Branco e Amarelo</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-daer-blue">Significado</dt>
+              <dt className="font-medium text-primary">Significado</dt>
               <dd>
                 Um embaixador representa seu governo em outro país; o Embaixador do Rei
                 representa Jesus Cristo aqui na terra.
               </dd>
             </div>
             <div>
-              <dt className="font-medium text-daer-blue">Requisitos Mínimos</dt>
+              <dt className="font-medium text-primary">Cores</dt>
+              <dd>Azul, Branco e Amarelo</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-primary">Hino Oficial</dt>
+              <dd>Firmando Propósitos</dd>
+            </div>
+            <div>
+              <dt className="font-medium text-primary">Requisitos Mínimos</dt>
               <dd>
                 Para ser membro de uma embaixada, o menino deve saber o significado do
                 nome, tema, divisa, compromisso e o hino oficial.
               </dd>
             </div>
           </dl>
+
+          <h4 className="pt-2 font-semibold text-primary">Os 5 Ideais do Embaixador:</h4>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-text sm:grid-cols-3">
+            {["Estudo da Bíblia", "Missões", "Oração", "Mordomia", "Serviço Real"].map(
+              (ideal) => (
+                <li key={ideal} className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
+                  {ideal}
+                </li>
+              )
+            )}
+          </ul>
         </div>
 
-        <h4 className="mt-14 mb-8 text-center font-semibold text-daer-blue">
-          Nossa História
+        <h4 className="mt-12 mb-8 pt-2 font-semibold text-primary">
+          Nossa História:
         </h4>
         <Timeline items={HISTORIA} />
       </div>

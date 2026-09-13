@@ -19,15 +19,15 @@ export default async function VerificarCarteirinhaPage({
   ).catch(() => null);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
-      <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
+    <main className="flex min-h-screen items-center justify-center bg-background px-6">
+      <div className="w-full max-w-sm rounded-lg border border-border bg-surface p-8 text-center shadow-sm">
         {!verificacao ? (
           <>
             <XCircle className="mx-auto h-12 w-12 text-red-500" />
-            <p className="mt-4 font-heading text-lg font-semibold text-daer-blue">
+            <p className="mt-4 font-heading text-lg font-semibold text-primary">
               Carteirinha não encontrada
             </p>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-text-muted">
               Verifique se o código do QR está correto.
             </p>
           </>
@@ -38,21 +38,21 @@ export default async function VerificarCarteirinhaPage({
             ) : (
               <XCircle className="mx-auto h-12 w-12 text-red-500" />
             )}
-            <p className="mt-4 font-heading text-lg font-semibold text-daer-blue">
+            <p className="mt-4 font-heading text-lg font-semibold text-primary">
               {verificacao.valida ? "Carteirinha válida" : "Carteirinha inválida ou vencida"}
             </p>
             <div className="mt-6 space-y-1 text-left text-sm">
               <p>
-                <span className="text-gray-500">Nome:</span>{" "}
-                <span className="font-medium text-gray-800">{verificacao.nome}</span>
+                <span className="text-text-muted">Nome:</span>{" "}
+                <span className="font-medium text-text">{verificacao.nome}</span>
               </p>
               <p>
-                <span className="text-gray-500">Embaixada:</span>{" "}
-                <span className="font-medium text-gray-800">{verificacao.embaixada}</span>
+                <span className="text-text-muted">Embaixada:</span>{" "}
+                <span className="font-medium text-text">{verificacao.embaixada}</span>
               </p>
               <p>
-                <span className="text-gray-500">Válida até:</span>{" "}
-                <span className="font-medium text-gray-800">
+                <span className="text-text-muted">Válida até:</span>{" "}
+                <span className="font-medium text-text">
                   {formatarDataBR(verificacao.validade)}
                 </span>
               </p>

@@ -157,6 +157,8 @@ export function PessoasPorPapel({
           method: "POST",
           body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
         });
+        // Papel só é atribuído na criação — editar papel de alguém já existente
+        // é uma ação mais sensível (feita direto no Django Admin por enquanto).
         await apiFetch("/papeis/", {
           token,
           method: "POST",
@@ -206,10 +208,10 @@ export function PessoasPorPapel({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-daer-blue">{titulo}</h1>
+        <h1 className="text-2xl font-bold text-primary">{titulo}</h1>
         <button
           onClick={abrirNovo}
-          className="rounded-md bg-daer-blue px-4 py-2 text-sm font-medium text-white hover:bg-daer-blue-light"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
         >
           + Novo
         </button>
@@ -218,68 +220,68 @@ export function PessoasPorPapel({
       {formularioAberto && (
         <form
           onSubmit={salvar}
-          className="mt-6 grid gap-4 rounded-lg border border-gray-200 bg-white p-5 sm:grid-cols-2"
+          className="mt-6 grid gap-4 rounded-lg border border-border bg-surface p-5 sm:grid-cols-2"
         >
           <div>
-            <label className="block text-sm text-gray-700">Nome</label>
+            <label className="block text-sm text-text">Nome</label>
             <input
               required
               value={formulario.nome}
               onChange={(e) => setFormulario({ ...formulario, nome: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700">Data de nascimento</label>
+            <label className="block text-sm text-text">Data de nascimento</label>
             <input
               required
               type="date"
               value={formulario.data_nascimento}
               onChange={(e) => setFormulario({ ...formulario, data_nascimento: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700">Telefone</label>
+            <label className="block text-sm text-text">Telefone</label>
             <input
               value={formulario.telefone_contato}
               onChange={(e) => setFormulario({ ...formulario, telefone_contato: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700">E-mail</label>
+            <label className="block text-sm text-text">E-mail</label>
             <input
               type="email"
               value={formulario.email}
               onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
 
           {mostraResponsavel && (
             <>
               <div>
-                <label className="block text-sm text-gray-700">Nome do responsável</label>
+                <label className="block text-sm text-text">Nome do responsável</label>
                 <input
                   value={formulario.nome_responsavel}
                   onChange={(e) =>
                     setFormulario({ ...formulario, nome_responsavel: e.target.value })
                   }
-                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+                  className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-700">Telefone do responsável</label>
+                <label className="block text-sm text-text">Telefone do responsável</label>
                 <input
                   value={formulario.telefone_responsavel}
                   onChange={(e) =>
                     setFormulario({ ...formulario, telefone_responsavel: e.target.value })
                   }
-                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+                  className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 />
               </div>
             </>
@@ -287,12 +289,12 @@ export function PessoasPorPapel({
 
           {ehDiretoria && (
             <div>
-              <label className="block text-sm text-gray-700">Embaixada</label>
+              <label className="block text-sm text-text">Embaixada</label>
               <select
                 required
                 value={formulario.embaixada_id}
                 onChange={(e) => setFormulario({ ...formulario, embaixada_id: e.target.value })}
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+                className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
               >
                 <option value="" disabled>
                   Selecione…
@@ -306,7 +308,7 @@ export function PessoasPorPapel({
             </div>
           )}
 
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-text">
             <input
               type="checkbox"
               checked={formulario.ativo}
@@ -323,14 +325,14 @@ export function PessoasPorPapel({
             <button
               type="submit"
               disabled={enviando}
-              className="rounded-md bg-daer-blue px-4 py-2 text-sm font-medium text-white hover:bg-daer-blue-light disabled:opacity-60"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
             >
               {enviando ? "Salvando…" : "Salvar"}
             </button>
             <button
               type="button"
               onClick={() => setFormularioAberto(false)}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-border px-4 py-2 text-sm text-text hover:bg-surface-2"
             >
               Cancelar
             </button>
@@ -338,16 +340,16 @@ export function PessoasPorPapel({
         </form>
       )}
 
-      <div className="mt-8 overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div className="mt-8 overflow-x-auto rounded-lg border border-border bg-surface">
         {carregando ? (
-          <p className="p-5 text-sm text-gray-500">Carregando…</p>
+          <p className="p-5 text-sm text-text-muted">Carregando…</p>
         ) : erro ? (
           <p className="p-5 text-sm text-red-600">{erro}</p>
         ) : lista.length === 0 ? (
-          <p className="p-5 text-sm text-gray-500">Nenhum registro ainda.</p>
+          <p className="p-5 text-sm text-text-muted">Nenhum registro ainda.</p>
         ) : (
           <table className="w-full text-left text-sm">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+            <thead className="bg-surface-2 text-xs uppercase text-text-muted">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Embaixada</th>
@@ -357,13 +359,13 @@ export function PessoasPorPapel({
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {lista.map((p) => (
                 <tr key={p.id}>
-                  <td className="px-4 py-3 font-medium text-gray-800">{p.nome}</td>
-                  <td className="px-4 py-3 text-gray-600">{p.embaixada_nome}</td>
+                  <td className="px-4 py-3 font-medium text-text">{p.nome}</td>
+                  <td className="px-4 py-3 text-text-muted">{p.embaixada_nome}</td>
                   {!mostraResponsavel ? null : (
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className="px-4 py-3 text-text-muted">
                       {p.faixa_etaria ? ROTULO_FAIXA_ETARIA[p.faixa_etaria] : "—"}
                     </td>
                   )}
@@ -373,7 +375,7 @@ export function PessoasPorPapel({
                     ) : (
                       <button
                         onClick={() => criarAcesso(p)}
-                        className="text-xs font-medium text-daer-blue underline"
+                        className="text-xs font-medium text-primary underline"
                       >
                         Criar acesso
                       </button>
@@ -382,7 +384,7 @@ export function PessoasPorPapel({
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs ${
-                        p.ativo ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"
+                        p.ativo ? "bg-green-50 text-green-700" : "bg-surface-2 text-text-muted"
                       }`}
                     >
                       {p.ativo ? "Ativo" : "Inativo"}
@@ -391,7 +393,7 @@ export function PessoasPorPapel({
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <button
                       onClick={() => abrirEdicao(p)}
-                      className="mr-3 text-xs font-medium text-daer-blue hover:underline"
+                      className="mr-3 text-xs font-medium text-primary hover:underline"
                     >
                       Editar
                     </button>

@@ -10,10 +10,10 @@ export default function PainelPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-daer-blue">
+      <h1 className="text-2xl font-bold text-primary">
         Olá, {pessoa.nome.split(" ")[0]}
       </h1>
-      <p className="mt-2 text-gray-600">
+      <p className="mt-2 text-text-muted">
         {pessoa.embaixada_nome} · {ROTULO_PAPEL[pessoa.papel ?? ""] ?? "Sem papel definido"}
       </p>
 
@@ -22,7 +22,7 @@ export default function PainelPage() {
         gestão estiverem prontas — cada bloco consome os endpoints já
         existentes: /api/embaixadas/, /api/pessoas/, /api/papeis/.
       */}
-      <p className="mt-8 text-sm text-gray-500">Resumo geral em construção.</p>
+      <p className="mt-8 text-sm text-text-muted">Resumo geral em construção.</p>
     </div>
   );
 }

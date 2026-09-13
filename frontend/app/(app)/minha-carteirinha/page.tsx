@@ -37,14 +37,14 @@ export default function MinhaCarteirinhaPage() {
   }, [token]);
 
   if (carregando) {
-    return <p className="text-sm text-gray-500">Carregando…</p>;
+    return <p className="text-sm text-text-muted">Carregando…</p>;
   }
 
   if (erro || !carteirinha) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-daer-blue">Minha carteirinha</h1>
-        <p className="mt-4 text-sm text-gray-600">{erro}</p>
+        <h1 className="text-2xl font-bold text-primary">Minha carteirinha</h1>
+        <p className="mt-4 text-sm text-text-muted">{erro}</p>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default function MinhaCarteirinhaPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-daer-blue">Minha carteirinha</h1>
+      <h1 className="mb-6 text-2xl font-bold text-primary">Minha carteirinha</h1>
 
       <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="flex items-center gap-3 bg-daer-blue px-5 py-4">

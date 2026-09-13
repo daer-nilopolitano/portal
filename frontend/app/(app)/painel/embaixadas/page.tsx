@@ -141,15 +141,15 @@ export default function PainelEmbaixadasPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-daer-blue">Embaixadas</h1>
+        <h1 className="text-2xl font-bold text-primary">Embaixadas</h1>
         <button
           onClick={abrirNovo}
-          className="rounded-md bg-daer-blue px-4 py-2 text-sm font-medium text-white hover:bg-daer-blue-light"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
         >
           + Nova
         </button>
       </div>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-text-muted">
         Cadastro de igrejas continua pelo Django Admin — aqui só escolhe entre as já
         cadastradas.
       </p>
@@ -157,25 +157,25 @@ export default function PainelEmbaixadasPage() {
       {formularioAberto && (
         <form
           onSubmit={salvar}
-          className="mt-6 grid gap-4 rounded-lg border border-gray-200 bg-white p-5 sm:grid-cols-2"
+          className="mt-6 grid gap-4 rounded-lg border border-border bg-surface p-5 sm:grid-cols-2"
         >
           <div>
-            <label className="block text-sm text-gray-700">Nome da embaixada</label>
+            <label className="block text-sm text-text">Nome da embaixada</label>
             <input
               required
               value={formulario.nome}
               onChange={(e) => setFormulario({ ...formulario, nome: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700">Igreja</label>
+            <label className="block text-sm text-text">Igreja</label>
             <select
               required
               value={formulario.igreja_id}
               onChange={(e) => setFormulario({ ...formulario, igreja_id: e.target.value })}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             >
               <option value="" disabled>
                 Selecione…
@@ -189,13 +189,13 @@ export default function PainelEmbaixadasPage() {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-sm text-gray-700">Conselheiro responsável</label>
+            <label className="block text-sm text-text">Conselheiro responsável</label>
             <select
               value={formulario.conselheiro_responsavel_id}
               onChange={(e) =>
                 setFormulario({ ...formulario, conselheiro_responsavel_id: e.target.value })
               }
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
             >
               <option value="">Nenhum por enquanto</option>
               {conselheiros.map((c) => (
@@ -204,7 +204,7 @@ export default function PainelEmbaixadasPage() {
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-text-muted">
               Só aparecem aqui pessoas já cadastradas como conselheiro em alguma
               embaixada.
             </p>
@@ -218,14 +218,14 @@ export default function PainelEmbaixadasPage() {
             <button
               type="submit"
               disabled={enviando}
-              className="rounded-md bg-daer-blue px-4 py-2 text-sm font-medium text-white hover:bg-daer-blue-light disabled:opacity-60"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
             >
               {enviando ? "Salvando…" : "Salvar"}
             </button>
             <button
               type="button"
               onClick={() => setFormularioAberto(false)}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-border px-4 py-2 text-sm text-text hover:bg-surface-2"
             >
               Cancelar
             </button>
@@ -233,16 +233,16 @@ export default function PainelEmbaixadasPage() {
         </form>
       )}
 
-      <div className="mt-8 overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div className="mt-8 overflow-x-auto rounded-lg border border-border bg-surface">
         {carregando ? (
-          <p className="p-5 text-sm text-gray-500">Carregando…</p>
+          <p className="p-5 text-sm text-text-muted">Carregando…</p>
         ) : erro ? (
           <p className="p-5 text-sm text-red-600">{erro}</p>
         ) : lista.length === 0 ? (
-          <p className="p-5 text-sm text-gray-500">Nenhuma embaixada cadastrada ainda.</p>
+          <p className="p-5 text-sm text-text-muted">Nenhuma embaixada cadastrada ainda.</p>
         ) : (
           <table className="w-full text-left text-sm">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+            <thead className="bg-surface-2 text-xs uppercase text-text-muted">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Igreja</th>
@@ -250,18 +250,18 @@ export default function PainelEmbaixadasPage() {
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {lista.map((e) => (
                 <tr key={e.id}>
-                  <td className="px-4 py-3 font-medium text-gray-800">{e.nome}</td>
-                  <td className="px-4 py-3 text-gray-600">{e.igreja_nome}</td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 font-medium text-text">{e.nome}</td>
+                  <td className="px-4 py-3 text-text-muted">{e.igreja_nome}</td>
+                  <td className="px-4 py-3 text-text-muted">
                     {e.conselheiro_responsavel_nome ?? "—"}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <button
                       onClick={() => abrirEdicao(e)}
-                      className="mr-3 text-xs font-medium text-daer-blue hover:underline"
+                      className="mr-3 text-xs font-medium text-primary hover:underline"
                     >
                       Editar
                     </button>

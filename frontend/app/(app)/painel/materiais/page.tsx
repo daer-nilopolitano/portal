@@ -35,7 +35,7 @@ export default function PainelMateriaisPage() {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-md border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 transition-colors hover:border-daer-blue hover:text-daer-blue"
+              className="flex items-center justify-between rounded-md border border-border bg-surface px-4 py-3 text-sm text-text transition-colors hover:border-primary hover:text-primary"
             >
               {item.categoria}
               <ExternalLink className="h-4 w-4 text-gray-400" />

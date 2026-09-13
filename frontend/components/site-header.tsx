@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const ITENS_NAV = [
   { href: "/", rotulo: "Início" },
@@ -17,13 +18,11 @@ export function SiteHeader() {
   const { pessoa, carregando } = useAuth();
 
   return (
-    <header className="border-b border-daer-blue/15 bg-white">
+    <header className="border-b border-border bg-surface-2">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo-daer.png" alt="" width={36} height={39} priority />
-          <span className="font-heading text-lg font-semibold text-daer-blue">
-            DAER Nilopolitano
-          </span>
+          <span className="font-heading text-lg font-semibold text-primary">DAER Nilopolitano</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -34,9 +33,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 className={`border-b-2 pb-1 text-sm transition-colors ${
-                  ativo
-                    ? "border-daer-yellow text-daer-blue"
-                    : "border-transparent text-gray-600 hover:text-daer-blue"
+                  ativo ? "border-accent text-primary" : "border-transparent text-text-muted hover:text-primary"
                 }`}
               >
                 {item.rotulo}
@@ -45,22 +42,25 @@ export function SiteHeader() {
           })}
         </nav>
 
-        {!carregando &&
-          (pessoa ? (
-            <Link
-              href="/painel"
-              className="rounded-md bg-daer-blue px-4 py-2 text-sm font-medium text-white hover:bg-daer-blue-light"
-            >
-              Minha área
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-md border border-daer-blue px-4 py-2 text-sm font-medium text-daer-blue hover:bg-daer-blue hover:text-white"
-            >
-              Entrar
-            </Link>
-          ))}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          {!carregando &&
+            (pessoa ? (
+              <Link
+                href="/painel"
+                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
+              >
+                Minha área
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-on-primary"
+              >
+                Entrar
+              </Link>
+            ))}
+        </div>
       </div>
     </header>
   );

@@ -27,16 +27,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
+    <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
-        <p className="text-center text-xl font-bold text-daer-blue">DAER Nilopolitano</p>
+        <p className="text-center text-xl font-bold text-primary">DAER Nilopolitano</p>
 
         <form
           onSubmit={handleSubmit}
-          className="mt-8 space-y-4 rounded-lg border border-gray-200 bg-white p-6"
+          className="mt-8 space-y-4 rounded-lg border border-border bg-surface p-6"
         >
           <div>
-            <label htmlFor="email" className="block text-sm text-gray-700">
+            <label htmlFor="email" className="block text-sm text-text">
               Usuário
             </label>
             <input
@@ -45,13 +45,13 @@ export default function LoginPage() {
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="senha" className="block text-sm text-gray-700">
+            <label htmlFor="senha" className="block text-sm text-text">
               Senha
             </label>
             <input
@@ -60,7 +60,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-daer-blue focus:outline-none"
+              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
               required
             />
           </div>
@@ -70,7 +70,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={enviando}
-            className="w-full rounded-md bg-daer-blue py-2 text-sm font-medium text-white hover:bg-daer-blue-light disabled:opacity-60"
+            className="w-full rounded-md bg-primary py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
           >
             {enviando ? "Entrando…" : "Entrar"}
           </button>
