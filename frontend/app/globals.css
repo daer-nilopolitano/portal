@@ -102,4 +102,13 @@
   .field-label {
     @apply block text-sm text-text;
   }
+
+  /* Mapa das embaixadas — reduz saturação do OpenStreetMap pra não competir com o
+     card ao lado; inverte/ajusta no escuro pra combinar com o resto da interface. */
+  .leaflet-tile-pane {
+    filter: saturate(0.55) brightness(1.03) contrast(0.95);
+  }
+  .dark .leaflet-tile-pane {
+    filter: saturate(0.45) brightness(0.8) invert(1) hue-rotate(180deg) contrast(0.85);
+  }
 }

@@ -21,10 +21,13 @@ function criarIcone(selecionado: boolean) {
   const largura = selecionado ? 36 : 28;
   const altura = selecionado ? 46 : 36;
   const cor = selecionado ? COR_PIN_SELECIONADO : COR_PIN;
+  const brilho = selecionado
+    ? `filter: drop-shadow(0 0 6px rgb(var(--color-accent) / 0.7));`
+    : "";
   return L.divIcon({
     className: "",
     html: `
-      <svg width="${largura}" height="${altura}" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
+      <svg width="${largura}" height="${altura}" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg" style="${brilho}">
         <path d="M14 0C6.3 0 0 6.3 0 14c0 10.5 14 22 14 22s14-11.5 14-22c0-7.7-6.3-14-14-14z" fill="${cor}" stroke="white" stroke-width="1.5" />
         <circle cx="14" cy="14" r="5" fill="white" />
       </svg>
