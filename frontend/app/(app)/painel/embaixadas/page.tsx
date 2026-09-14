@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { DataTable, type Coluna } from "@/components/ui/data-table";
 
 interface Embaixada {
   id: number;
@@ -138,13 +139,24 @@ export default function PainelEmbaixadasPage() {
     await carregar();
   }
 
+  const colunas: Coluna<Embaixada>[] = [
+    { cabecalho: "Nome", render: (e) => <span className="font-medium text-text">{e.nome}</span> },
+    { cabecalho: "Igreja", render: (e) => <span className="text-text-muted">{e.igreja_nome}</span> },
+    {
+      cabecalho: "Conselheiro responsável",
+      render: (e) => (
+        <span className="text-text-muted">{e.conselheiro_responsavel_nome ?? "—"}</span>
+      ),
+    },
+  ];
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">Embaixadas</h1>
         <button
           onClick={abrirNovo}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
+          className="btn-primary"
         >
           + Nova
         </button>
@@ -165,7 +177,7 @@ export default function PainelEmbaixadasPage() {
               required
               value={formulario.nome}
               onChange={(e) => setFormulario({ ...formulario, nome: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             />
           </div>
 
@@ -175,7 +187,7 @@ export default function PainelEmbaixadasPage() {
               required
               value={formulario.igreja_id}
               onChange={(e) => setFormulario({ ...formulario, igreja_id: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             >
               <option value="" disabled>
                 Selecione…
@@ -195,7 +207,7 @@ export default function PainelEmbaixadasPage() {
               onChange={(e) =>
                 setFormulario({ ...formulario, conselheiro_responsavel_id: e.target.value })
               }
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             >
               <option value="">Nenhum por enquanto</option>
               {conselheiros.map((c) => (
@@ -211,21 +223,21 @@ export default function PainelEmbaixadasPage() {
           </div>
 
           {erroFormulario && (
-            <p className="sm:col-span-2 text-sm text-red-600">{erroFormulario}</p>
+            <p className="sm:col-span-2 text-sm text-danger">{erroFormulario}</p>
           )}
 
           <div className="flex gap-3 sm:col-span-2">
             <button
               type="submit"
               disabled={enviando}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
+              className="btn-primary"
             >
               {enviando ? "Salvando…" : "Salvar"}
             </button>
             <button
               type="button"
               onClick={() => setFormularioAberto(false)}
-              className="rounded-md border border-border px-4 py-2 text-sm text-text hover:bg-surface-2"
+              className="btn-ghost"
             >
               Cancelar
             </button>
@@ -233,51 +245,18 @@ export default function PainelEmbaixadasPage() {
         </form>
       )}
 
-      <div className="mt-8 overflow-x-auto rounded-lg border border-border bg-surface">
-        {carregando ? (
-          <p className="p-5 text-sm text-text-muted">Carregando…</p>
-        ) : erro ? (
-          <p className="p-5 text-sm text-red-600">{erro}</p>
-        ) : lista.length === 0 ? (
-          <p className="p-5 text-sm text-text-muted">Nenhuma embaixada cadastrada ainda.</p>
-        ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-surface-2 text-xs uppercase text-text-muted">
-              <tr>
-                <th className="px-4 py-3">Nome</th>
-                <th className="px-4 py-3">Igreja</th>
-                <th className="px-4 py-3">Conselheiro responsável</th>
-                <th className="px-4 py-3" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {lista.map((e) => (
-                <tr key={e.id}>
-                  <td className="px-4 py-3 font-medium text-text">{e.nome}</td>
-                  <td className="px-4 py-3 text-text-muted">{e.igreja_nome}</td>
-                  <td className="px-4 py-3 text-text-muted">
-                    {e.conselheiro_responsavel_nome ?? "—"}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right">
-                    <button
-                      onClick={() => abrirEdicao(e)}
-                      className="mr-3 text-xs font-medium text-primary hover:underline"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => excluir(e)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Excluir
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      <DataTable
+        itens={lista}
+        colunas={colunas}
+        chave={(e) => e.id}
+        carregando={carregando}
+        erro={erro}
+        mensagemVazio="Nenhuma embaixada cadastrada ainda."
+        onEditar={abrirEdicao}
+        onExcluir={excluir}
+        rotuloEditar={(e) => `Editar ${e.nome}`}
+        rotuloExcluir={(e) => `Excluir ${e.nome}`}
+      />
     </div>
   );
 }

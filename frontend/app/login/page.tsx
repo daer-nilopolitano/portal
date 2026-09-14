@@ -45,7 +45,7 @@ export default function LoginPage() {
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
               required
             />
           </div>
@@ -60,18 +60,14 @@ export default function LoginPage() {
               autoComplete="current-password"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
               required
             />
           </div>
 
-          {erro && <p className="text-sm text-red-600">{erro}</p>}
+          {erro && <p className="text-sm text-danger">{erro}</p>}
 
-          <button
-            type="submit"
-            disabled={enviando}
-            className="w-full rounded-md bg-primary py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
-          >
+          <button type="submit" disabled={enviando} className="btn-primary w-full">
             {enviando ? "Entrando…" : "Entrar"}
           </button>
         </form>

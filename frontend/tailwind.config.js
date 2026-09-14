@@ -28,6 +28,12 @@ module.exports = {
           muted: "rgb(var(--color-text-muted) / <alpha-value>)",
         },
         border: "rgb(var(--color-border) / <alpha-value>)",
+        danger: {
+          DEFAULT: "rgb(var(--color-danger) / <alpha-value>)",
+          hover: "rgb(var(--color-danger-hover) / <alpha-value>)",
+        },
+        success: "rgb(var(--color-success) / <alpha-value>)",
+        "focus-ring": "rgb(var(--color-focus-ring) / <alpha-value>)",
         daer: {
           blue: "#1B3A6B",
           "blue-light": "#2E5AA8",

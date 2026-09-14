@@ -32,12 +32,12 @@ export function SobreSecao() {
 
         <div className="mt-12 space-y-4">
           <h3 className="text-xl font-semibold text-primary">O DAER Nilopolitano</h3>
-          <p className="text-text">
+          <p className="text-measure leading-relaxed text-text">
             O Departamento Associacional de Embaixadores do Rei (DAER) Nilopolitano é o
             órgão responsável por apoiar, orientar e fortalecer as embaixadas vinculadas
             às igrejas da Associação Batista Nilopolitana.
           </p>
-          <p className="text-text">
+          <p className="text-measure leading-relaxed text-text">
             Nossa missão é caminhar ao lado das igrejas locais, oferecendo o suporte
             necessário para que a organização Embaixadores do Rei cumpra seu papel
             transformador na vida dos meninos e jovens de Nilópolis.
@@ -68,7 +68,7 @@ export function SobreSecao() {
           <h3 className="text-xl font-semibold text-primary">
             A Organização Embaixadores do Rei
           </h3>
-          <p className="text-text">
+          <p className="text-measure leading-relaxed text-text">
             Os Embaixadores do Rei (ER) é uma organização missionária das Igrejas
             Batistas voltada para meninos de 9 a 17 anos. O objetivo central é promover
             o desenvolvimento físico, moral e espiritual dos garotos, preparando-os para

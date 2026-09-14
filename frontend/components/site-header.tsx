@@ -46,17 +46,11 @@ export function SiteHeader() {
           <ThemeToggle />
           {!carregando &&
             (pessoa ? (
-              <Link
-                href="/painel"
-                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
-              >
+              <Link href="/painel" className="btn-primary">
                 Minha área
               </Link>
             ) : (
-              <Link
-                href="/login"
-                className="rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-on-primary"
-              >
+              <Link href="/login" className="btn-outline">
                 Entrar
               </Link>
             ))}

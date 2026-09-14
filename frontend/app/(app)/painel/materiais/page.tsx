@@ -23,8 +23,8 @@ const MATERIAIS: CategoriaMaterial[] = [
 export default function PainelMateriaisPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold text-daer-blue">Materiais</h1>
-      <p className="mt-2 text-sm text-gray-600">
+      <h1 className="text-2xl font-bold text-primary">Materiais</h1>
+      <p className="mt-2 text-sm text-text-muted">
         Links para as pastas de arquivos do DAER Nilopolitano no Google Drive.
       </p>
 
@@ -38,7 +38,7 @@ export default function PainelMateriaisPage() {
               className="flex items-center justify-between rounded-md border border-border bg-surface px-4 py-3 text-sm text-text transition-colors hover:border-primary hover:text-primary"
             >
               {item.categoria}
-              <ExternalLink className="h-4 w-4 text-gray-400" />
+              <ExternalLink className="h-4 w-4 text-text-muted" />
             </a>
           </li>
         ))}

@@ -84,7 +84,7 @@ export default function MinhaCarteirinhaPage() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-gray-400">
+              <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-gray-500">
                 {carteirinha.pessoa_nome.charAt(0)}
               </div>
             )}
@@ -110,7 +110,7 @@ export default function MinhaCarteirinhaPage() {
               <QRCodeSVG value={urlVerificacao} size={140} />
             </div>
           )}
-          <p className="mt-2 text-center text-[11px] text-gray-400">
+          <p className="mt-2 text-center text-xs text-gray-500">
             Aponte a câmera pra verificar a validade desta carteirinha
           </p>
         </div>

@@ -23,7 +23,7 @@ export default async function VerificarCarteirinhaPage({
       <div className="w-full max-w-sm rounded-lg border border-border bg-surface p-8 text-center shadow-sm">
         {!verificacao ? (
           <>
-            <XCircle className="mx-auto h-12 w-12 text-red-500" />
+            <XCircle className="mx-auto h-12 w-12 text-danger" />
             <p className="mt-4 font-heading text-lg font-semibold text-primary">
               Carteirinha não encontrada
             </p>
@@ -34,9 +34,9 @@ export default async function VerificarCarteirinhaPage({
         ) : (
           <>
             {verificacao.valida ? (
-              <CheckCircle2 className="mx-auto h-12 w-12 text-green-600" />
+              <CheckCircle2 className="mx-auto h-12 w-12 text-success" />
             ) : (
-              <XCircle className="mx-auto h-12 w-12 text-red-500" />
+              <XCircle className="mx-auto h-12 w-12 text-danger" />
             )}
             <p className="mt-4 font-heading text-lg font-semibold text-primary">
               {verificacao.valida ? "Carteirinha válida" : "Carteirinha inválida ou vencida"}

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { ROTULO_FAIXA_ETARIA } from "@/lib/labels";
+import { DataTable, type Coluna } from "@/components/ui/data-table";
 
 interface Pessoa {
   id: number;
@@ -205,13 +206,56 @@ export function PessoasPorPapel({
     }
   }
 
+  const colunas: Coluna<Pessoa>[] = [
+    { cabecalho: "Nome", render: (p) => <span className="font-medium text-text">{p.nome}</span> },
+    { cabecalho: "Embaixada", render: (p) => <span className="text-text-muted">{p.embaixada_nome}</span> },
+    ...(mostraResponsavel
+      ? [
+          {
+            cabecalho: "Faixa etária",
+            render: (p: Pessoa) => (
+              <span className="text-text-muted">
+                {p.faixa_etaria ? ROTULO_FAIXA_ETARIA[p.faixa_etaria] : "—"}
+              </span>
+            ),
+          },
+        ]
+      : []),
+    {
+      cabecalho: "Acesso",
+      render: (p) =>
+        p.tem_acesso ? (
+          <span className="text-xs text-success">Criado</span>
+        ) : (
+          <button
+            onClick={() => criarAcesso(p)}
+            className="text-xs font-medium text-primary underline underline-offset-2"
+          >
+            Criar acesso
+          </button>
+        ),
+    },
+    {
+      cabecalho: "Status",
+      render: (p) => (
+        <span
+          className={`rounded-full px-2 py-0.5 text-xs ${
+            p.ativo ? "bg-success/10 text-success" : "bg-surface-2 text-text-muted"
+          }`}
+        >
+          {p.ativo ? "Ativo" : "Inativo"}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">{titulo}</h1>
         <button
           onClick={abrirNovo}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover"
+          className="btn-primary"
         >
           + Novo
         </button>
@@ -228,7 +272,7 @@ export function PessoasPorPapel({
               required
               value={formulario.nome}
               onChange={(e) => setFormulario({ ...formulario, nome: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             />
           </div>
 
@@ -239,7 +283,7 @@ export function PessoasPorPapel({
               type="date"
               value={formulario.data_nascimento}
               onChange={(e) => setFormulario({ ...formulario, data_nascimento: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             />
           </div>
 
@@ -248,7 +292,7 @@ export function PessoasPorPapel({
             <input
               value={formulario.telefone_contato}
               onChange={(e) => setFormulario({ ...formulario, telefone_contato: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             />
           </div>
 
@@ -258,7 +302,7 @@ export function PessoasPorPapel({
               type="email"
               value={formulario.email}
               onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+              className="field"
             />
           </div>
 
@@ -271,7 +315,7 @@ export function PessoasPorPapel({
                   onChange={(e) =>
                     setFormulario({ ...formulario, nome_responsavel: e.target.value })
                   }
-                  className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="field"
                 />
               </div>
               <div>
@@ -281,7 +325,7 @@ export function PessoasPorPapel({
                   onChange={(e) =>
                     setFormulario({ ...formulario, telefone_responsavel: e.target.value })
                   }
-                  className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  className="field"
                 />
               </div>
             </>
@@ -294,7 +338,7 @@ export function PessoasPorPapel({
                 required
                 value={formulario.embaixada_id}
                 onChange={(e) => setFormulario({ ...formulario, embaixada_id: e.target.value })}
-                className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="field"
               >
                 <option value="" disabled>
                   Selecione…
@@ -318,21 +362,21 @@ export function PessoasPorPapel({
           </label>
 
           {erroFormulario && (
-            <p className="sm:col-span-2 text-sm text-red-600">{erroFormulario}</p>
+            <p className="sm:col-span-2 text-sm text-danger">{erroFormulario}</p>
           )}
 
           <div className="flex gap-3 sm:col-span-2">
             <button
               type="submit"
               disabled={enviando}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary-hover disabled:opacity-60"
+              className="btn-primary"
             >
               {enviando ? "Salvando…" : "Salvar"}
             </button>
             <button
               type="button"
               onClick={() => setFormularioAberto(false)}
-              className="rounded-md border border-border px-4 py-2 text-sm text-text hover:bg-surface-2"
+              className="btn-ghost"
             >
               Cancelar
             </button>
@@ -340,76 +384,18 @@ export function PessoasPorPapel({
         </form>
       )}
 
-      <div className="mt-8 overflow-x-auto rounded-lg border border-border bg-surface">
-        {carregando ? (
-          <p className="p-5 text-sm text-text-muted">Carregando…</p>
-        ) : erro ? (
-          <p className="p-5 text-sm text-red-600">{erro}</p>
-        ) : lista.length === 0 ? (
-          <p className="p-5 text-sm text-text-muted">Nenhum registro ainda.</p>
-        ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-surface-2 text-xs uppercase text-text-muted">
-              <tr>
-                <th className="px-4 py-3">Nome</th>
-                <th className="px-4 py-3">Embaixada</th>
-                {!mostraResponsavel ? null : <th className="px-4 py-3">Faixa etária</th>}
-                <th className="px-4 py-3">Acesso</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {lista.map((p) => (
-                <tr key={p.id}>
-                  <td className="px-4 py-3 font-medium text-text">{p.nome}</td>
-                  <td className="px-4 py-3 text-text-muted">{p.embaixada_nome}</td>
-                  {!mostraResponsavel ? null : (
-                    <td className="px-4 py-3 text-text-muted">
-                      {p.faixa_etaria ? ROTULO_FAIXA_ETARIA[p.faixa_etaria] : "—"}
-                    </td>
-                  )}
-                  <td className="px-4 py-3">
-                    {p.tem_acesso ? (
-                      <span className="text-xs text-green-700">Criado</span>
-                    ) : (
-                      <button
-                        onClick={() => criarAcesso(p)}
-                        className="text-xs font-medium text-primary underline"
-                      >
-                        Criar acesso
-                      </button>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs ${
-                        p.ativo ? "bg-green-50 text-green-700" : "bg-surface-2 text-text-muted"
-                      }`}
-                    >
-                      {p.ativo ? "Ativo" : "Inativo"}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right">
-                    <button
-                      onClick={() => abrirEdicao(p)}
-                      className="mr-3 text-xs font-medium text-primary hover:underline"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => excluir(p)}
-                      className="text-xs font-medium text-red-600 hover:underline"
-                    >
-                      Excluir
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      <DataTable
+        itens={lista}
+        colunas={colunas}
+        chave={(p) => p.id}
+        carregando={carregando}
+        erro={erro}
+        mensagemVazio="Nenhum registro ainda."
+        onEditar={abrirEdicao}
+        onExcluir={excluir}
+        rotuloEditar={(p) => `Editar ${p.nome}`}
+        rotuloExcluir={(p) => `Excluir ${p.nome}`}
+      />
     </div>
   );
 }

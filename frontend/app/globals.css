@@ -14,6 +14,11 @@
     --color-text: 15 23 42;
     --color-text-muted: 71 85 105;
     --color-border: 226 232 240;
+    /* Papéis semânticos — validados em WCAG AA (4.5:1) sobre background, surface e surface-2 */
+    --color-danger: 220 38 38;
+    --color-danger-hover: 185 28 28;
+    --color-success: 21 128 61;
+    --color-focus-ring: 30 64 175;
   }
 
   .dark {
@@ -27,13 +32,74 @@
     --color-text: 241 245 249;
     --color-text-muted: 148 163 184;
     --color-border: 51 65 85;
+    /* Vermelho/verde mais claros no escuro — versões -600 abaixo de 4.5:1 sobre surface */
+    --color-danger: 248 113 113;
+    --color-danger-hover: 252 165 165;
+    --color-success: 74 222 128;
+    --color-focus-ring: 96 165 250;
   }
 
   html {
     scroll-behavior: smooth;
   }
 
+  body {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
   h1, h2, h3, h4 {
     font-family: var(--font-heading), system-ui, sans-serif;
+    line-height: 1.25;
+  }
+
+  /* Foco de teclado visível em qualquer elemento interativo — nunca remover sem repor */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid rgb(var(--color-focus-ring));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Bloco de leitura — limita a largura de linha a ~70ch para textos longos (Sobre, notícias) */
+  .text-measure {
+    max-width: 70ch;
+  }
+
+  /* Botões — altura, raio e espaçamento padronizados (h-10, rounded-md) em todas as variantes */
+  .btn {
+    @apply inline-flex h-10 min-w-[44px] items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-on-primary hover:bg-primary-hover;
+  }
+  .btn-outline {
+    @apply btn border border-primary text-primary hover:bg-primary hover:text-on-primary;
+  }
+  .btn-ghost {
+    @apply btn border border-border text-text hover:bg-surface-2;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-danger-hover;
+  }
+  .btn-danger-text {
+    @apply inline-flex min-h-[44px] items-center text-xs font-medium text-danger hover:underline;
+  }
+  .btn-link-text {
+    @apply inline-flex min-h-[44px] items-center text-xs font-medium text-primary hover:underline;
+  }
+
+  /* Campos de formulário — mesmo raio/borda/tamanho e foco visível padronizado */
+  .field {
+    @apply mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary;
+  }
+  .field-label {
+    @apply block text-sm text-text;
   }
 }
