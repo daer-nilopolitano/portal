@@ -8,17 +8,27 @@ const EmbaixadasMapaInterno = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">
+      <div className="flex h-full w-full items-center justify-center text-sm text-text-muted">
         Carregando mapa…
       </div>
     ),
   }
 );
 
-export function EmbaixadasMapa({ igrejas }: { igrejas: IgrejaMapa[] }) {
+interface Props {
+  igrejas: IgrejaMapa[];
+  igrejaSelecionadaId: number | null;
+  onSelecionarIgreja: (id: number) => void;
+}
+
+export function EmbaixadasMapa({ igrejas, igrejaSelecionadaId, onSelecionarIgreja }: Props) {
   return (
-    <div className="h-[350px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-      <EmbaixadasMapaInterno igrejas={igrejas} />
+    <div className="h-[350px] overflow-hidden rounded-lg border border-border bg-surface-2">
+      <EmbaixadasMapaInterno
+        igrejas={igrejas}
+        igrejaSelecionadaId={igrejaSelecionadaId}
+        onSelecionarIgreja={onSelecionarIgreja}
+      />
     </div>
   );
 }
