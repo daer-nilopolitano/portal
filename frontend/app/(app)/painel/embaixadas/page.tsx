@@ -4,25 +4,12 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
+import type { Embaixada, Igreja, Pessoa } from "@/lib/types";
 
-interface Embaixada {
-  id: number;
-  nome: string;
-  igreja_id: number;
-  igreja_nome: string;
-  conselheiro_responsavel_id: number | null;
-  conselheiro_responsavel_nome: string | null;
-}
-
-interface Igreja {
-  id: number;
-  nome: string;
-}
-
-interface PessoaConselheiro {
-  id: number;
-  nome: string;
-}
+// Esta tela só usa id/nome de Igreja e de Pessoa (pra popular os <select>) —
+// Pick evita puxar campos que aqui não são usados (endereço, faixa etária...)
+type IgrejaOpcao = Pick<Igreja, "id" | "nome">;
+type PessoaConselheiro = Pick<Pessoa, "id" | "nome">;
 
 interface FormularioEmbaixada {
   nome: string;
@@ -40,7 +27,7 @@ export default function PainelEmbaixadasPage() {
   const { token } = useAuth();
 
   const [lista, setLista] = useState<Embaixada[]>([]);
-  const [igrejas, setIgrejas] = useState<Igreja[]>([]);
+  const [igrejas, setIgrejas] = useState<IgrejaOpcao[]>([]);
   const [conselheiros, setConselheiros] = useState<PessoaConselheiro[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
@@ -58,7 +45,7 @@ export default function PainelEmbaixadasPage() {
     try {
       const [listaEmbaixadas, listaIgrejas, listaConselheiros] = await Promise.all([
         apiFetch<Embaixada[]>("/embaixadas/", { token }),
-        apiFetch<Igreja[]>("/igrejas/", { token }),
+        apiFetch<IgrejaOpcao[]>("/igrejas/", { token }),
         apiFetch<PessoaConselheiro[]>("/pessoas/?papel=conselheiro", { token }),
       ]);
       setLista(listaEmbaixadas);

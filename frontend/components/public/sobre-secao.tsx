@@ -1,5 +1,5 @@
-import { SectionTitle } from "@/components/section-title";
-import { Timeline, type TimelineItem } from "@/components/timeline";
+import { SectionTitle } from "@/components/public/section-title";
+import { Timeline, type TimelineItem } from "@/components/public/timeline";
 
 const HISTORIA: TimelineItem[] = [
   {
@@ -26,7 +26,7 @@ const HISTORIA: TimelineItem[] = [
 
 export function SobreSecao() {
   return (
-    <section id="sobre" className="border-t border-border bg-surface px-6 py-20">
+    <section id="sobre" className="border-t border-border bg-surface-soft px-6 py-20">
       <div className="mx-auto max-w-3xl">
         <SectionTitle>Quem Somos</SectionTitle>
 

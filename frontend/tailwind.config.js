@@ -17,6 +17,7 @@ module.exports = {
         background: "rgb(var(--color-background) / <alpha-value>)",
         surface: "rgb(var(--color-surface) / <alpha-value>)",
         "surface-2": "rgb(var(--color-surface-2) / <alpha-value>)",
+        "surface-soft": "rgb(var(--color-surface-soft) / <alpha-value>)",
         primary: {
           DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
           hover: "rgb(var(--color-primary-hover) / <alpha-value>)",

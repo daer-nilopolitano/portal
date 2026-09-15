@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { IgrejaMapa } from "@/components/embaixadas-mapa-interno";
+import type { IgrejaMapa } from "@/components/public/embaixadas/mapa-interno";
 
 const EmbaixadasMapaInterno = dynamic(
-  () => import("@/components/embaixadas-mapa-interno").then((m) => m.EmbaixadasMapaInterno),
+  () => import("@/components/public/embaixadas/mapa-interno").then((m) => m.EmbaixadasMapaInterno),
   {
     ssr: false,
     loading: () => (

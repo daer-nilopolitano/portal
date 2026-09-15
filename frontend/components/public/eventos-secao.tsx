@@ -1,5 +1,5 @@
-import { SectionTitle } from "@/components/section-title";
-import { Timeline, type TimelineItem } from "@/components/timeline";
+import { SectionTitle } from "@/components/public/section-title";
+import { Timeline, type TimelineItem } from "@/components/public/timeline";
 
 const CRONOGRAMA: TimelineItem[] = [
   {
@@ -31,7 +31,7 @@ const CRONOGRAMA: TimelineItem[] = [
 
 export function EventosSecao() {
   return (
-    <section id="eventos" className="border-t border-border bg-surface px-6 py-20">
+    <section id="eventos" className="border-t border-border bg-surface-soft px-6 py-20">
       <div className="mx-auto max-w-3xl">
         <SectionTitle>Cronograma de Eventos</SectionTitle>
         <p className="mt-4 text-center text-text-muted">

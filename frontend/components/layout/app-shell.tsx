@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth, type Papel } from "@/lib/auth-context";
 import { ROTULO_PAPEL } from "@/lib/labels";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 interface ItemNav {
   href: string;

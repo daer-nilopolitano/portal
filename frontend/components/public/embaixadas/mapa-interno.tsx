@@ -4,15 +4,12 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import type { Igreja } from "@/lib/types";
 
-export interface IgrejaMapa {
-  id: number;
-  nome: string;
-  municipio: string;
-  bairro: string;
-  latitude: number | null;
-  longitude: number | null;
-}
+// Subconjunto de `Igreja` com os campos que o mapa realmente usa — derivado
+// do tipo compartilhado em vez de reescrito à mão (evitava ser uma 3ª
+// versão divergente de "Igreja" só pra isso).
+export type IgrejaMapa = Pick<Igreja, "id" | "nome" | "municipio" | "bairro" | "latitude" | "longitude">;
 
 const COR_PIN = "rgb(var(--color-primary))";
 const COR_PIN_SELECIONADO = "rgb(var(--color-accent))";

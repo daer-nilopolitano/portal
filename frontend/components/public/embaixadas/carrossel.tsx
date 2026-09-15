@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight, Clock, MapPin, User } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect } from "react";
-import type { Igreja } from "@/components/embaixadas-secao";
+import type { Igreja } from "@/lib/types";
 
 const INTERVALO_MS = 6000;
 

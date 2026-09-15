@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { EmbaixadasSecao } from "@/components/embaixadas-secao";
-import { EventosSecao } from "@/components/eventos-secao";
-import { SobreSecao } from "@/components/sobre-secao";
+import { EmbaixadasSecao } from "@/components/public/embaixadas/secao";
+import { EventosSecao } from "@/components/public/eventos-secao";
+import { SobreSecao } from "@/components/public/sobre-secao";
 
 export default function HomePage() {
   return (

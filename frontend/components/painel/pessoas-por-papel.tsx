@@ -5,27 +5,10 @@ import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { ROTULO_FAIXA_ETARIA } from "@/lib/labels";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
+import type { Pessoa, Embaixada as EmbaixadaCompleta } from "@/lib/types";
 
-interface Pessoa {
-  id: number;
-  nome: string;
-  data_nascimento: string;
-  telefone_contato: string;
-  email: string | null;
-  nome_responsavel: string;
-  telefone_responsavel: string;
-  embaixada_id: number;
-  embaixada_nome: string;
-  ativo: boolean;
-  idade: number;
-  faixa_etaria: string | null;
-  tem_acesso: boolean;
-}
-
-interface Embaixada {
-  id: number;
-  nome: string;
-}
+// Esta tela só usa id/nome de Embaixada (pra popular o <select>)
+type Embaixada = Pick<EmbaixadaCompleta, "id" | "nome">;
 
 interface FormularioPessoa {
   nome: string;
