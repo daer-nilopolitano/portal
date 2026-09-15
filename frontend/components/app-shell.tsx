@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`mb-1 block border-l-4 px-3 py-2 text-sm ${
+                className={`mb-1 flex min-h-[44px] items-center border-l-4 px-3 text-sm ${
                   ativo ? "border-daer-yellow bg-white/10 font-medium" : "border-transparent text-white/80 hover:bg-white/10"
                 }`}
               >
@@ -74,7 +74,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <button onClick={logout} className="rounded-md border border-border px-4 py-2 text-sm text-text hover:bg-surface-2">
+            <button onClick={logout} className="btn-ghost">
               Sair
             </button>
           </div>

@@ -21,7 +21,7 @@ export function ThemeToggle() {
       onClick={alternar}
       title={`Tema: ${ROTULOS[tema]}`}
       aria-label={`Alternar tema (atual: ${ROTULOS[tema]})`}
-      className="rounded-md border border-border p-2 text-text-muted hover:border-primary hover:text-primary"
+      className="flex h-11 w-11 items-center justify-center rounded-md border border-border text-text-muted hover:border-primary hover:text-primary"
     >
       <Icone size={16} />
     </button>

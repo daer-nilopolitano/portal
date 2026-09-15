@@ -72,9 +72,9 @@
     max-width: 70ch;
   }
 
-  /* Botões — altura, raio e espaçamento padronizados (h-10, rounded-md) em todas as variantes */
+  /* Botões — altura, raio e espaçamento padronizados (h-11 = 44px, área mínima de toque) em todas as variantes */
   .btn {
-    @apply inline-flex h-10 min-w-[44px] items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-primary {
     @apply btn bg-primary text-on-primary hover:bg-primary-hover;
@@ -97,7 +97,7 @@
 
   /* Campos de formulário — mesmo raio/borda/tamanho e foco visível padronizado */
   .field {
-    @apply mt-1 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary;
+    @apply mt-1 min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary;
   }
   .field-label {
     @apply block text-sm text-text;
@@ -111,4 +111,11 @@
   .dark .leaflet-tile-pane {
     filter: saturate(0.45) brightness(0.8) invert(1) hue-rotate(180deg) contrast(0.85);
   }
+}
+
+/* Sidebar do painel é sempre azul-marinho fixo (não segue o tema, ver app-shell.tsx) —
+   o anel de foco padrão (azul sobre azul) fica quase invisível ali, então usamos o
+   amarelo da marca só dentro dela. */
+aside {
+  --color-focus-ring: 242 183 5;
 }

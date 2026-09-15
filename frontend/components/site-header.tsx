@@ -32,7 +32,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`border-b-2 pb-1 text-sm transition-colors ${
+                className={`border-b-[3px] pb-1 text-sm transition-colors ${
                   ativo ? "border-accent text-primary" : "border-transparent text-text-muted hover:text-primary"
                 }`}
               >

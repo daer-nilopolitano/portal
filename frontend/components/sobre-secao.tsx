@@ -115,7 +115,7 @@ export function SobreSecao() {
           </dl>
 
           <h4 className="pt-2 font-semibold text-primary">Os 5 Ideais do Embaixador:</h4>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-text sm:grid-cols-3">
+          <ul className="grid grid-cols-2 gap-3 rounded-lg border border-border bg-surface-2 p-4 text-text sm:grid-cols-3">
             {["Estudo da Bíblia", "Missões", "Oração", "Mordomia", "Serviço Real"].map(
               (ideal) => (
                 <li key={ideal} className="flex items-center gap-2">

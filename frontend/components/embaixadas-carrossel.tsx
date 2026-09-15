@@ -108,7 +108,7 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
       </div>
 
       <div className="flex items-center justify-between">
-        <button onClick={scrollAnterior} aria-label="Embaixada anterior" className="rounded-full border border-border p-2 text-text-muted hover:border-primary hover:text-primary">
+        <button onClick={scrollAnterior} aria-label="Embaixada anterior" className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-muted hover:border-primary hover:text-primary">
           <ChevronLeft size={16} />
         </button>
 
@@ -131,7 +131,7 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
           ))}
         </div>
 
-        <button onClick={scrollProximo} aria-label="Próxima embaixada" className="rounded-full border border-border p-2 text-text-muted hover:border-primary hover:text-primary">
+        <button onClick={scrollProximo} aria-label="Próxima embaixada" className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-muted hover:border-primary hover:text-primary">
           <ChevronRight size={16} />
         </button>
       </div>
