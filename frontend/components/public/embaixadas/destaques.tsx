@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import type { Igreja } from "@/lib/types";
+import type { EmbaixadaDestaque } from "@/lib/types";
 import { EmbaixadasCarrossel } from "@/components/public/embaixadas/carrossel";
 import { EmbaixadasMapa } from "@/components/public/embaixadas/mapa";
 
-export function EmbaixadasDestaques({ igrejas }: { igrejas: Igreja[] }) {
+export function EmbaixadasDestaques({ igrejas }: { igrejas: EmbaixadaDestaque[] }) {
   const [igrejaSelecionadaId, setIgrejaSelecionadaId] = useState<number | null>(
     igrejas[0]?.id ?? null
   );

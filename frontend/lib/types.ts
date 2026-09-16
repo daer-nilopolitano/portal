@@ -27,6 +27,13 @@ export interface Igreja {
   longitude: number | null;
 }
 
+export interface HorarioReuniao {
+  id: number;
+  dia_semana: string;
+  dia_semana_display: string;
+  horario: string;
+}
+
 export interface Embaixada {
   id: number;
   nome: string;
@@ -34,6 +41,9 @@ export interface Embaixada {
   igreja_nome: string;
   conselheiro_responsavel_id: number | null;
   conselheiro_responsavel_nome: string | null;
+  conselheiro_ids: number[];
+  conselheiro_nomes: string[];
+  horarios_reuniao: HorarioReuniao[];
 }
 
 export interface Pessoa {
@@ -50,4 +60,36 @@ export interface Pessoa {
   idade: number;
   faixa_etaria: string | null;
   tem_acesso: boolean;
+}
+
+// Formato do endpoint público /embaixadas-publicas/ — só o que o site
+// institucional pode mostrar (sem conselheiro_responsavel_id nem qualquer
+// dado pessoal de Pessoa como telefone, e-mail ou data de nascimento).
+export interface HorarioReuniaoPublico {
+  dia_semana: string;
+  horario: string;
+}
+
+export interface EmbaixadaPublica {
+  id: number;
+  nome: string;
+  igreja_id: number;
+  igreja_nome: string;
+  conselheiros_nomes: string[];
+  horarios_reuniao: HorarioReuniaoPublico[];
+}
+
+/**
+ * Formato combinado usado pelo card de destaques da home (carrossel + mapa):
+ * junta o endereço de `Igreja` com os dados públicos da `Embaixada`
+ * associada. Montado no frontend a partir de dois endpoints distintos —
+ * /igrejas/ e /embaixadas-publicas/ — porque no backend são recursos com
+ * responsabilidades diferentes (geografia vs. gestão de embaixada). Só
+ * igrejas que já têm uma embaixada correspondente viram um `EmbaixadaDestaque`.
+ */
+export interface EmbaixadaDestaque extends Igreja {
+  embaixada_id: number;
+  embaixada_nome: string;
+  conselheiros_nomes: string[];
+  horarios_reuniao: HorarioReuniaoPublico[];
 }

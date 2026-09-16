@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Carteirinha, Embaixada, Igreja, Papel, Pessoa
+from .models import Carteirinha, Embaixada, HorarioReuniao, Igreja, Papel, Pessoa
 
 
 class PapelInline(admin.TabularInline):
@@ -10,6 +10,11 @@ class PapelInline(admin.TabularInline):
 
 class CarteirinhaInline(admin.StackedInline):
     model = Carteirinha
+    extra = 0
+
+
+class HorarioReuniaoInline(admin.TabularInline):
+    model = HorarioReuniao
     extra = 0
 
 
@@ -24,6 +29,8 @@ class EmbaixadaAdmin(admin.ModelAdmin):
     list_display = ("nome", "igreja", "conselheiro_responsavel")
     search_fields = ("nome",)
     autocomplete_fields = ("igreja", "conselheiro_responsavel")
+    filter_horizontal = ("conselheiros",)
+    inlines = [HorarioReuniaoInline]
 
 
 @admin.register(Pessoa)

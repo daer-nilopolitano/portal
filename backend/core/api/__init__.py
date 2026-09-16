@@ -10,6 +10,7 @@ from ninja import Router
 from .auth import router as auth_router
 from .carteirinhas import router as carteirinhas_router
 from .embaixadas import router as embaixadas_router
+from .embaixadas import router_publico as embaixadas_publicas_router
 from .igrejas import router as igrejas_router
 from .papeis import router as papeis_router
 from .pessoas import router as pessoas_router
@@ -19,6 +20,7 @@ router = Router()
 router.add_router("/auth", auth_router)
 router.add_router("/igrejas", igrejas_router)
 router.add_router("/embaixadas", embaixadas_router)
+router.add_router("/embaixadas-publicas", embaixadas_publicas_router)
 router.add_router("/pessoas", pessoas_router)
 router.add_router("/papeis", papeis_router)
 router.add_router("/carteirinhas", carteirinhas_router)

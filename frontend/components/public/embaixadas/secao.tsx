@@ -1,10 +1,29 @@
 import { EmbaixadasDestaques } from "@/components/public/embaixadas/destaques";
 import { SectionTitle } from "@/components/public/section-title";
 import { getFromApi } from "@/lib/api";
-import type { Igreja } from "@/lib/types";
+import type { Igreja, EmbaixadaPublica, EmbaixadaDestaque } from "@/lib/types";
 
 export async function EmbaixadasSecao() {
-  const igrejas = await getFromApi<Igreja[]>("/igrejas/").catch(() => []);
+  const [igrejas, embaixadas] = await Promise.all([
+    getFromApi<Igreja[]>("/igrejas/").catch(() => []),
+    getFromApi<EmbaixadaPublica[]>("/embaixadas-publicas/").catch(() => []),
+  ]);
+
+  // Junta os dois por igreja_id — só entram igrejas que já têm embaixada
+  // cadastrada (relação é 1:1, então cada igreja aparece no máximo uma vez).
+  const destaques: EmbaixadaDestaque[] = igrejas.flatMap((igreja) => {
+    const embaixada = embaixadas.find((e) => e.igreja_id === igreja.id);
+    if (!embaixada) return [];
+    return [
+      {
+        ...igreja,
+        embaixada_id: embaixada.id,
+        embaixada_nome: embaixada.nome,
+        conselheiros_nomes: embaixada.conselheiros_nomes,
+        horarios_reuniao: embaixada.horarios_reuniao,
+      },
+    ];
+  });
 
   return (
     <section id="embaixadas" className="border-t border-border bg-background px-6 py-20">
@@ -13,7 +32,7 @@ export async function EmbaixadasSecao() {
         <p className="mt-4 text-center text-text-muted">
           Conheça as igrejas que sediam nossas embaixadas e encontre a mais próxima de você.
         </p>
-        <EmbaixadasDestaques igrejas={igrejas} />
+        <EmbaixadasDestaques igrejas={destaques} />
       </div>
     </section>
   );

@@ -11,8 +11,12 @@ router = Router(tags=["igrejas"])
 class IgrejaOut(Schema):
     id: int
     nome: str
-    municipio: str
+    cep: str
+    rua: str
+    numero: str
+    complemento: str
     bairro: str
+    municipio: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
 

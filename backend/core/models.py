@@ -42,6 +42,16 @@ class Igreja(models.Model):
         return self.nome
 
 
+class DiaSemana(models.TextChoices):
+    DOMINGO = "domingo", "Domingo"
+    SEGUNDA = "segunda", "Segunda-feira"
+    TERCA = "terca", "Terça-feira"
+    QUARTA = "quarta", "Quarta-feira"
+    QUINTA = "quinta", "Quinta-feira"
+    SEXTA = "sexta", "Sexta-feira"
+    SABADO = "sabado", "Sábado"
+
+
 class Embaixada(models.Model):
     nome = models.CharField(max_length=200)
     igreja = models.OneToOneField(
@@ -53,7 +63,13 @@ class Embaixada(models.Model):
         null=True,
         blank=True,
         related_name="embaixadas_lideradas",
-        help_text="Deve ser uma Pessoa com Papel do tipo 'conselheiro'.",
+        help_text="Deve ser uma Pessoa com Papel do tipo 'conselheiro'. É quem cadastra embaixadores e auxiliares desta embaixada.",
+    )
+    conselheiros = models.ManyToManyField(
+        "Pessoa",
+        related_name="embaixadas_como_conselheiro",
+        blank=True,
+        help_text="Demais conselheiros desta embaixada, além do responsável acima.",
     )
 
     class Meta:
@@ -63,6 +79,28 @@ class Embaixada(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class HorarioReuniao(models.Model):
+    """
+    Uma embaixada pode ter mais de uma reunião por semana (ex.: reunião
+    normal no sábado + culto infantil no domingo) — por isso é um model à
+    parte com FK pra Embaixada, em vez de dois campos soltos nela.
+    """
+
+    embaixada = models.ForeignKey(
+        Embaixada, on_delete=models.CASCADE, related_name="horarios_reuniao"
+    )
+    dia_semana = models.CharField("Dia da semana", max_length=10, choices=DiaSemana.choices)
+    horario = models.TimeField("Horário")
+
+    class Meta:
+        verbose_name = "Horário de reunião"
+        verbose_name_plural = "Horários de reunião"
+        ordering = ["embaixada", "dia_semana", "horario"]
+
+    def __str__(self):
+        return f"{self.embaixada} — {self.get_dia_semana_display()} às {self.horario.strftime('%H:%M')}"
 
 
 class Pessoa(models.Model):

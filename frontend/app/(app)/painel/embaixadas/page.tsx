@@ -11,16 +11,36 @@ import type { Embaixada, Igreja, Pessoa } from "@/lib/types";
 type IgrejaOpcao = Pick<Igreja, "id" | "nome">;
 type PessoaConselheiro = Pick<Pessoa, "id" | "nome">;
 
+// Precisa bater com DiaSemana em backend/core/models.py.
+const DIAS_SEMANA = [
+  { value: "domingo", label: "Domingo" },
+  { value: "segunda", label: "Segunda-feira" },
+  { value: "terca", label: "Terça-feira" },
+  { value: "quarta", label: "Quarta-feira" },
+  { value: "quinta", label: "Quinta-feira" },
+  { value: "sexta", label: "Sexta-feira" },
+  { value: "sabado", label: "Sábado" },
+];
+
+interface FormularioHorario {
+  dia_semana: string;
+  horario: string;
+}
+
 interface FormularioEmbaixada {
   nome: string;
   igreja_id: string;
   conselheiro_responsavel_id: string;
+  conselheiro_ids: string[];
+  horarios_reuniao: FormularioHorario[];
 }
 
 const FORMULARIO_VAZIO: FormularioEmbaixada = {
   nome: "",
   igreja_id: "",
   conselheiro_responsavel_id: "",
+  conselheiro_ids: [],
+  horarios_reuniao: [],
 };
 
 export default function PainelEmbaixadasPage() {
@@ -77,9 +97,46 @@ export default function PainelEmbaixadasPage() {
       conselheiro_responsavel_id: e.conselheiro_responsavel_id
         ? String(e.conselheiro_responsavel_id)
         : "",
+      conselheiro_ids: e.conselheiro_ids.map(String),
+      horarios_reuniao: e.horarios_reuniao.map((h) => ({
+        dia_semana: h.dia_semana,
+        horario: h.horario,
+      })),
     });
     setErroFormulario(null);
     setFormularioAberto(true);
+  }
+
+  function adicionarHorario() {
+    setFormulario({
+      ...formulario,
+      horarios_reuniao: [...formulario.horarios_reuniao, { dia_semana: "sabado", horario: "16:00" }],
+    });
+  }
+
+  function removerHorario(indice: number) {
+    setFormulario({
+      ...formulario,
+      horarios_reuniao: formulario.horarios_reuniao.filter((_, i) => i !== indice),
+    });
+  }
+
+  function atualizarHorario(indice: number, campo: keyof FormularioHorario, valor: string) {
+    setFormulario({
+      ...formulario,
+      horarios_reuniao: formulario.horarios_reuniao.map((h, i) =>
+        i === indice ? { ...h, [campo]: valor } : h
+      ),
+    });
+  }
+
+  function alternarConselheiro(id: string) {
+    setFormulario({
+      ...formulario,
+      conselheiro_ids: formulario.conselheiro_ids.includes(id)
+        ? formulario.conselheiro_ids.filter((c) => c !== id)
+        : [...formulario.conselheiro_ids, id],
+    });
   }
 
   async function salvar(evento: FormEvent) {
@@ -94,6 +151,10 @@ export default function PainelEmbaixadasPage() {
       conselheiro_responsavel_id: formulario.conselheiro_responsavel_id
         ? Number(formulario.conselheiro_responsavel_id)
         : null,
+      conselheiro_ids: formulario.conselheiro_ids.map(Number),
+      horarios_reuniao: formulario.horarios_reuniao
+        .filter((h) => h.dia_semana && h.horario)
+        .map((h) => ({ dia_semana: h.dia_semana, horario: h.horario })),
     };
 
     try {
@@ -130,9 +191,28 @@ export default function PainelEmbaixadasPage() {
     { cabecalho: "Nome", render: (e) => <span className="font-medium text-text">{e.nome}</span> },
     { cabecalho: "Igreja", render: (e) => <span className="text-text-muted">{e.igreja_nome}</span> },
     {
-      cabecalho: "Conselheiro responsável",
+      cabecalho: "Conselheiros",
+      render: (e) => {
+        // Responsável primeiro (é quem cadastra embaixadores/auxiliares),
+        // depois os demais, sem repetir o nome se ele também estiver na
+        // lista de conselheiros da embaixada.
+        const nomes = [
+          ...(e.conselheiro_responsavel_nome ? [`${e.conselheiro_responsavel_nome} (responsável)`] : []),
+          ...e.conselheiro_nomes.filter((nome) => nome !== e.conselheiro_responsavel_nome),
+        ];
+        return (
+          <span className="text-text-muted">{nomes.length > 0 ? nomes.join(", ") : "—"}</span>
+        );
+      },
+    },
+    {
+      cabecalho: "Horários",
       render: (e) => (
-        <span className="text-text-muted">{e.conselheiro_responsavel_nome ?? "—"}</span>
+        <span className="text-text-muted">
+          {e.horarios_reuniao.length > 0
+            ? e.horarios_reuniao.map((h) => `${h.dia_semana_display} ${h.horario}`).join(", ")
+            : "—"}
+        </span>
       ),
     },
   ];
@@ -204,9 +284,76 @@ export default function PainelEmbaixadasPage() {
               ))}
             </select>
             <p className="mt-1 text-xs text-text-muted">
-              Só aparecem aqui pessoas já cadastradas como conselheiro em alguma
-              embaixada.
+              É quem cadastra os embaixadores e auxiliares desta embaixada.
             </p>
+          </div>
+
+          <div className="sm:col-span-2">
+            <label className="block text-sm text-text">Outros conselheiros</label>
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-2 rounded-md border border-border p-3">
+              {conselheiros
+                .filter((c) => String(c.id) !== formulario.conselheiro_responsavel_id)
+                .map((c) => (
+                  <label key={c.id} className="flex items-center gap-2 text-sm text-text">
+                    <input
+                      type="checkbox"
+                      checked={formulario.conselheiro_ids.includes(String(c.id))}
+                      onChange={() => alternarConselheiro(String(c.id))}
+                    />
+                    {c.nome}
+                  </label>
+                ))}
+              {conselheiros.length === 0 && (
+                <p className="text-xs text-text-muted">Nenhum conselheiro cadastrado ainda.</p>
+              )}
+            </div>
+            <p className="mt-1 text-xs text-text-muted">
+              Além do responsável — todos aparecem juntos no site institucional.
+            </p>
+          </div>
+
+          <div className="sm:col-span-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm text-text">Horários de reunião</label>
+              <button type="button" onClick={adicionarHorario} className="btn-ghost text-sm">
+                + Adicionar horário
+              </button>
+            </div>
+            <div className="mt-2 space-y-2">
+              {formulario.horarios_reuniao.map((h, indice) => (
+                <div key={indice} className="flex items-center gap-2">
+                  <select
+                    value={h.dia_semana}
+                    onChange={(e) => atualizarHorario(indice, "dia_semana", e.target.value)}
+                    className="field"
+                  >
+                    {DIAS_SEMANA.map((d) => (
+                      <option key={d.value} value={d.value}>
+                        {d.label}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="time"
+                    required
+                    value={h.horario}
+                    onChange={(e) => atualizarHorario(indice, "horario", e.target.value)}
+                    className="field"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removerHorario(indice)}
+                    aria-label="Remover horário"
+                    className="btn-ghost text-danger"
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))}
+              {formulario.horarios_reuniao.length === 0 && (
+                <p className="text-xs text-text-muted">Nenhum horário cadastrado ainda.</p>
+              )}
+            </div>
           </div>
 
           {erroFormulario && (

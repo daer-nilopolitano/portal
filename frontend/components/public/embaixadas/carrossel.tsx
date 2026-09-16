@@ -3,11 +3,11 @@
 import { ChevronLeft, ChevronRight, Clock, MapPin, User } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect } from "react";
-import type { Igreja } from "@/lib/types";
+import type { EmbaixadaDestaque } from "@/lib/types";
 
 const INTERVALO_MS = 6000;
 
-function enderecoCompleto(igreja: Igreja) {
+function enderecoCompleto(igreja: EmbaixadaDestaque) {
   return [
     [igreja.rua, igreja.numero].filter(Boolean).join(", "),
     igreja.complemento,
@@ -18,19 +18,25 @@ function enderecoCompleto(igreja: Igreja) {
     .join(" — ");
 }
 
-// Dados de exemplo — o backend ainda não expõe horário de reuniões nem
-// conselheiro responsável por igreja. Mantém o card com a mesma densidade
-// visual do mapa; trocar por dados reais assim que o endpoint existir.
-function dadosExemplo(igreja: Igreja) {
-  const horarios = ["Reuniões aos sábados, às 16h", "Reuniões aos domingos, às 17h"];
-  return {
-    horario: horarios[igreja.id % horarios.length],
-    conselheiro: "Conselheiro responsável: a definir",
-  };
+function horariosReuniao(destaque: EmbaixadaDestaque) {
+  if (destaque.horarios_reuniao.length === 0) {
+    return "Horário de reunião: a definir";
+  }
+  const rotulo = destaque.horarios_reuniao.length > 1 ? "Reuniões" : "Reunião";
+  const lista = destaque.horarios_reuniao.map((h) => `${h.dia_semana}, ${h.horario}`).join(" / ");
+  return `${rotulo}: ${lista}`;
+}
+
+function conselheirosResponsaveis(destaque: EmbaixadaDestaque) {
+  if (destaque.conselheiros_nomes.length === 0) {
+    return "Conselheiro responsável: a definir";
+  }
+  const rotulo = destaque.conselheiros_nomes.length > 1 ? "Conselheiros" : "Conselheiro responsável";
+  return `${rotulo}: ${destaque.conselheiros_nomes.join(", ")}`;
 }
 
 interface Props {
-  igrejas: Igreja[];
+  igrejas: EmbaixadaDestaque[];
   igrejaSelecionadaId: number | null;
   onSelecionarIgreja: (id: number) => void;
   pausado: boolean;
@@ -81,29 +87,27 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
     <div className="relative flex h-[350px] flex-col justify-between rounded-lg border border-border bg-surface p-6">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
-          {igrejas.map((igreja) => {
-            const exemplo = dadosExemplo(igreja);
-            return (
-              <div key={igreja.id} className="min-w-0 flex-[0_0_100%]">
-                <p className="font-heading text-lg font-semibold text-primary">{igreja.nome}</p>
+          {igrejas.map((igreja) => (
+            <div key={igreja.id} className="min-w-0 flex-[0_0_100%]">
+              <p className="font-heading text-lg font-semibold text-primary">{igreja.nome}</p>
+              <p className="text-xs text-text-muted">{igreja.embaixada_nome}</p>
 
-                <div className="mt-4 space-y-3 text-sm text-text-muted">
-                  <div className="flex items-start gap-2">
-                    <MapPin size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                    <span className="line-clamp-2 leading-relaxed">{enderecoCompleto(igreja)}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Clock size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                    <span className="leading-relaxed">{exemplo.horario}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <User size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                    <span className="leading-relaxed">{exemplo.conselheiro}</span>
-                  </div>
+              <div className="mt-4 space-y-3 text-sm text-text-muted">
+                <div className="flex items-start gap-2">
+                  <MapPin size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
+                  <span className="line-clamp-2 leading-relaxed">{enderecoCompleto(igreja)}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Clock size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
+                  <span className="leading-relaxed">{horariosReuniao(igreja)}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <User size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
+                  <span className="leading-relaxed">{conselheirosResponsaveis(igreja)}</span>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
 
