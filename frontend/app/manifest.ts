@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
+import { NOME_SITE, TAGLINE } from "@/lib/content/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "DAER Nilopolitano",
-    short_name: "DAER Nilopolitano",
-    description:
-      "Departamento Associacional de Embaixadores do Rei Nilopolitano",
+    name: NOME_SITE,
+    short_name: NOME_SITE,
+    description: TAGLINE,
     start_url: "/",
     display: "standalone",
     background_color: "#F8FAFC",

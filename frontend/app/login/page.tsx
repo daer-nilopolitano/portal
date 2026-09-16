@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
+import { EMAIL_CONTATO, NOME_SITE } from "@/lib/content/site";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -34,7 +35,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center text-center">
           <Image src="/logo-daer.png" alt="" width={56} height={61} priority />
-          <p className="mt-3 text-xl font-bold text-primary">DAER Nilopolitano</p>
+          <p className="mt-3 text-xl font-bold text-primary">{NOME_SITE}</p>
           <p className="mt-1 text-sm text-text-muted">
             Bem-vindo de volta! Entre com seus dados pra acessar sua área.
           </p>
@@ -101,7 +102,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-4 text-center text-xs text-text-muted">
-          Esqueceu a senha? Entre em contato pelo email: daernil.oficial@gmail.com
+          Esqueceu a senha? Entre em contato pelo email: {EMAIL_CONTATO}
         </p>
       </div>
     </div>

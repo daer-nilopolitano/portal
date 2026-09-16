@@ -7,6 +7,7 @@ import { apiFetch, mediaUrl } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatarDataBR } from "@/lib/format";
 import { ROTULO_CARGO_DIRETORIA, ROTULO_PAPEL } from "@/lib/labels";
+import { NOME_SITE } from "@/lib/content/site";
 
 interface CarteirinhaMe {
   id: number;
@@ -68,7 +69,7 @@ export default function MinhaCarteirinhaPage() {
         <div className="flex items-center gap-3 bg-daer-blue px-5 py-4">
           <Image src="/logo-daer.png" alt="" width={32} height={35} />
           <div>
-            <p className="text-sm font-semibold text-white">DAER Nilopolitano</p>
+            <p className="text-sm font-semibold text-white">{NOME_SITE}</p>
             <p className="text-xs text-white/70">Carteirinha Digital</p>
           </div>
         </div>

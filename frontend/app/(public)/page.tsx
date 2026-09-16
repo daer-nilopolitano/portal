@@ -3,6 +3,7 @@ import { EmbaixadasSecao } from "@/components/public/embaixadas/secao";
 import { EmbaixadoresDoReiSecao } from "@/components/public/embaixadores-do-rei-secao";
 import { EventosSecao } from "@/components/public/eventos-secao";
 import { SobreSecao } from "@/components/public/sobre-secao";
+import { NOME_SITE, TAGLINE } from "@/lib/content/site";
 
 export default function HomePage() {
   return (
@@ -28,10 +29,10 @@ export default function HomePage() {
             className="mx-auto"
           />
           <h1 className="mt-4 text-4xl font-bold text-white">
-            DAER Nilopolitano
+            {NOME_SITE}
           </h1>
           <p className="mt-3 text-lg text-white/90">
-            Departamento Associacional de Embaixadores do Rei Nilopolitano.
+            {TAGLINE}.
           </p>
         </div>
       </section>

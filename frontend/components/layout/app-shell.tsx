@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth, type Papel } from "@/lib/auth-context";
 import { ROTULO_PAPEL } from "@/lib/labels";
+import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 interface ItemNav {
@@ -47,7 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         raciocínio do rodapé do site público.
       */}
       <aside className="flex w-60 flex-shrink-0 flex-col bg-daer-blue text-white">
-        <div className="px-6 py-5 font-heading text-base font-semibold">DAER Nilopolitano</div>
+        <div className="px-6 py-5 font-heading text-base font-semibold">{NOME_SITE}</div>
         <nav className="flex-1 px-3">
           {itensVisiveis.map((item) => {
             const ativo = pathname === item.href;

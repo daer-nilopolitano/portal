@@ -4,23 +4,13 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
+import { DIAS_SEMANA } from "@/lib/labels";
 import type { Embaixada, Igreja, Pessoa } from "@/lib/types";
 
 // Esta tela só usa id/nome de Igreja e de Pessoa (pra popular os <select>) —
 // Pick evita puxar campos que aqui não são usados (endereço, faixa etária...)
 type IgrejaOpcao = Pick<Igreja, "id" | "nome">;
 type PessoaConselheiro = Pick<Pessoa, "id" | "nome">;
-
-// Precisa bater com DiaSemana em backend/core/models.py.
-const DIAS_SEMANA = [
-  { value: "domingo", label: "Domingo" },
-  { value: "segunda", label: "Segunda-feira" },
-  { value: "terca", label: "Terça-feira" },
-  { value: "quarta", label: "Quarta-feira" },
-  { value: "quinta", label: "Quinta-feira" },
-  { value: "sexta", label: "Sexta-feira" },
-  { value: "sabado", label: "Sábado" },
-];
 
 interface FormularioHorario {
   dia_semana: string;

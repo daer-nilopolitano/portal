@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const ITENS_NAV = [
@@ -23,7 +24,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo-daer.png" alt="" width={36} height={39} priority />
-          <span className="font-heading text-lg font-semibold text-primary">DAER Nilopolitano</span>
+          <span className="font-heading text-lg font-semibold text-primary">{NOME_SITE}</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

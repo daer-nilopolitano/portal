@@ -18,3 +18,14 @@ export const ROTULO_FAIXA_ETARIA: Record<string, string> = {
   adolescente: "Adolescente (12-14 anos)",
   juvenil: "Juvenil (15-17 anos)",
 };
+
+// Precisa bater com DiaSemana em backend/core/models.py.
+export const DIAS_SEMANA: { value: string; label: string }[] = [
+  { value: "domingo", label: "Domingo" },
+  { value: "segunda", label: "Segunda-feira" },
+  { value: "terca", label: "Terça-feira" },
+  { value: "quarta", label: "Quarta-feira" },
+  { value: "quinta", label: "Quinta-feira" },
+  { value: "sexta", label: "Sexta-feira" },
+  { value: "sabado", label: "Sábado" },
+];
