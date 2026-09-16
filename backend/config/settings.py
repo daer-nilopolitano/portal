@@ -117,7 +117,10 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 
-WAGTAIL_SITE_NAME = "DAER Nilopolitano"
+# Constante de identificação do site
+SITE_NAME = "DAER Nilopolitano"
+
+WAGTAIL_SITE_NAME = SITE_NAME
 WAGTAILADMIN_BASE_URL = os.environ.get(
     "WAGTAILADMIN_BASE_URL", "http://localhost:8000"
 )
@@ -129,11 +132,11 @@ JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080")) 
 
 # Configuração do django-jazzmin (tema do Django Admin).
 JAZZMIN_SETTINGS = {
-    "site_title": "DAER Nilopolitano",
-    "site_header": "DAER Nilopolitano",
-    "site_brand": "DAER Nilopolitano",
-    "welcome_sign": "Administração do DAER Nilopolitano",
-    "copyright": "DAER Nilopolitano",
+    "site_title": SITE_NAME,
+    "site_header": SITE_NAME,
+    "site_brand": SITE_NAME,
+    "welcome_sign": f"Administração do {SITE_NAME}",
+    "copyright": SITE_NAME,
     "site_logo": "img/logo.png",
     "login_logo": "img/logo.png",
     "site_logo_classes": "img-fluid",

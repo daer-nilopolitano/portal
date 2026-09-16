@@ -26,7 +26,7 @@ export async function EmbaixadasSecao() {
   });
 
   return (
-    <section id="embaixadas" className="border-t border-border bg-background px-6 py-20">
+    <section id="embaixadas" className="border-t border-border bg-surface-soft px-6 py-20">
       <div className="mx-auto max-w-5xl">
         <SectionTitle>Embaixadas Nilopolitanas</SectionTitle>
         <p className="mt-4 text-center text-text-muted">
