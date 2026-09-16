@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`mb-1 flex min-h-[44px] items-center border-l-4 px-3 text-sm ${
+                className={`mb-1 flex min-h-[44px] items-center rounded border-l-4 px-3 text-sm ${
                   ativo ? "border-daer-yellow bg-white/10 font-medium" : "border-transparent text-white/80 hover:bg-white/10"
                 }`}
               >

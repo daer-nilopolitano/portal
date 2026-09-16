@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { EmbaixadasSecao } from "@/components/public/embaixadas/secao";
+import { EmbaixadoresDoReiSecao } from "@/components/public/embaixadores-do-rei-secao";
 import { EventosSecao } from "@/components/public/eventos-secao";
 import { SobreSecao } from "@/components/public/sobre-secao";
 
@@ -36,6 +37,7 @@ export default function HomePage() {
       </section>
 
       <SobreSecao />
+      <EmbaixadoresDoReiSecao />
       <EventosSecao />
       <EmbaixadasSecao />
     </>

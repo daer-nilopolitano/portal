@@ -101,7 +101,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-4 text-center text-xs text-text-muted">
-          Esqueceu a senha? Fale com sua Diretoria pra redefinir o acesso.
+          Esqueceu a senha? Entre em contato pelo email: daernil.oficial@gmail.com
         </p>
       </div>
     </div>

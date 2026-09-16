@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 const ITENS_NAV = [
   { href: "/", rotulo: "Início" },
   { href: "/#sobre", rotulo: "Sobre" },
+  { href: "/#embaixadores-do-rei", rotulo: "Embaixadores do Rei" },
   { href: "/#eventos", rotulo: "Eventos" },
   { href: "/#embaixadas", rotulo: "Embaixadas" },
 ];
