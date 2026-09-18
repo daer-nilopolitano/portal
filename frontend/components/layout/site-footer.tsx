@@ -1,17 +1,59 @@
-import { NOME_SITE, TAGLINE } from "@/lib/content/site";
+import Link from "next/link";
+
+const EMAIL_CONTATO = "daernil.oficial@gmail.com";
+
+const LINKS_NAVEGACAO = [
+  { href: "/#sobre", rotulo: "Sobre" },
+  { href: "/#embaixadores-do-rei", rotulo: "Embaixadores do Rei" },
+  { href: "/#eventos", rotulo: "Eventos" },
+  { href: "/#embaixadas", rotulo: "Embaixadas" },
+];
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-surface-2">
       <div className="mx-auto max-w-5xl px-6 py-10">
-        <p className="font-heading text-base font-semibold text-primary">
-          {NOME_SITE}
-        </p>
-        <p className="mt-2 max-w-md text-sm text-text-muted">
-          {TAGLINE}.
-        </p>
-        <p className="mt-6 text-xs text-text-muted/70">
-          © {new Date().getFullYear()} {NOME_SITE}.
+        <div className="grid gap-8 sm:grid-cols-3">
+          <div>
+            <p className="font-heading text-base font-semibold text-primary">
+              DAER Nilopolitano
+            </p>
+            <p className="mt-2 max-w-xs text-sm text-text-muted">
+              Departamento Associacional de Embaixadores do Rei Nilopolitano.
+            </p>
+          </div>
+
+          <nav aria-label="Navegação rápida">
+            <p className="text-sm font-semibold text-primary">Navegação</p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {LINKS_NAVEGACAO.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-text-muted hover:text-primary">
+                    {link.rotulo}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/login" className="text-text-muted hover:text-primary">
+                  Entrar
+                </Link>
+              </li>
+            </ul>
+          </nav>
+
+          <div>
+            <p className="text-sm font-semibold text-primary">Contato</p>
+            <a
+              href={`mailto:${EMAIL_CONTATO}`}
+              className="mt-3 inline-block text-sm text-text-muted hover:text-primary"
+            >
+              {EMAIL_CONTATO}
+            </a>
+          </div>
+        </div>
+
+        <p className="mt-8 text-xs text-text-muted/70">
+          © {new Date().getFullYear()} DAER Nilopolitano.
         </p>
       </div>
     </footer>

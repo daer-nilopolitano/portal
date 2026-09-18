@@ -1,6 +1,6 @@
 /**
  * Helper para chamar a API do backend Django (Ninja + Wagtail headless).
- * Ex.: apiFetch("/igrejas/") ou apiFetch("/pessoas/", { token })
+ * Ex.: apiFetch("/igrejas/") ou apiFetch("/membros/", { token })
  */
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 const MEDIA_ORIGIN = API_URL.replace(/\/api\/?$/, "");

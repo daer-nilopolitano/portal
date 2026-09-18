@@ -24,20 +24,20 @@ const ITENS_NAV: ItemNav[] = [
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { pessoa, carregando, logout } = useAuth();
+  const { membro, carregando, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    if (!carregando && !pessoa) router.replace("/login");
-  }, [carregando, pessoa, router]);
+    if (!carregando && !membro) router.replace("/login");
+  }, [carregando, membro, router]);
 
   if (carregando) {
     return <div className="flex min-h-screen items-center justify-center text-primary">Carregando…</div>;
   }
-  if (!pessoa) return null;
+  if (!membro) return null;
 
-  const itensVisiveis = ITENS_NAV.filter((item) => pessoa.papel && item.papeis.includes(pessoa.papel));
+  const itensVisiveis = ITENS_NAV.filter((item) => membro.papel && item.papeis.includes(membro.papel));
 
   return (
     <div className="flex min-h-screen">
@@ -70,8 +70,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1 flex-col bg-background">
         <header className="flex items-center justify-between border-b border-border bg-surface px-8 py-4">
           <div>
-            <p className="text-sm text-text-muted">{pessoa.papel ? ROTULO_PAPEL[pessoa.papel] : "Sem papel definido"}</p>
-            <p className="font-heading text-base font-semibold text-primary">{pessoa.nome}</p>
+            <p className="text-sm text-text-muted">{membro.papel ? ROTULO_PAPEL[membro.papel] : "Sem papel definido"}</p>
+            <p className="font-heading text-base font-semibold text-primary">{membro.nome}</p>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />

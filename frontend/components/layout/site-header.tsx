@@ -17,7 +17,7 @@ const ITENS_NAV = [
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { pessoa, carregando } = useAuth();
+  const { membro, carregando } = useAuth();
 
   return (
     <header className="border-b border-border bg-surface-2">
@@ -47,7 +47,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           {!carregando &&
-            (pessoa ? (
+            (membro ? (
               <Link href="/painel" className="btn-primary">
                 Minha área
               </Link>

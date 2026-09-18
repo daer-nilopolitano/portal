@@ -11,7 +11,7 @@ from cms.api import api_router as wagtail_api_router
 
 api = NinjaAPI(title="DAER Nilopolitano API", version="1.0.0")
 
-# Router-mestre com todas as entidades (igrejas, embaixadas, pessoas, papéis, carteirinhas)
+# Router-mestre com todas as entidades (igrejas, embaixadas, membros, papéis, carteirinhas)
 api.add_router("/", "core.api.router")
 
 urlpatterns = [

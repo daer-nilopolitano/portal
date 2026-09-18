@@ -46,7 +46,7 @@ export interface Embaixada {
   horarios_reuniao: HorarioReuniao[];
 }
 
-export interface Pessoa {
+export interface Membro {
   id: number;
   nome: string;
   data_nascimento: string;
@@ -64,7 +64,7 @@ export interface Pessoa {
 
 // Formato do endpoint público /embaixadas-publicas/ — só o que o site
 // institucional pode mostrar (sem conselheiro_responsavel_id nem qualquer
-// dado pessoal de Pessoa como telefone, e-mail ou data de nascimento).
+// dado pessoal de Membro como telefone, e-mail ou data de nascimento).
 export interface HorarioReuniaoPublico {
   dia_semana: string;
   horario: string;

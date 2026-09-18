@@ -5,12 +5,12 @@ import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import { DIAS_SEMANA } from "@/lib/labels";
-import type { Embaixada, Igreja, Pessoa } from "@/lib/types";
+import type { Embaixada, Igreja, Membro } from "@/lib/types";
 
-// Esta tela só usa id/nome de Igreja e de Pessoa (pra popular os <select>) —
+// Esta tela só usa id/nome de Igreja e de Membro (pra popular os <select>) —
 // Pick evita puxar campos que aqui não são usados (endereço, faixa etária...)
 type IgrejaOpcao = Pick<Igreja, "id" | "nome">;
-type PessoaConselheiro = Pick<Pessoa, "id" | "nome">;
+type MembroConselheiro = Pick<Membro, "id" | "nome">;
 
 interface FormularioHorario {
   dia_semana: string;
@@ -38,7 +38,7 @@ export default function PainelEmbaixadasPage() {
 
   const [lista, setLista] = useState<Embaixada[]>([]);
   const [igrejas, setIgrejas] = useState<IgrejaOpcao[]>([]);
-  const [conselheiros, setConselheiros] = useState<PessoaConselheiro[]>([]);
+  const [conselheiros, setConselheiros] = useState<MembroConselheiro[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -56,7 +56,7 @@ export default function PainelEmbaixadasPage() {
       const [listaEmbaixadas, listaIgrejas, listaConselheiros] = await Promise.all([
         apiFetch<Embaixada[]>("/embaixadas/", { token }),
         apiFetch<IgrejaOpcao[]>("/igrejas/", { token }),
-        apiFetch<PessoaConselheiro[]>("/pessoas/?papel=conselheiro", { token }),
+        apiFetch<MembroConselheiro[]>("/membros/?papel=conselheiro", { token }),
       ]);
       setLista(listaEmbaixadas);
       setIgrejas(listaIgrejas);

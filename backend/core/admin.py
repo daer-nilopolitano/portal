@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Carteirinha, Embaixada, HorarioReuniao, Igreja, Papel, Pessoa
+from .models import Carteirinha, Embaixada, HorarioReuniao, Igreja, Membro, Papel
 
 
 class PapelInline(admin.TabularInline):
@@ -33,8 +33,8 @@ class EmbaixadaAdmin(admin.ModelAdmin):
     inlines = [HorarioReuniaoInline]
 
 
-@admin.register(Pessoa)
-class PessoaAdmin(admin.ModelAdmin):
+@admin.register(Membro)
+class MembroAdmin(admin.ModelAdmin):
     list_display = ("nome", "embaixada", "idade", "faixa_etaria", "ativo")
     list_filter = ("ativo", "embaixada")
     search_fields = ("nome", "email")
@@ -44,6 +44,6 @@ class PessoaAdmin(admin.ModelAdmin):
 
 @admin.register(Papel)
 class PapelAdmin(admin.ModelAdmin):
-    list_display = ("pessoa", "tipo", "cargo_diretoria", "data_inicio", "data_fim")
+    list_display = ("membro", "tipo", "cargo_diretoria", "data_inicio", "data_fim")
     list_filter = ("tipo", "cargo_diretoria")
-    autocomplete_fields = ("pessoa",)
+    autocomplete_fields = ("membro",)

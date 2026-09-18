@@ -9,8 +9,8 @@ válido, sem precisar estar logada. Ele só devolve o mínimo necessário
 telefone, e-mail ou contato do responsável.
 
 Os demais endpoints exigem login: emitir/renovar seguem a mesma regra de
-Embaixada/Pessoa (Diretoria ou o conselheiro responsável pela embaixada da
-pessoa); `/carteirinhas/me/` é o que a PWA usa para mostrar a carteirinha de
+Embaixada/Membro (Diretoria ou o conselheiro responsável pela embaixada do
+membro); `/carteirinhas/me/` é o que a PWA usa para mostrar a carteirinha de
 quem está logado, e funciona para qualquer papel (diretoria, conselheiro ou
 embaixador do rei).
 """
@@ -22,16 +22,16 @@ from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 from ninja.errors import HttpError
 
-from ..auth import AuthBearer, pessoa_do_usuario
-from ..models import Carteirinha, Embaixada, Papel, Pessoa
+from ..auth import AuthBearer, membro_do_usuario
+from ..models import Carteirinha, Embaixada, Membro, Papel
 
 router = Router(tags=["carteirinhas"], auth=AuthBearer())
 
 
 class CarteirinhaOut(Schema):
     id: int
-    pessoa_id: int
-    pessoa_nome: str
+    membro_id: int
+    membro_nome: str
     foto_url: Optional[str] = None
     embaixada_nome: str
     papel: Optional[str] = None
@@ -41,30 +41,30 @@ class CarteirinhaOut(Schema):
     emitida_em: date
 
     @staticmethod
-    def resolve_pessoa_nome(obj: Carteirinha) -> str:
-        return obj.pessoa.nome
+    def resolve_membro_nome(obj: Carteirinha) -> str:
+        return obj.membro.nome
 
     @staticmethod
     def resolve_foto_url(obj: Carteirinha) -> Optional[str]:
-        return obj.pessoa.foto.url if obj.pessoa.foto else None
+        return obj.membro.foto.url if obj.membro.foto else None
 
     @staticmethod
     def resolve_embaixada_nome(obj: Carteirinha) -> str:
-        return obj.pessoa.embaixada.nome
+        return obj.membro.embaixada.nome
 
     @staticmethod
     def resolve_papel(obj: Carteirinha) -> Optional[str]:
-        papel = obj.pessoa.papel_atual
+        papel = obj.membro.papel_atual
         return papel.tipo if papel else None
 
     @staticmethod
     def resolve_cargo_diretoria(obj: Carteirinha) -> Optional[str]:
-        papel = obj.pessoa.papel_atual
+        papel = obj.membro.papel_atual
         return papel.cargo_diretoria if papel else None
 
 
 class CarteirinhaIn(Schema):
-    pessoa_id: int
+    membro_id: int
     validade: date
 
 
@@ -81,62 +81,62 @@ class VerificacaoOut(Schema):
     validade: date
 
 
-def _pode_gerenciar_carteirinha_de(pessoa_logada: Pessoa, pessoa_alvo: Pessoa) -> bool:
-    papel = pessoa_logada.papel_atual
+def _pode_gerenciar_carteirinha_de(membro_logado: Membro, membro_alvo: Membro) -> bool:
+    papel = membro_logado.papel_atual
     if papel and papel.tipo == Papel.Tipo.DIRETORIA:
         return True
     if papel and papel.tipo == Papel.Tipo.CONSELHEIRO:
         return Embaixada.objects.filter(
-            pk=pessoa_alvo.embaixada_id, conselheiro_responsavel=pessoa_logada
+            pk=membro_alvo.embaixada_id, conselheiro_responsavel=membro_logado
         ).exists()
     return False
 
 
 @router.get("/me/", response=CarteirinhaOut)
 def minha_carteirinha(request):
-    pessoa = pessoa_do_usuario(request.auth)
+    membro = membro_do_usuario(request.auth)
     carteirinha = get_object_or_404(
-        Carteirinha.objects.select_related("pessoa", "pessoa__embaixada"), pessoa=pessoa
+        Carteirinha.objects.select_related("membro", "membro__embaixada"), membro=membro
     )
     return carteirinha
 
 
-@router.get("/{pessoa_id}/", response=CarteirinhaOut)
-def detalhar_carteirinha(request, pessoa_id: int):
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    pessoa_alvo = get_object_or_404(Pessoa, pk=pessoa_id)
+@router.get("/{membro_id}/", response=CarteirinhaOut)
+def detalhar_carteirinha(request, membro_id: int):
+    membro_logado = membro_do_usuario(request.auth)
+    membro_alvo = get_object_or_404(Membro, pk=membro_id)
 
-    eh_ela_mesma = pessoa_logada.id == pessoa_alvo.id
-    if not (eh_ela_mesma or _pode_gerenciar_carteirinha_de(pessoa_logada, pessoa_alvo)):
-        raise HttpError(403, "Sem permissão para ver a carteirinha desta pessoa.")
+    eh_ele_mesmo = membro_logado.id == membro_alvo.id
+    if not (eh_ele_mesmo or _pode_gerenciar_carteirinha_de(membro_logado, membro_alvo)):
+        raise HttpError(403, "Sem permissão para ver a carteirinha deste membro.")
 
     return get_object_or_404(
-        Carteirinha.objects.select_related("pessoa", "pessoa__embaixada"), pessoa_id=pessoa_id
+        Carteirinha.objects.select_related("membro", "membro__embaixada"), membro_id=membro_id
     )
 
 
 @router.post("/", response={201: CarteirinhaOut})
 def emitir_carteirinha(request, payload: CarteirinhaIn):
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    pessoa_alvo = get_object_or_404(Pessoa, pk=payload.pessoa_id)
-    if not _pode_gerenciar_carteirinha_de(pessoa_logada, pessoa_alvo):
-        raise HttpError(403, "Você só pode emitir carteirinha para pessoas da sua própria embaixada.")
+    membro_logado = membro_do_usuario(request.auth)
+    membro_alvo = get_object_or_404(Membro, pk=payload.membro_id)
+    if not _pode_gerenciar_carteirinha_de(membro_logado, membro_alvo):
+        raise HttpError(403, "Você só pode emitir carteirinha para membros da sua própria embaixada.")
 
-    if Carteirinha.objects.filter(pessoa=pessoa_alvo).exists():
-        raise HttpError(400, "Essa pessoa já tem uma carteirinha emitida — use PUT para renovar.")
+    if Carteirinha.objects.filter(membro=membro_alvo).exists():
+        raise HttpError(400, "Esse membro já tem uma carteirinha emitida — use PUT para renovar.")
 
-    carteirinha = Carteirinha.objects.create(pessoa=pessoa_alvo, validade=payload.validade)
+    carteirinha = Carteirinha.objects.create(membro=membro_alvo, validade=payload.validade)
     return 201, carteirinha
 
 
-@router.put("/{pessoa_id}/", response=CarteirinhaOut)
-def renovar_carteirinha(request, pessoa_id: int, payload: CarteirinhaUpdate):
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    pessoa_alvo = get_object_or_404(Pessoa, pk=pessoa_id)
-    if not _pode_gerenciar_carteirinha_de(pessoa_logada, pessoa_alvo):
-        raise HttpError(403, "Você só pode renovar carteirinha de pessoas da sua própria embaixada.")
+@router.put("/{membro_id}/", response=CarteirinhaOut)
+def renovar_carteirinha(request, membro_id: int, payload: CarteirinhaUpdate):
+    membro_logado = membro_do_usuario(request.auth)
+    membro_alvo = get_object_or_404(Membro, pk=membro_id)
+    if not _pode_gerenciar_carteirinha_de(membro_logado, membro_alvo):
+        raise HttpError(403, "Você só pode renovar carteirinha de membros da sua própria embaixada.")
 
-    carteirinha = get_object_or_404(Carteirinha, pessoa_id=pessoa_id)
+    carteirinha = get_object_or_404(Carteirinha, membro_id=membro_id)
     carteirinha.validade = payload.validade
     carteirinha.save()
     return carteirinha
@@ -146,13 +146,13 @@ def renovar_carteirinha(request, pessoa_id: int, payload: CarteirinhaUpdate):
 def verificar_carteirinha(request, identificador: UUID):
     """Endpoint público — para onde o QR code da carteirinha aponta."""
     carteirinha = get_object_or_404(
-        Carteirinha.objects.select_related("pessoa", "pessoa__embaixada"),
+        Carteirinha.objects.select_related("membro", "membro__embaixada"),
         identificador=identificador,
     )
-    pessoa = carteirinha.pessoa
+    membro = carteirinha.membro
     return VerificacaoOut(
-        nome=pessoa.nome,
-        embaixada=pessoa.embaixada.nome,
-        valida=pessoa.ativo and carteirinha.validade >= date.today(),
+        nome=membro.nome,
+        embaixada=membro.embaixada.nome,
+        valida=membro.ativo and carteirinha.validade >= date.today(),
         validade=carteirinha.validade,
     )

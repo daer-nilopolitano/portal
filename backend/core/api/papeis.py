@@ -1,11 +1,11 @@
 """
-Endpoints de gestão de Papéis (vínculo entre Pessoa e um tipo: diretoria,
+Endpoints de gestão de Papéis (vínculo entre Membro e um tipo: diretoria,
 conselheiro ou embaixador do rei — com cargo específico quando for diretoria).
 
 Regras de acesso:
 - Diretoria: pode criar/editar/excluir qualquer Papel.
 - Conselheiro: só pode criar Papel do tipo "embaixador_do_rei", e só para
-  pessoas da própria embaixada (não pode promover ninguém a conselheiro ou
+  membros da própria embaixada (não pode promover ninguém a conselheiro ou
   diretoria — isso é decisão da Diretoria).
 """
 from datetime import date
@@ -15,28 +15,28 @@ from django.shortcuts import get_object_or_404
 from ninja import Query, Router, Schema
 from ninja.errors import HttpError
 
-from ..auth import AuthBearer, pessoa_do_usuario
-from ..models import Papel, Pessoa
+from ..auth import AuthBearer, membro_do_usuario
+from ..models import Membro, Papel
 
 router = Router(tags=["papeis"], auth=AuthBearer())
 
 
 class PapelOut(Schema):
     id: int
-    pessoa_id: int
-    pessoa_nome: str
+    membro_id: int
+    membro_nome: str
     tipo: str
     cargo_diretoria: Optional[str] = None
     data_inicio: date
     data_fim: Optional[date] = None
 
     @staticmethod
-    def resolve_pessoa_nome(obj: Papel) -> str:
-        return obj.pessoa.nome
+    def resolve_membro_nome(obj: Papel) -> str:
+        return obj.membro.nome
 
 
 class PapelIn(Schema):
-    pessoa_id: int
+    membro_id: int
     tipo: str
     cargo_diretoria: Optional[str] = None
     data_inicio: date
@@ -51,7 +51,7 @@ class PapelUpdate(Schema):
 
 
 class PapelFiltros(Schema):
-    pessoa_id: Optional[int] = None
+    membro_id: Optional[int] = None
     tipo: Optional[str] = None
 
 
@@ -62,32 +62,32 @@ def _validar_cargo_diretoria(tipo: str, cargo_diretoria: Optional[str]):
         raise HttpError(400, "cargo_diretoria só deve ser preenchido quando tipo = diretoria.")
 
 
-def _pessoa_logada_eh_diretoria(pessoa_logada: Pessoa) -> bool:
-    papel = pessoa_logada.papel_atual
+def _membro_logado_eh_diretoria(membro_logado: Membro) -> bool:
+    papel = membro_logado.papel_atual
     return bool(papel and papel.tipo == Papel.Tipo.DIRETORIA)
 
 
-def _pessoa_logada_eh_conselheiro_de(pessoa_logada: Pessoa, pessoa_alvo: Pessoa) -> bool:
-    papel = pessoa_logada.papel_atual
+def _membro_logado_eh_conselheiro_de(membro_logado: Membro, membro_alvo: Membro) -> bool:
+    papel = membro_logado.papel_atual
     if not (papel and papel.tipo == Papel.Tipo.CONSELHEIRO):
         return False
-    return pessoa_alvo.embaixada.conselheiro_responsavel_id == pessoa_logada.id
+    return membro_alvo.embaixada.conselheiro_responsavel_id == membro_logado.id
 
 
 def _queryset_visivel(request):
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    qs = Papel.objects.select_related("pessoa", "pessoa__embaixada")
-    if _pessoa_logada_eh_diretoria(pessoa_logada):
+    membro_logado = membro_do_usuario(request.auth)
+    qs = Papel.objects.select_related("membro", "membro__embaixada")
+    if _membro_logado_eh_diretoria(membro_logado):
         return qs
-    # Conselheiro (ou embaixador): só enxerga papéis de pessoas da própria embaixada.
-    return qs.filter(pessoa__embaixada__conselheiro_responsavel=pessoa_logada)
+    # Conselheiro (ou embaixador): só enxerga papéis de membros da própria embaixada.
+    return qs.filter(membro__embaixada__conselheiro_responsavel=membro_logado)
 
 
 @router.get("/", response=list[PapelOut])
 def listar_papeis(request, filtros: PapelFiltros = Query(...)):
     qs = _queryset_visivel(request)
-    if filtros.pessoa_id is not None:
-        qs = qs.filter(pessoa_id=filtros.pessoa_id)
+    if filtros.membro_id is not None:
+        qs = qs.filter(membro_id=filtros.membro_id)
     if filtros.tipo:
         qs = qs.filter(tipo=filtros.tipo)
     return qs
@@ -103,21 +103,21 @@ def detalhar_papel(request, papel_id: int):
 def criar_papel(request, payload: PapelIn):
     _validar_cargo_diretoria(payload.tipo, payload.cargo_diretoria)
 
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    pessoa_alvo = get_object_or_404(Pessoa, pk=payload.pessoa_id)
+    membro_logado = membro_do_usuario(request.auth)
+    membro_alvo = get_object_or_404(Membro, pk=payload.membro_id)
 
-    eh_diretoria = _pessoa_logada_eh_diretoria(pessoa_logada)
+    eh_diretoria = _membro_logado_eh_diretoria(membro_logado)
     if not eh_diretoria:
-        eh_conselheiro_do_alvo = _pessoa_logada_eh_conselheiro_de(pessoa_logada, pessoa_alvo)
+        eh_conselheiro_do_alvo = _membro_logado_eh_conselheiro_de(membro_logado, membro_alvo)
         if not (eh_conselheiro_do_alvo and payload.tipo == Papel.Tipo.EMBAIXADOR_DO_REI):
             raise HttpError(
                 403,
                 "Conselheiros só podem atribuir o papel 'embaixador_do_rei', "
-                "e apenas para pessoas da própria embaixada.",
+                "e apenas para membros da própria embaixada.",
             )
 
     papel = Papel.objects.create(
-        pessoa=pessoa_alvo,
+        membro=membro_alvo,
         tipo=payload.tipo,
         cargo_diretoria=payload.cargo_diretoria,
         data_inicio=payload.data_inicio,
@@ -131,8 +131,8 @@ def atualizar_papel(request, papel_id: int, payload: PapelUpdate):
     # Edição/exclusão de papel (promoções, encerramento de mandato) fica
     # restrita à Diretoria por enquanto — é uma operação mais sensível que
     # o cadastro inicial de um embaixador.
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    if not _pessoa_logada_eh_diretoria(pessoa_logada):
+    membro_logado = membro_do_usuario(request.auth)
+    if not _membro_logado_eh_diretoria(membro_logado):
         raise HttpError(403, "Editar um papel existente é uma ação restrita à Diretoria.")
 
     papel = get_object_or_404(Papel, pk=papel_id)
@@ -149,8 +149,8 @@ def atualizar_papel(request, papel_id: int, payload: PapelUpdate):
 
 @router.delete("/{papel_id}/", response={204: None})
 def excluir_papel(request, papel_id: int):
-    pessoa_logada = pessoa_do_usuario(request.auth)
-    if not _pessoa_logada_eh_diretoria(pessoa_logada):
+    membro_logado = membro_do_usuario(request.auth)
+    if not _membro_logado_eh_diretoria(membro_logado):
         raise HttpError(403, "Excluir um papel é uma ação restrita à Diretoria.")
 
     papel = get_object_or_404(Papel, pk=papel_id)

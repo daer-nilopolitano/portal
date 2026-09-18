@@ -58,15 +58,15 @@ class Embaixada(models.Model):
         Igreja, on_delete=models.PROTECT, related_name="embaixada"
     )
     conselheiro_responsavel = models.ForeignKey(
-        "Pessoa",
+        "Membro",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="embaixadas_lideradas",
-        help_text="Deve ser uma Pessoa com Papel do tipo 'conselheiro'. É quem cadastra embaixadores e auxiliares desta embaixada.",
+        help_text="Deve ser um Membro com Papel do tipo 'conselheiro'. É quem cadastra embaixadores e auxiliares desta embaixada.",
     )
     conselheiros = models.ManyToManyField(
-        "Pessoa",
+        "Membro",
         related_name="embaixadas_como_conselheiro",
         blank=True,
         help_text="Demais conselheiros desta embaixada, além do responsável acima.",
@@ -103,14 +103,14 @@ class HorarioReuniao(models.Model):
         return f"{self.embaixada} — {self.get_dia_semana_display()} às {self.horario.strftime('%H:%M')}"
 
 
-class Pessoa(models.Model):
+class Membro(models.Model):
     nome = models.CharField(max_length=200)
     data_nascimento = models.DateField()
-    foto = models.ImageField(upload_to="pessoas/fotos/", null=True, blank=True)
+    foto = models.ImageField(upload_to="membros/fotos/", null=True, blank=True)
     telefone_contato = models.CharField(max_length=20, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
 
-    # Preenchidos apenas quando a pessoa tem Papel do tipo "embaixador_do_rei"
+    # Preenchidos apenas quando o membro tem Papel do tipo "embaixador_do_rei"
     nome_responsavel = models.CharField(
         "Nome do responsável", max_length=200, blank=True
     )
@@ -119,25 +119,25 @@ class Pessoa(models.Model):
     )
 
     embaixada = models.ForeignKey(
-        Embaixada, on_delete=models.PROTECT, related_name="pessoas"
+        Embaixada, on_delete=models.PROTECT, related_name="membros"
     )
     ativo = models.BooleanField(default=True)
 
-    # Login da pessoa no sistema (diretoria, conselheiro ou embaixador do rei
+    # Login do membro no sistema (diretoria, conselheiro ou embaixador do rei
     # — todos podem ter conta, conforme decidido no planejamento). Fica nulo
     # até alguém (Diretoria ou o próprio conselheiro da embaixada) criar o
-    # acesso via endpoint dedicado — ver core/api/pessoas.py.
+    # acesso via endpoint dedicado — ver core/api/membros.py.
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="pessoa",
+        related_name="membro",
     )
 
     class Meta:
-        verbose_name = "Pessoa"
-        verbose_name_plural = "Pessoas"
+        verbose_name = "Membro"
+        verbose_name_plural = "Membros"
         ordering = ["nome"]
 
     def __str__(self):
@@ -153,7 +153,7 @@ class Pessoa(models.Model):
 
     @property
     def faixa_etaria(self) -> str | None:
-        """Só é relevante para pessoas com papel 'embaixador_do_rei'."""
+        """Só é relevante para membro que é 'embaixador_do_rei'."""
         idade = self.idade
         if 9 <= idade <= 11:
             return "junior"
@@ -167,7 +167,7 @@ class Pessoa(models.Model):
     def papel_atual(self) -> "Papel | None":
         """
         Papel vigente hoje (data_inicio <= hoje e data_fim nulo ou futuro).
-        Uma pessoa pode ter mais de um Papel ao longo do tempo (ex.: foi
+        Um membro pode ter mais de um Papel ao longo do tempo (ex.: foi
         conselheiro e depois entrou pra diretoria) — este é o que vale
         para checagens de permissão na API.
         """
@@ -197,7 +197,7 @@ class Papel(models.Model):
         )
         DIRETOR_ESPORTES = "diretor_esportes", "Diretor de Esportes"
 
-    pessoa = models.ForeignKey(Pessoa, on_delete=models.CASCADE, related_name="papeis")
+    membro = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name="papeis")
     tipo = models.CharField(max_length=30, choices=Tipo.choices)
     cargo_diretoria = models.CharField(
         "Cargo na diretoria",
@@ -216,12 +216,12 @@ class Papel(models.Model):
         ordering = ["-data_inicio"]
 
     def __str__(self):
-        return f"{self.pessoa} — {self.get_tipo_display()}"
+        return f"{self.membro} — {self.get_tipo_display()}"
 
 
 class Carteirinha(models.Model):
-    pessoa = models.OneToOneField(
-        Pessoa, on_delete=models.CASCADE, related_name="carteirinha"
+    membro = models.OneToOneField(
+        Membro, on_delete=models.CASCADE, related_name="carteirinha"
     )
     identificador = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     validade = models.DateField()
@@ -232,7 +232,7 @@ class Carteirinha(models.Model):
         verbose_name_plural = "Carteirinhas"
 
     def __str__(self):
-        return f"Carteirinha de {self.pessoa}"
+        return f"Carteirinha de {self.membro}"
 
 
 # ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 /**
  * Contexto de autenticação, compartilhado por toda a aplicação (site público
- * e área logada). Guarda o token JWT e os dados da Pessoa logada (via
+ * e área logada). Guarda o token JWT e os dados do Membro logado (via
  * /api/auth/me/), e expõe login/logout.
  *
  * TODO(segurança): o token fica em localStorage por simplicidade no MVP —
@@ -22,8 +22,8 @@ import {
 
 export type Papel = "diretoria" | "conselheiro" | "embaixador_do_rei";
 
-export interface PessoaLogada {
-  pessoa_id: number;
+export interface MembroLogado {
+  membro_id: number;
   nome: string;
   embaixada_id: number;
   embaixada_nome: string;
@@ -33,7 +33,7 @@ export interface PessoaLogada {
 
 interface AuthContextValue {
   token: string | null;
-  pessoa: PessoaLogada | null;
+  membro: MembroLogado | null;
   carregando: boolean;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
@@ -44,7 +44,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 const CHAVE_TOKEN = "daer_token";
 
-async function buscarPessoaLogada(token: string): Promise<PessoaLogada> {
+async function buscarMembroLogado(token: string): Promise<MembroLogado> {
   const res = await fetch(`${API_URL}/auth/me/`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
@@ -57,7 +57,7 @@ async function buscarPessoaLogada(token: string): Promise<PessoaLogada> {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [pessoa, setPessoa] = useState<PessoaLogada | null>(null);
+  const [membro, setMembro] = useState<MembroLogado | null>(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -67,8 +67,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     setToken(tokenSalvo);
-    buscarPessoaLogada(tokenSalvo)
-      .then(setPessoa)
+    buscarMembroLogado(tokenSalvo)
+      .then(setMembro)
       .catch(() => {
         localStorage.removeItem(CHAVE_TOKEN);
         setToken(null);
@@ -88,17 +88,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const dados = await res.json();
     localStorage.setItem(CHAVE_TOKEN, dados.access_token);
     setToken(dados.access_token);
-    setPessoa(await buscarPessoaLogada(dados.access_token));
+    setMembro(await buscarMembroLogado(dados.access_token));
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem(CHAVE_TOKEN);
     setToken(null);
-    setPessoa(null);
+    setMembro(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, pessoa, carregando, login, logout }}>
+    <AuthContext.Provider value={{ token, membro, carregando, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

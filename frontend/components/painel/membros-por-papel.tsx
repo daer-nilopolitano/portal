@@ -5,12 +5,12 @@ import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { ROTULO_FAIXA_ETARIA } from "@/lib/labels";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
-import type { Pessoa, Embaixada as EmbaixadaCompleta } from "@/lib/types";
+import type { Membro, Embaixada as EmbaixadaCompleta } from "@/lib/types";
 
 // Esta tela só usa id/nome de Embaixada (pra popular o <select>)
 type Embaixada = Pick<EmbaixadaCompleta, "id" | "nome">;
 
-interface FormularioPessoa {
+interface FormularioMembro {
   nome: string;
   data_nascimento: string;
   telefone_contato: string;
@@ -21,7 +21,7 @@ interface FormularioPessoa {
   ativo: boolean;
 }
 
-const FORMULARIO_VAZIO: FormularioPessoa = {
+const FORMULARIO_VAZIO: FormularioMembro = {
   nome: "",
   data_nascimento: "",
   telefone_contato: "",
@@ -32,25 +32,25 @@ const FORMULARIO_VAZIO: FormularioPessoa = {
   ativo: true,
 };
 
-export function PessoasPorPapel({
+export function MembrosPorPapel({
   papel,
   titulo,
 }: {
   papel: "conselheiro" | "embaixador_do_rei";
   titulo: string;
 }) {
-  const { token, pessoa: pessoaLogada } = useAuth();
-  const ehDiretoria = pessoaLogada?.papel === "diretoria";
+  const { token, membro: membroLogado } = useAuth();
+  const ehDiretoria = membroLogado?.papel === "diretoria";
   const mostraResponsavel = papel === "embaixador_do_rei";
 
-  const [lista, setLista] = useState<Pessoa[]>([]);
+  const [lista, setLista] = useState<Membro[]>([]);
   const [embaixadas, setEmbaixadas] = useState<Embaixada[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
   const [formularioAberto, setFormularioAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [formulario, setFormulario] = useState<FormularioPessoa>(FORMULARIO_VAZIO);
+  const [formulario, setFormulario] = useState<FormularioMembro>(FORMULARIO_VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
 
@@ -59,7 +59,7 @@ export function PessoasPorPapel({
     setCarregando(true);
     setErro(null);
     try {
-      const dados = await apiFetch<Pessoa[]>(`/pessoas/?papel=${papel}`, { token });
+      const dados = await apiFetch<Membro[]>(`/membros/?papel=${papel}`, { token });
       setLista(dados);
       if (ehDiretoria) {
         const listaEmbaixadas = await apiFetch<Embaixada[]>("/embaixadas/", { token });
@@ -80,23 +80,23 @@ export function PessoasPorPapel({
     setEditandoId(null);
     setFormulario({
       ...FORMULARIO_VAZIO,
-      embaixada_id: ehDiretoria ? "" : String(pessoaLogada?.embaixada_id ?? ""),
+      embaixada_id: ehDiretoria ? "" : String(membroLogado?.embaixada_id ?? ""),
     });
     setErroFormulario(null);
     setFormularioAberto(true);
   }
 
-  function abrirEdicao(p: Pessoa) {
-    setEditandoId(p.id);
+  function abrirEdicao(m: Membro) {
+    setEditandoId(m.id);
     setFormulario({
-      nome: p.nome,
-      data_nascimento: p.data_nascimento,
-      telefone_contato: p.telefone_contato,
-      email: p.email ?? "",
-      nome_responsavel: p.nome_responsavel,
-      telefone_responsavel: p.telefone_responsavel,
-      embaixada_id: String(p.embaixada_id),
-      ativo: p.ativo,
+      nome: m.nome,
+      data_nascimento: m.data_nascimento,
+      telefone_contato: m.telefone_contato,
+      email: m.email ?? "",
+      nome_responsavel: m.nome_responsavel,
+      telefone_responsavel: m.telefone_responsavel,
+      embaixada_id: String(m.embaixada_id),
+      ativo: m.ativo,
     });
     setErroFormulario(null);
     setFormularioAberto(true);
@@ -124,7 +124,7 @@ export function PessoasPorPapel({
 
     try {
       if (editandoId) {
-        await apiFetch(`/pessoas/${editandoId}/`, {
+        await apiFetch(`/membros/${editandoId}/`, {
           token,
           method: "PUT",
           body: JSON.stringify({
@@ -135,8 +135,8 @@ export function PessoasPorPapel({
       } else {
         const embaixadaId = ehDiretoria
           ? Number(formulario.embaixada_id)
-          : pessoaLogada?.embaixada_id;
-        const novaPessoa = await apiFetch<Pessoa>("/pessoas/", {
+          : membroLogado?.embaixada_id;
+        const novoMembro = await apiFetch<Membro>("/membros/", {
           token,
           method: "POST",
           body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
@@ -147,7 +147,7 @@ export function PessoasPorPapel({
           token,
           method: "POST",
           body: JSON.stringify({
-            pessoa_id: novaPessoa.id,
+            membro_id: novoMembro.id,
             tipo: papel,
             data_inicio: new Date().toISOString().slice(0, 10),
           }),
@@ -162,23 +162,23 @@ export function PessoasPorPapel({
     }
   }
 
-  async function excluir(p: Pessoa) {
+  async function excluir(m: Membro) {
     if (!token) return;
-    if (!window.confirm(`Excluir ${p.nome}? Essa ação não pode ser desfeita.`)) return;
-    await apiFetch(`/pessoas/${p.id}/`, { token, method: "DELETE" });
+    if (!window.confirm(`Excluir ${m.nome}? Essa ação não pode ser desfeita.`)) return;
+    await apiFetch(`/membros/${m.id}/`, { token, method: "DELETE" });
     await carregar();
   }
 
-  async function criarAcesso(p: Pessoa) {
+  async function criarAcesso(m: Membro) {
     if (!token) return;
-    if (!p.email) {
-      window.alert("Cadastre um e-mail para essa pessoa antes de criar o acesso.");
+    if (!m.email) {
+      window.alert("Cadastre um e-mail para esse membro antes de criar o acesso.");
       return;
     }
-    const senha = window.prompt(`Senha inicial para ${p.nome}:`);
+    const senha = window.prompt(`Senha inicial para ${m.nome}:`);
     if (!senha) return;
     try {
-      await apiFetch(`/pessoas/${p.id}/criar-acesso/`, {
+      await apiFetch(`/membros/${m.id}/criar-acesso/`, {
         token,
         method: "POST",
         body: JSON.stringify({ senha }),
@@ -189,16 +189,16 @@ export function PessoasPorPapel({
     }
   }
 
-  const colunas: Coluna<Pessoa>[] = [
-    { cabecalho: "Nome", render: (p) => <span className="font-medium text-text">{p.nome}</span> },
-    { cabecalho: "Embaixada", render: (p) => <span className="text-text-muted">{p.embaixada_nome}</span> },
+  const colunas: Coluna<Membro>[] = [
+    { cabecalho: "Nome", render: (m) => <span className="font-medium text-text">{m.nome}</span> },
+    { cabecalho: "Embaixada", render: (m) => <span className="text-text-muted">{m.embaixada_nome}</span> },
     ...(mostraResponsavel
       ? [
           {
             cabecalho: "Faixa etária",
-            render: (p: Pessoa) => (
+            render: (m: Membro) => (
               <span className="text-text-muted">
-                {p.faixa_etaria ? ROTULO_FAIXA_ETARIA[p.faixa_etaria] : "—"}
+                {m.faixa_etaria ? ROTULO_FAIXA_ETARIA[m.faixa_etaria] : "—"}
               </span>
             ),
           },
@@ -206,12 +206,12 @@ export function PessoasPorPapel({
       : []),
     {
       cabecalho: "Acesso",
-      render: (p) =>
-        p.tem_acesso ? (
+      render: (m) =>
+        m.tem_acesso ? (
           <span className="text-xs text-success">Criado</span>
         ) : (
           <button
-            onClick={() => criarAcesso(p)}
+            onClick={() => criarAcesso(m)}
             className="text-xs font-medium text-primary underline underline-offset-2"
           >
             Criar acesso
@@ -220,13 +220,13 @@ export function PessoasPorPapel({
     },
     {
       cabecalho: "Status",
-      render: (p) => (
+      render: (m) => (
         <span
           className={`rounded-full px-2 py-0.5 text-xs ${
-            p.ativo ? "bg-success/10 text-success" : "bg-surface-2 text-text-muted"
+            m.ativo ? "bg-success/10 text-success" : "bg-surface-2 text-text-muted"
           }`}
         >
-          {p.ativo ? "Ativo" : "Inativo"}
+          {m.ativo ? "Ativo" : "Inativo"}
         </span>
       ),
     },
@@ -370,14 +370,14 @@ export function PessoasPorPapel({
       <DataTable
         itens={lista}
         colunas={colunas}
-        chave={(p) => p.id}
+        chave={(m) => m.id}
         carregando={carregando}
         erro={erro}
         mensagemVazio="Nenhum registro ainda."
         onEditar={abrirEdicao}
         onExcluir={excluir}
-        rotuloEditar={(p) => `Editar ${p.nome}`}
-        rotuloExcluir={(p) => `Excluir ${p.nome}`}
+        rotuloEditar={(m) => `Editar ${m.nome}`}
+        rotuloExcluir={(m) => `Excluir ${m.nome}`}
       />
     </div>
   );
