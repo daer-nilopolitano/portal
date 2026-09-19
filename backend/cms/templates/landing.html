@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DAER Nilopolitano</title>
+  <link rel="icon" href="{% static 'img/favicon.png' %}">
+  <style>
+    :root {
+      --background: 248 250 252;
+      --surface: 255 255 255;
+      --surface-2: 241 245 249;
+      --primary: 30 64 175;
+      --text: 15 23 42;
+      --text-muted: 71 85 105;
+      --border: 226 232 240;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: 2 6 23;
+        --surface: 15 23 42;
+        --surface-2: 30 41 59;
+        --primary: 96 165 250;
+        --text: 241 245 249;
+        --text-muted: 148 163 184;
+        --border: 51 65 85;
+      }
+      /* o azul-marinho da logo some no fundo escuro; um contorno claro resolve */
+      .logo { filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgb(255 255 255 / .25)); }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      background: rgb(var(--background));
+      color: rgb(var(--text));
+    }
+    .logo { width: min(240px, 60vw); height: auto; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0; }
+    .subtitle { margin: 0.5rem 0 0; color: rgb(var(--text-muted)); }
+
+    nav { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    nav a {
+      display: block;
+      min-width: 16rem;
+      padding: 1.25rem 1.5rem;
+      background: rgb(var(--surface));
+      border: 1px solid rgb(var(--border));
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .15s, background-color .15s, transform .15s;
+    }
+    nav a:hover {
+      border-color: rgb(var(--primary));
+      background: rgb(var(--surface-2));
+      transform: translateY(-2px);
+    }
+    nav a:focus-visible {
+      outline: 2px solid rgb(var(--primary));
+      outline-offset: 2px;
+    }
+    nav strong { display: block; font-size: 1.1rem; color: rgb(var(--primary)); }
+    nav span { font-size: 0.9rem; color: rgb(var(--text-muted)); }
+  </style>
+</head>
+<body>
+  <img class="logo" src="{% static 'img/logo_daer.png' %}" alt="Logo do DAER Nilopolitano">
+
+  <div>
+    <h1>DAER Nilopolitano</h1>
+    <p class="subtitle">Sistema de gestão de igrejas, embaixadas, membros e carteirinhas</p>
+  </div>
+
+  <nav>
+    <a href="{% url 'admin:index' %}">
+      <strong>Django Admin</strong>
+      <span>Igrejas, embaixadas, membros, papéis e carteirinhas</span>
+    </a>
+    <a href="{% url 'wagtailadmin_home' %}">
+      <strong>CMS (Wagtail)</strong>
+      <span>Páginas e conteúdo do site</span>
+    </a>
+    <a href="/api/docs">
+      <strong>API</strong>
+      <span>Documentação Swagger</span>
+    </a>
+  </nav>
+</body>
+</html>

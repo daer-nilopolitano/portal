@@ -12,7 +12,7 @@ from django.utils import timezone
 from ninja import Router, Schema
 
 from ..auth import AuthBearer, membro_do_usuario
-from ..models import Membro, TipoMembro
+from ..models import Embaixada, Membro, TipoMembro
 
 router = Router(tags=["estatisticas"], auth=AuthBearer())
 
@@ -31,6 +31,8 @@ class EstatisticasOut(Schema):
     sem_carteirinha: list[MembroResumoOut] = []
     sem_acesso: list[MembroResumoOut] = []
     aniversariantes_mes: list[MembroResumoOut] = []
+    # Só populado pra Diretoria (visão da associação inteira).
+    embaixadas_sem_conselheiro: list[str] = []
     # Só populado para quem está logado como embaixador_do_rei.
     conselheiros_embaixada: list[str] = []
 
@@ -78,4 +80,13 @@ def estatisticas(request):
             MembroResumoOut(id=m.id, nome=m.nome)
             for m in escopo.filter(data_nascimento__month=mes_atual)
         ],
+        embaixadas_sem_conselheiro=(
+            list(
+                Embaixada.objects.exclude(membros__tipo=TipoMembro.CONSELHEIRO)
+                .distinct()
+                .values_list("nome", flat=True)
+            )
+            if membro.eh_diretoria
+            else []
+        ),
     )

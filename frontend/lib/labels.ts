@@ -14,12 +14,6 @@ export const ROTULO_CARGO_DIRETORIA: Record<string, string> = {
   diretor_esportes: "Diretor de Esportes",
 };
 
-export const ROTULO_FAIXA_ETARIA: Record<string, string> = {
-  junior: "Júnior (9-11 anos)",
-  adolescente: "Adolescente (12-14 anos)",
-  juvenil: "Juvenil (15-17 anos)",
-};
-
 export const ROTULO_POSTO: Record<string, string> = {
   escudeiro: "Embaixador Escudeiro",
   arauto: "Embaixador Arauto",
@@ -37,6 +31,12 @@ export const ROTULO_CARGO_DIRETORIA_EMBAIXADA: Record<string, string> = {
   tesoureiro: "Tesoureiro",
   diretor_musica: "Diretor de Música",
   diretor_esportes: "Diretor de Esportes",
+};
+
+export const ROTULO_FAIXA_ETARIA: Record<string, string> = {
+  junior: "Júnior (9-11 anos)",
+  adolescente: "Adolescente (12-14 anos)",
+  juvenil: "Juvenil (15-17 anos)",
 };
 
 // Precisa bater com DiaSemana em backend/core/models.py.

@@ -22,7 +22,7 @@ const ITENS_NAV: ItemNav[] = [
   { href: "/painel/embaixadores", rotulo: "Embaixadores", papeis: ["conselheiro", "auxiliar"] },
   { href: "/painel/diretoria", rotulo: "Diretoria", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
   { href: "/painel/grupos", rotulo: "Grupos", papeis: ["conselheiro"] },
-  { href: "/minha-carteirinha", rotulo: "Minha carteirinha", papeis: [ "embaixador_do_rei"] },
+  { href: "/minha-carteirinha", rotulo: "Minha carteirinha", papeis: ["embaixador_do_rei"] },
   { href: "/painel/materiais", rotulo: "Materiais", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
 ];
 

@@ -138,3 +138,23 @@ export interface EmbaixadaDestaque extends Igreja {
   conselheiros_nomes: string[];
   horarios_reuniao: HorarioReuniaoPublico[];
 }
+
+export interface MembroResumo {
+  id: number;
+  nome: string;
+}
+
+export interface Estatisticas {
+  tipo: TipoMembro;
+  total_conselheiros: number;
+  total_auxiliares: number;
+  total_embaixadores: number;
+  embaixadores_por_faixa: Record<string, number>;
+  sem_carteirinha: MembroResumo[];
+  sem_acesso: MembroResumo[];
+  aniversariantes_mes: MembroResumo[];
+  // Só populado pra Diretoria.
+  embaixadas_sem_conselheiro: string[];
+  // Só populado para quem está logado como embaixador_do_rei.
+  conselheiros_embaixada: string[];
+}

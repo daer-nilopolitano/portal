@@ -46,7 +46,7 @@ export function MembrosPorTipo({
   const { token, membro: membroLogado } = useAuth();
   const ehDiretoria = !!membroLogado?.cargo_diretoria;
   const ehAuxiliar = membroLogado?.tipo === "auxiliar";
-  const mostraResponsavel = tipo === "embaixador_do_rei";
+  const mostraCamposEmbaixador = tipo === "embaixador_do_rei";
 
   const [lista, setLista] = useState<Membro[]>([]);
   const [embaixadas, setEmbaixadas] = useState<Embaixada[]>([]);
@@ -115,55 +115,57 @@ export function MembrosPorTipo({
     setEnviando(true);
     setErroFormulario(null);
 
-  const payloadBase = {
-    nome: formulario.nome,
-    data_nascimento: formulario.data_nascimento,
-    telefone_contato: formulario.telefone_contato,
-    email: formulario.email || null,
-    tipo,
-    ...(mostraResponsavel
-      ? {
-          posto_embaixador: formulario.posto_embaixador,
-          nome_responsavel: formulario.nome_responsavel,
-          telefone_responsavel: formulario.telefone_responsavel,
-        }
-      : {}),
-    ativo: formulario.ativo,
-  };
+    const payloadBase = {
+      nome: formulario.nome,
+      data_nascimento: formulario.data_nascimento,
+      telefone_contato: formulario.telefone_contato,
+      email: formulario.email || null,
+      tipo,
+      ...(mostraCamposEmbaixador
+        ? {
+            posto_embaixador: formulario.posto_embaixador,
+            nome_responsavel: formulario.nome_responsavel,
+            telefone_responsavel: formulario.telefone_responsavel,
+          }
+        : {}),
+      ativo: formulario.ativo,
+    };
 
-  try {
-    let membroId = editandoId;
-    if (editandoId) {
-      await apiFetch(`/membros/${editandoId}/`, {
-        token,
-        method: "PUT",
-        body: JSON.stringify({
-          ...payloadBase,
-          embaixada_id: Number(formulario.embaixada_id),
-        }),
-      });
-    } else {
-      const embaixadaId = ehDiretoria
-        ? Number(formulario.embaixada_id)
-        : membroLogado?.embaixada_id;
-      const novoMembro = await apiFetch<Membro>("/membros/", {
-        token,
-        method: "POST",
-        body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
-      });
-      membroId = novoMembro.id;
-    }
-    // Cargo no quadro de oficiais é um endpoint à parte — o backend troca
-    // automaticamente o titular anterior se o cargo já estiver ocupado.
-    if (mostraResponsavel && membroId) {
-      await apiFetch(`/membros/${membroId}/cargo-embaixada/`, {
-        token,
-        method: "PUT",
-        body: JSON.stringify({ cargo: formulario.cargo_embaixada || null }),
-      });
-    }
-    setFormularioAberto(false);
-    await carregar();
+    try {
+      let membroId = editandoId;
+      if (editandoId) {
+        await apiFetch(`/membros/${editandoId}/`, {
+          token,
+          method: "PUT",
+          body: JSON.stringify({
+            ...payloadBase,
+            embaixada_id: Number(formulario.embaixada_id),
+          }),
+        });
+      } else {
+        const embaixadaId = ehDiretoria
+          ? Number(formulario.embaixada_id)
+          : membroLogado?.embaixada_id;
+        const novoMembro = await apiFetch<Membro>("/membros/", {
+          token,
+          method: "POST",
+          body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
+        });
+        membroId = novoMembro.id;
+      }
+
+      // Cargo no quadro de oficiais é um endpoint à parte — o backend troca
+      // automaticamente o titular anterior se o cargo já estiver ocupado.
+      if (mostraCamposEmbaixador && membroId) {
+        await apiFetch(`/membros/${membroId}/cargo-embaixada/`, {
+          token,
+          method: "PUT",
+          body: JSON.stringify({ cargo: formulario.cargo_embaixada || null }),
+        });
+      }
+
+      setFormularioAberto(false);
+      await carregar();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -201,7 +203,7 @@ export function MembrosPorTipo({
   const colunas: Coluna<Membro>[] = [
     { cabecalho: "Nome", render: (m) => <span className="font-medium text-text">{m.nome}</span> },
     { cabecalho: "Embaixada", render: (m) => <span className="text-text-muted">{m.embaixada_nome}</span> },
-    ...(mostraResponsavel
+    ...(mostraCamposEmbaixador
       ? [
           {
             cabecalho: "Faixa etária",
@@ -227,7 +229,7 @@ export function MembrosPorTipo({
               </span>
             ),
           },
-      ]
+        ]
       : []),
     {
       cabecalho: "Acesso",
@@ -315,7 +317,7 @@ export function MembrosPorTipo({
             />
           </div>
 
-          {mostraResponsavel && (
+          {mostraCamposEmbaixador && (
             <>
               <div>
                 <label className="block text-sm text-text">Posto</label>
@@ -409,18 +411,10 @@ export function MembrosPorTipo({
           )}
 
           <div className="flex gap-3 sm:col-span-2">
-            <button
-              type="submit"
-              disabled={enviando}
-              className="btn-primary"
-            >
+            <button type="submit" disabled={enviando} className="btn-primary">
               {enviando ? "Salvando…" : "Salvar"}
             </button>
-            <button
-              type="button"
-              onClick={() => setFormularioAberto(false)}
-              className="btn-ghost"
-            >
+            <button type="button" onClick={() => setFormularioAberto(false)} className="btn-ghost">
               Cancelar
             </button>
           </div>

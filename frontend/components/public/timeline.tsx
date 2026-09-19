@@ -2,6 +2,8 @@ export interface TimelineItem {
   data: string;
   texto: string;
   rotulo?: string;
+  /** Opcional — só pra permitir cálculo (ex.: "próximo evento" no painel). Exibição continua usando `data`. */
+  dataISO?: string;
 }
 
 export function Timeline({ items, className = "" }: { items: TimelineItem[]; className?: string }) {

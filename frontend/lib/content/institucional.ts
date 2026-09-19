@@ -81,30 +81,37 @@ export const EVENTOS = {
   descricao: "Agenda de atividades do DAER Nilopolitano para o 2º semestre de 2026.",
 };
 
+// dataISO é usado pelo painel pra calcular o "próximo evento" — ao editar
+// o cronograma a cada semestre, atualizar dataISO junto com data/texto.
 export const CRONOGRAMA_EVENTOS: TimelineItem[] = [
   {
     rotulo: "Julho",
     data: "11 de julho",
+    dataISO: "2026-07-11",
     texto: "Conclave dos Embaixadores do Rei na PIB de Olinda.",
   },
   {
     rotulo: "Agosto",
     data: "22 de agosto",
+    dataISO: "2026-08-22",
     texto: "Programação especial em alusão ao início do ER no Brasil (local a definir).",
   },
   {
     rotulo: "Setembro",
     data: "12 de setembro",
+    dataISO: "2026-09-12",
     texto: "Conclave dos Embaixadores do Rei na IB Quinze de Novembro.",
   },
   {
     rotulo: "Outubro",
     data: "17 de outubro",
+    dataISO: "2026-10-17",
     texto: "Intercâmbio na Igreja Batista Videira em Nilópolis.",
   },
   {
     rotulo: "Novembro",
     data: "07 de novembro",
+    dataISO: "2026-11-07",
     texto: "Mutirão evangelístico em cooperação com outros DAERs na PIB de Vila Norma.",
   },
 ];
