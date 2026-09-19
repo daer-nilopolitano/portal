@@ -3,10 +3,10 @@ Autenticação e autorização da API.
 
 Abordagem: JWT simples (um único access token, sem refresh token por
 enquanto — TODO se o tempo de expiração de 7 dias se mostrar curto demais
-na prática). O token carrega só o id do usuário Django; o Membro e o papel
-atual são resolvidos a cada request a partir dele, então uma mudança de
-papel (ex.: promovido a diretoria) já vale no próximo request, sem precisar
-gerar um novo token.
+na prática). O token carrega só o id do usuário Django; o Membro e o tipo
+são resolvidos a cada request a partir dele, então uma mudança de tipo (ex.:
+promovido a conselheiro) já vale no próximo request, sem precisar gerar um
+novo token.
 """
 from datetime import datetime, timedelta, timezone
 
@@ -16,7 +16,7 @@ from django.contrib.auth import get_user_model
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
-from .models import Membro, Papel
+from .models import Membro, TipoMembro
 
 User = get_user_model()
 
@@ -61,34 +61,28 @@ def membro_do_usuario(user) -> Membro:
 
 
 def exigir_diretoria(request):
-    """Levanta 403 se o membro logado não for da Diretoria."""
+    """Levanta 403 se o membro logado não tiver mandato ativo na Diretoria."""
     membro = membro_do_usuario(request.auth)
-    papel = membro.papel_atual
-    if papel is None or papel.tipo != Papel.Tipo.DIRETORIA:
+    if not membro.eh_diretoria:
         raise HttpError(403, "Ação restrita à Diretoria.")
     return membro
 
 
 def exigir_diretoria_ou_conselheiro_da_embaixada(request, embaixada_id: int):
     """
-    Levanta 403 a menos que o membro logado seja da Diretoria, ou seja, o
-    conselheiro responsável pela embaixada em questão (cadastro descentralizado).
+    Levanta 403 a menos que o membro logado tenha mandato ativo na
+    Diretoria, ou seja conselheiro da própria embaixada em questão
+    (cadastro descentralizado: qualquer conselheiro cuida da própria
+    embaixada, sem precisar de aprovação da Diretoria).
     """
     membro = membro_do_usuario(request.auth)
-    papel = membro.papel_atual
 
-    if papel and papel.tipo == Papel.Tipo.DIRETORIA:
+    if membro.eh_diretoria:
         return membro
 
-    if papel and papel.tipo == Papel.Tipo.CONSELHEIRO:
-        from .models import Embaixada  # import local pra evitar ciclo no topo do arquivo
-
-        eh_responsavel = Embaixada.objects.filter(
-            pk=embaixada_id, conselheiro_responsavel=membro
-        ).exists()
-        if eh_responsavel:
-            return membro
+    if membro.tipo == TipoMembro.CONSELHEIRO and membro.embaixada_id == embaixada_id:
+        return membro
 
     raise HttpError(
-        403, "Ação restrita à Diretoria ou ao conselheiro responsável por esta embaixada."
+        403, "Ação restrita à Diretoria ou a um conselheiro desta embaixada."
     )

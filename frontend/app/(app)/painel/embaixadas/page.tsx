@@ -5,12 +5,11 @@ import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import { DIAS_SEMANA } from "@/lib/labels";
-import type { Embaixada, Igreja, Membro } from "@/lib/types";
+import type { Embaixada, Igreja } from "@/lib/types";
 
-// Esta tela só usa id/nome de Igreja e de Membro (pra popular os <select>) —
-// Pick evita puxar campos que aqui não são usados (endereço, faixa etária...)
+// Esta tela só usa id/nome de Igreja (pra popular o <select>) — Pick evita
+// puxar campos que aqui não são usados (endereço...)
 type IgrejaOpcao = Pick<Igreja, "id" | "nome">;
-type MembroConselheiro = Pick<Membro, "id" | "nome">;
 
 interface FormularioHorario {
   dia_semana: string;
@@ -20,25 +19,22 @@ interface FormularioHorario {
 interface FormularioEmbaixada {
   nome: string;
   igreja_id: string;
-  conselheiro_responsavel_id: string;
-  conselheiro_ids: string[];
   horarios_reuniao: FormularioHorario[];
 }
 
 const FORMULARIO_VAZIO: FormularioEmbaixada = {
   nome: "",
   igreja_id: "",
-  conselheiro_responsavel_id: "",
-  conselheiro_ids: [],
   horarios_reuniao: [],
 };
 
 export default function PainelEmbaixadasPage() {
-  const { token } = useAuth();
+  const { token, membro } = useAuth();
+  const ehDiretoria = !!membro?.cargo_diretoria;
+  const ehConselheiro = membro?.tipo === "conselheiro";
 
   const [lista, setLista] = useState<Embaixada[]>([]);
   const [igrejas, setIgrejas] = useState<IgrejaOpcao[]>([]);
-  const [conselheiros, setConselheiros] = useState<MembroConselheiro[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -53,24 +49,40 @@ export default function PainelEmbaixadasPage() {
     setCarregando(true);
     setErro(null);
     try {
-      const [listaEmbaixadas, listaIgrejas, listaConselheiros] = await Promise.all([
-        apiFetch<Embaixada[]>("/embaixadas/", { token }),
-        apiFetch<IgrejaOpcao[]>("/igrejas/", { token }),
-        apiFetch<MembroConselheiro[]>("/membros/?papel=conselheiro", { token }),
-      ]);
+      const listaEmbaixadas = await apiFetch<Embaixada[]>("/embaixadas/", { token });
       setLista(listaEmbaixadas);
-      setIgrejas(listaIgrejas);
-      setConselheiros(listaConselheiros);
+      if (ehDiretoria) {
+        const listaIgrejas = await apiFetch<IgrejaOpcao[]>("/igrejas/", { token });
+        setIgrejas(listaIgrejas);
+      }
     } catch {
       setErro("Não foi possível carregar a lista.");
     } finally {
       setCarregando(false);
     }
-  }, [token]);
+  }, [token, ehDiretoria]);
 
   useEffect(() => {
     carregar();
   }, [carregar]);
+
+  // Conselheiro comum não vê lista — cai direto no formulário da própria
+  // embaixada, assim que ela chega da API.
+  const minhaEmbaixada = lista.find((e) => e.id === membro?.embaixada_id) ?? null;
+  useEffect(() => {
+    if (ehConselheiro && !ehDiretoria && minhaEmbaixada && editandoId === null) {
+      setEditandoId(minhaEmbaixada.id);
+      setFormulario({
+        nome: minhaEmbaixada.nome,
+        igreja_id: String(minhaEmbaixada.igreja_id),
+        horarios_reuniao: minhaEmbaixada.horarios_reuniao.map((h) => ({
+          dia_semana: h.dia_semana,
+          horario: h.horario,
+        })),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ehConselheiro, ehDiretoria, minhaEmbaixada]);
 
   function abrirNovo() {
     setEditandoId(null);
@@ -84,10 +96,6 @@ export default function PainelEmbaixadasPage() {
     setFormulario({
       nome: e.nome,
       igreja_id: String(e.igreja_id),
-      conselheiro_responsavel_id: e.conselheiro_responsavel_id
-        ? String(e.conselheiro_responsavel_id)
-        : "",
-      conselheiro_ids: e.conselheiro_ids.map(String),
       horarios_reuniao: e.horarios_reuniao.map((h) => ({
         dia_semana: h.dia_semana,
         horario: h.horario,
@@ -120,32 +128,26 @@ export default function PainelEmbaixadasPage() {
     });
   }
 
-  function alternarConselheiro(id: string) {
-    setFormulario({
-      ...formulario,
-      conselheiro_ids: formulario.conselheiro_ids.includes(id)
-        ? formulario.conselheiro_ids.filter((c) => c !== id)
-        : [...formulario.conselheiro_ids, id],
-    });
-  }
-
   async function salvar(evento: FormEvent) {
     evento.preventDefault();
     if (!token) return;
     setEnviando(true);
     setErroFormulario(null);
 
-    const payload = {
-      nome: formulario.nome,
-      igreja_id: Number(formulario.igreja_id),
-      conselheiro_responsavel_id: formulario.conselheiro_responsavel_id
-        ? Number(formulario.conselheiro_responsavel_id)
-        : null,
-      conselheiro_ids: formulario.conselheiro_ids.map(Number),
-      horarios_reuniao: formulario.horarios_reuniao
-        .filter((h) => h.dia_semana && h.horario)
-        .map((h) => ({ dia_semana: h.dia_semana, horario: h.horario })),
-    };
+    const horarios = formulario.horarios_reuniao
+      .filter((h) => h.dia_semana && h.horario)
+      .map((h) => ({ dia_semana: h.dia_semana, horario: h.horario }));
+
+    // Conselheiro comum só pode mandar horários — nome/igreja ficam de fora
+    // do payload de propósito, pra não disparar o 403 do backend (que
+    // bloqueia esses dois campos pra quem não é Diretoria).
+    const payload = ehDiretoria
+      ? {
+          nome: formulario.nome,
+          igreja_id: Number(formulario.igreja_id),
+          horarios_reuniao: horarios,
+        }
+      : { horarios_reuniao: horarios };
 
     try {
       if (editandoId) {
@@ -177,23 +179,20 @@ export default function PainelEmbaixadasPage() {
     await carregar();
   }
 
+  if (!ehDiretoria && !ehConselheiro) {
+    return <p className="text-sm text-text-muted">Sem permissão para acessar esta página.</p>;
+  }
+
   const colunas: Coluna<Embaixada>[] = [
     { cabecalho: "Nome", render: (e) => <span className="font-medium text-text">{e.nome}</span> },
     { cabecalho: "Igreja", render: (e) => <span className="text-text-muted">{e.igreja_nome}</span> },
     {
       cabecalho: "Conselheiros",
-      render: (e) => {
-        // Responsável primeiro (é quem cadastra embaixadores/auxiliares),
-        // depois os demais, sem repetir o nome se ele também estiver na
-        // lista de conselheiros da embaixada.
-        const nomes = [
-          ...(e.conselheiro_responsavel_nome ? [`${e.conselheiro_responsavel_nome} (responsável)`] : []),
-          ...e.conselheiro_nomes.filter((nome) => nome !== e.conselheiro_responsavel_nome),
-        ];
-        return (
-          <span className="text-text-muted">{nomes.length > 0 ? nomes.join(", ") : "—"}</span>
-        );
-      },
+      render: (e) => (
+        <span className="text-text-muted">
+          {e.conselheiro_nomes.length > 0 ? e.conselheiro_nomes.join(", ") : "—"}
+        </span>
+      ),
     },
     {
       cabecalho: "Horários",
@@ -207,14 +206,98 @@ export default function PainelEmbaixadasPage() {
     },
   ];
 
+  const camposHorarios = (
+    <div className="sm:col-span-2">
+      <div className="flex items-center justify-between">
+        <label className="block text-sm text-text">Horários de reunião</label>
+        <button type="button" onClick={adicionarHorario} className="btn-ghost text-sm">
+          + Adicionar horário
+        </button>
+      </div>
+      <div className="mt-2 space-y-2">
+        {formulario.horarios_reuniao.map((h, indice) => (
+          <div key={indice} className="flex items-center gap-2">
+            <select
+              value={h.dia_semana}
+              onChange={(e) => atualizarHorario(indice, "dia_semana", e.target.value)}
+              className="field"
+            >
+              {DIAS_SEMANA.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+            <input
+              type="time"
+              required
+              value={h.horario}
+              onChange={(e) => atualizarHorario(indice, "horario", e.target.value)}
+              className="field"
+            />
+            <button
+              type="button"
+              onClick={() => removerHorario(indice)}
+              aria-label="Remover horário"
+              className="btn-ghost text-danger"
+            >
+              Remover
+            </button>
+          </div>
+        ))}
+        {formulario.horarios_reuniao.length === 0 && (
+          <p className="text-xs text-text-muted">Nenhum horário cadastrado ainda.</p>
+        )}
+      </div>
+    </div>
+  );
+
+  // Conselheiro comum: só a própria embaixada, nome/igreja somente-leitura.
+  if (!ehDiretoria) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-primary">Minha embaixada</h1>
+        <p className="mt-1 text-sm text-text-muted">
+          Nome e igreja só podem ser alterados pela Diretoria — aqui você edita os horários de reunião.
+        </p>
+
+        {!minhaEmbaixada ? (
+          <p className="mt-6 text-sm text-text-muted">Carregando…</p>
+        ) : (
+          <form
+            onSubmit={salvar}
+            className="mt-6 grid gap-4 rounded-lg border border-border bg-surface p-5 sm:grid-cols-2"
+          >
+            <div>
+              <label className="block text-sm text-text">Nome da embaixada</label>
+              <p className="field bg-surface-2 text-text-muted">{formulario.nome}</p>
+            </div>
+            <div>
+              <label className="block text-sm text-text">Igreja</label>
+              <p className="field bg-surface-2 text-text-muted">{minhaEmbaixada.igreja_nome}</p>
+            </div>
+
+            {camposHorarios}
+
+            {erroFormulario && <p className="sm:col-span-2 text-sm text-danger">{erroFormulario}</p>}
+
+            <div className="sm:col-span-2">
+              <button type="submit" disabled={enviando} className="btn-primary">
+                {enviando ? "Salvando…" : "Salvar horários"}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    );
+  }
+
+  // Diretoria: lista completa + CRUD total.
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">Embaixadas</h1>
-        <button
-          onClick={abrirNovo}
-          className="btn-primary"
-        >
+        <button onClick={abrirNovo} className="btn-primary">
           + Nova
         </button>
       </div>
@@ -257,112 +340,15 @@ export default function PainelEmbaixadasPage() {
             </select>
           </div>
 
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-text">Conselheiro responsável</label>
-            <select
-              value={formulario.conselheiro_responsavel_id}
-              onChange={(e) =>
-                setFormulario({ ...formulario, conselheiro_responsavel_id: e.target.value })
-              }
-              className="field"
-            >
-              <option value="">Nenhum por enquanto</option>
-              {conselheiros.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nome}
-                </option>
-              ))}
-            </select>
-            <p className="mt-1 text-xs text-text-muted">
-              É quem cadastra os embaixadores e auxiliares desta embaixada.
-            </p>
-          </div>
+          {camposHorarios}
 
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-text">Outros conselheiros</label>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-2 rounded-md border border-border p-3">
-              {conselheiros
-                .filter((c) => String(c.id) !== formulario.conselheiro_responsavel_id)
-                .map((c) => (
-                  <label key={c.id} className="flex items-center gap-2 text-sm text-text">
-                    <input
-                      type="checkbox"
-                      checked={formulario.conselheiro_ids.includes(String(c.id))}
-                      onChange={() => alternarConselheiro(String(c.id))}
-                    />
-                    {c.nome}
-                  </label>
-                ))}
-              {conselheiros.length === 0 && (
-                <p className="text-xs text-text-muted">Nenhum conselheiro cadastrado ainda.</p>
-              )}
-            </div>
-            <p className="mt-1 text-xs text-text-muted">
-              Além do responsável — todos aparecem juntos no site institucional.
-            </p>
-          </div>
-
-          <div className="sm:col-span-2">
-            <div className="flex items-center justify-between">
-              <label className="block text-sm text-text">Horários de reunião</label>
-              <button type="button" onClick={adicionarHorario} className="btn-ghost text-sm">
-                + Adicionar horário
-              </button>
-            </div>
-            <div className="mt-2 space-y-2">
-              {formulario.horarios_reuniao.map((h, indice) => (
-                <div key={indice} className="flex items-center gap-2">
-                  <select
-                    value={h.dia_semana}
-                    onChange={(e) => atualizarHorario(indice, "dia_semana", e.target.value)}
-                    className="field"
-                  >
-                    {DIAS_SEMANA.map((d) => (
-                      <option key={d.value} value={d.value}>
-                        {d.label}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="time"
-                    required
-                    value={h.horario}
-                    onChange={(e) => atualizarHorario(indice, "horario", e.target.value)}
-                    className="field"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removerHorario(indice)}
-                    aria-label="Remover horário"
-                    className="btn-ghost text-danger"
-                  >
-                    Remover
-                  </button>
-                </div>
-              ))}
-              {formulario.horarios_reuniao.length === 0 && (
-                <p className="text-xs text-text-muted">Nenhum horário cadastrado ainda.</p>
-              )}
-            </div>
-          </div>
-
-          {erroFormulario && (
-            <p className="sm:col-span-2 text-sm text-danger">{erroFormulario}</p>
-          )}
+          {erroFormulario && <p className="sm:col-span-2 text-sm text-danger">{erroFormulario}</p>}
 
           <div className="flex gap-3 sm:col-span-2">
-            <button
-              type="submit"
-              disabled={enviando}
-              className="btn-primary"
-            >
+            <button type="submit" disabled={enviando} className="btn-primary">
               {enviando ? "Salvando…" : "Salvar"}
             </button>
-            <button
-              type="button"
-              onClick={() => setFormularioAberto(false)}
-              className="btn-ghost"
-            >
+            <button type="button" onClick={() => setFormularioAberto(false)} className="btn-ghost">
               Cancelar
             </button>
           </div>

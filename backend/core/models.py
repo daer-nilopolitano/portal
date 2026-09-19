@@ -8,7 +8,6 @@ ativado se a diretoria precisar de inscrição/confirmação de presença
 por evento no futuro.
 """
 import uuid
-from datetime import date
 
 from django.conf import settings
 from django.db import models
@@ -57,20 +56,6 @@ class Embaixada(models.Model):
     igreja = models.OneToOneField(
         Igreja, on_delete=models.PROTECT, related_name="embaixada"
     )
-    conselheiro_responsavel = models.ForeignKey(
-        "Membro",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="embaixadas_lideradas",
-        help_text="Deve ser um Membro com Papel do tipo 'conselheiro'. É quem cadastra embaixadores e auxiliares desta embaixada.",
-    )
-    conselheiros = models.ManyToManyField(
-        "Membro",
-        related_name="embaixadas_como_conselheiro",
-        blank=True,
-        help_text="Demais conselheiros desta embaixada, além do responsável acima.",
-    )
 
     class Meta:
         verbose_name = "Embaixada"
@@ -103,6 +88,19 @@ class HorarioReuniao(models.Model):
         return f"{self.embaixada} — {self.get_dia_semana_display()} às {self.horario.strftime('%H:%M')}"
 
 
+class TipoMembro(models.TextChoices):
+    CONSELHEIRO = "conselheiro", "Conselheiro"
+    AUXILIAR = "auxiliar", "Auxiliar"
+    EMBAIXADOR_DO_REI = "embaixador_do_rei", "Embaixador do Rei"
+
+
+class PostoEmbaixador(models.TextChoices):
+    ESCUDEIRO = "escudeiro", "Embaixador Escudeiro"
+    ARAUTO = "arauto", "Embaixador Arauto"
+    SENIOR = "senior", "Embaixador Sênior"
+    EMERITO = "emerito", "Embaixador Emérito"
+
+
 class Membro(models.Model):
     nome = models.CharField(max_length=200)
     data_nascimento = models.DateField()
@@ -110,7 +108,21 @@ class Membro(models.Model):
     telefone_contato = models.CharField(max_length=20, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
 
-    # Preenchidos apenas quando o membro tem Papel do tipo "embaixador_do_rei"
+    tipo = models.CharField(max_length=30, choices=TipoMembro.choices)
+
+    # Só preenchido quando tipo = embaixador_do_rei. "Escudeiro" é o posto
+    # inicial; sobe informalmente (~1 ano, mas varia) a critério do
+    # conselheiro — não existe regra automática de progressão.
+    posto_embaixador = models.CharField(
+        "Posto",
+        max_length=20,
+        choices=PostoEmbaixador.choices,
+        null=True,
+        blank=True,
+        help_text="Preencher apenas quando tipo = Embaixador do Rei.",
+    )
+
+    # Preenchidos apenas quando tipo = embaixador_do_rei
     nome_responsavel = models.CharField(
         "Nome do responsável", max_length=200, blank=True
     )
@@ -123,9 +135,8 @@ class Membro(models.Model):
     )
     ativo = models.BooleanField(default=True)
 
-    # Login do membro no sistema (diretoria, conselheiro ou embaixador do rei
-    # — todos podem ter conta, conforme decidido no planejamento). Fica nulo
-    # até alguém (Diretoria ou o próprio conselheiro da embaixada) criar o
+    # Login do membro no sistema (todos os tipos podem ter conta). Fica nulo
+    # até um conselheiro da própria embaixada (ou a Diretoria) criar o
     # acesso via endpoint dedicado — ver core/api/membros.py.
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -153,7 +164,7 @@ class Membro(models.Model):
 
     @property
     def faixa_etaria(self) -> str | None:
-        """Só é relevante para membro que é 'embaixador_do_rei'."""
+        """Só é relevante para membros com tipo 'embaixador_do_rei'."""
         idade = self.idade
         if 9 <= idade <= 11:
             return "junior"
@@ -164,31 +175,22 @@ class Membro(models.Model):
         return None
 
     @property
-    def papel_atual(self) -> "Papel | None":
-        """
-        Papel vigente hoje (data_inicio <= hoje e data_fim nulo ou futuro).
-        Um membro pode ter mais de um Papel ao longo do tempo (ex.: foi
-        conselheiro e depois entrou pra diretoria) — este é o que vale
-        para checagens de permissão na API.
-        """
-        hoje = timezone.localdate()
-        return (
-            self.papeis.filter(data_inicio__lte=hoje)
-            .filter(models.Q(data_fim__isnull=True) | models.Q(data_fim__gte=hoje))
-            .order_by("-data_inicio")
-            .first()
-        )
+    def eh_diretoria(self) -> bool:
+        """Tem mandato ativo (sem data_fim) na Diretoria da associação."""
+        return self.mandatos_diretoria.filter(data_fim__isnull=True).exists()
 
 
-class Papel(models.Model):
-    class Tipo(models.TextChoices):
-        DIRETORIA = "diretoria", "Diretoria"
-        CONSELHEIRO = "conselheiro", "Conselheiro"
-        EMBAIXADOR_DO_REI = "embaixador_do_rei", "Embaixador do Rei"
+class Diretoria(models.Model):
+    """
+    Diretoria da associação (DAER Nilopolitano) — só Membros com
+    tipo=conselheiro podem ocupar um cargo aqui (validado na API, não no
+    banco). Mantém data_fim para preservar histórico de mandatos.
+    """
 
-    class CargoDiretoria(models.TextChoices):
+    class Cargo(models.TextChoices):
         COORDENADOR = "coordenador", "Coordenador"
         PRESIDENTE = "presidente", "Presidente"
+        VICE_PRESIDENTE = "vice_presidente", "Vice-Presidente"
         PRIMEIRO_SECRETARIO = "primeiro_secretario", "1º Secretário"
         SEGUNDO_SECRETARIO = "segundo_secretario", "2º Secretário"
         DIRETOR_MIDIA_COMUNICACAO = (
@@ -197,29 +199,125 @@ class Papel(models.Model):
         )
         DIRETOR_ESPORTES = "diretor_esportes", "Diretor de Esportes"
 
-    membro = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name="papeis")
-    tipo = models.CharField(max_length=30, choices=Tipo.choices)
-    cargo_diretoria = models.CharField(
-        "Cargo na diretoria",
-        max_length=40,
-        choices=CargoDiretoria.choices,
-        null=True,
-        blank=True,
-        help_text="Preencher apenas quando tipo = Diretoria.",
+    membro = models.ForeignKey(
+        Membro, on_delete=models.CASCADE, related_name="mandatos_diretoria"
     )
+    cargo = models.CharField(max_length=40, choices=Cargo.choices)
     data_inicio = models.DateField()
     data_fim = models.DateField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Papel"
-        verbose_name_plural = "Papéis"
+        verbose_name = "Diretoria"
+        verbose_name_plural = "Diretoria"
         ordering = ["-data_inicio"]
+        constraints = [
+            # Um membro só pode ter 1 mandato ativo (sem data_fim) por vez —
+            # "não pode ter mais de um cargo" na diretoria.
+            models.UniqueConstraint(
+                fields=["membro"],
+                condition=models.Q(data_fim__isnull=True),
+                name="unico_mandato_ativo_por_membro",
+            ),
+        ]
 
     def __str__(self):
-        return f"{self.membro} — {self.get_tipo_display()}"
+        return f"{self.membro} — {self.get_cargo_display()}"
+
+
+class GrupoTrabalho(models.Model):
+    """
+    Catálogo de grupos (Música, Programações, Evangelismo, hoje) —
+    tabela em vez de enum fixo, pra permitir criar um grupo novo no
+    futuro sem precisar de migração.
+    """
+
+    nome = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = "Grupo de Trabalho"
+        verbose_name_plural = "Grupos de Trabalho"
+        ordering = ["nome"]
+
+    def __str__(self):
+        return self.nome
+
+
+class GrupoMembro(models.Model):
+    class PapelNoGrupo(models.TextChoices):
+        LIDER = "lider", "Líder"
+        MEMBRO = "membro", "Membro"
+
+    grupo = models.ForeignKey(GrupoTrabalho, on_delete=models.CASCADE, related_name="participantes")
+    membro = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name="grupos_trabalho")
+    papel_no_grupo = models.CharField(max_length=10, choices=PapelNoGrupo.choices)
+
+    class Meta:
+        verbose_name = "Participante de Grupo de Trabalho"
+        verbose_name_plural = "Participantes de Grupos de Trabalho"
+        ordering = ["grupo", "papel_no_grupo", "membro__nome"]
+        constraints = [
+            # Uma pessoa só entra 1 vez em cada grupo (como líder OU membro).
+            models.UniqueConstraint(fields=["grupo", "membro"], name="unico_membro_por_grupo"),
+            # Regra de negócio "lidera no máximo 1 grupo": um Membro só pode
+            # ter no máximo uma linha com papel_no_grupo=lider em toda a
+            # tabela (não só dentro de um grupo) — daí o campo único ser só
+            # `membro`, com a condição restringindo à liderança.
+            models.UniqueConstraint(
+                fields=["membro"],
+                condition=models.Q(papel_no_grupo="lider"),
+                name="unico_grupo_liderado_por_membro",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.membro} — {self.grupo} ({self.get_papel_no_grupo_display()})"
+
+
+class DiretoriaEmbaixada(models.Model):
+    """
+    Quadro de oficiais de uma embaixada — cargos ocupados pelos próprios
+    Embaixadores do Rei (tipo=embaixador_do_rei), como prática de
+    liderança, não por conselheiros. Cargo é editável pelo conselheiro da
+    embaixada; atribuir um cargo já ocupado troca o titular automaticamente
+    (sem manter histórico, diferente da Diretoria da associação).
+    """
+
+    class Cargo(models.TextChoices):
+        EMBAIXADOR_CHEFE = "embaixador_chefe", "Embaixador Chefe"
+        EMBAIXADOR_ASSISTENTE = "embaixador_assistente", "Embaixador Assistente"
+        SECRETARIO = "secretario", "Secretário"
+        INTENDENTE = "intendente", "Intendente"
+        PORTA_VOZ = "porta_voz", "Porta-voz"
+        CONSUL = "consul", "Cônsul"
+        TESOUREIRO = "tesoureiro", "Tesoureiro"
+        DIRETOR_MUSICA = "diretor_musica", "Diretor de Música"
+        DIRETOR_ESPORTES = "diretor_esportes", "Diretor de Esportes"
+
+    embaixada = models.ForeignKey(
+        Embaixada, on_delete=models.CASCADE, related_name="quadro_oficiais"
+    )
+    membro = models.ForeignKey(
+        Membro, on_delete=models.CASCADE, related_name="cargos_embaixada"
+    )
+    cargo = models.CharField(max_length=30, choices=Cargo.choices)
+    data_inicio = models.DateField()
+
+    class Meta:
+        verbose_name = "Diretoria da Embaixada"
+        verbose_name_plural = "Diretorias das Embaixadas"
+        ordering = ["embaixada", "cargo"]
+        constraints = [
+            # Só um titular por cargo por embaixada de cada vez.
+            models.UniqueConstraint(fields=["embaixada", "cargo"], name="unico_titular_por_cargo"),
+        ]
+
+    def __str__(self):
+        return f"{self.membro} — {self.get_cargo_display()} ({self.embaixada})"
 
 
 class Carteirinha(models.Model):
+    """Exclusiva para Membro com tipo=embaixador_do_rei (validado na API)."""
+
     membro = models.OneToOneField(
         Membro, on_delete=models.CASCADE, related_name="carteirinha"
     )

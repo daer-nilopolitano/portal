@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { ROTULO_FAIXA_ETARIA } from "@/lib/labels";
+import { ROTULO_CARGO_DIRETORIA_EMBAIXADA, ROTULO_FAIXA_ETARIA, ROTULO_POSTO } from "@/lib/labels";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import type { Membro, Embaixada as EmbaixadaCompleta } from "@/lib/types";
 
@@ -15,6 +15,8 @@ interface FormularioMembro {
   data_nascimento: string;
   telefone_contato: string;
   email: string;
+  posto_embaixador: string;
+  cargo_embaixada: string;
   nome_responsavel: string;
   telefone_responsavel: string;
   embaixada_id: string;
@@ -26,22 +28,25 @@ const FORMULARIO_VAZIO: FormularioMembro = {
   data_nascimento: "",
   telefone_contato: "",
   email: "",
+  posto_embaixador: "escudeiro",
+  cargo_embaixada: "",
   nome_responsavel: "",
   telefone_responsavel: "",
   embaixada_id: "",
   ativo: true,
 };
 
-export function MembrosPorPapel({
-  papel,
+export function MembrosPorTipo({
+  tipo,
   titulo,
 }: {
-  papel: "conselheiro" | "embaixador_do_rei";
+  tipo: "conselheiro" | "auxiliar" | "embaixador_do_rei";
   titulo: string;
 }) {
   const { token, membro: membroLogado } = useAuth();
-  const ehDiretoria = membroLogado?.papel === "diretoria";
-  const mostraResponsavel = papel === "embaixador_do_rei";
+  const ehDiretoria = !!membroLogado?.cargo_diretoria;
+  const ehAuxiliar = membroLogado?.tipo === "auxiliar";
+  const mostraResponsavel = tipo === "embaixador_do_rei";
 
   const [lista, setLista] = useState<Membro[]>([]);
   const [embaixadas, setEmbaixadas] = useState<Embaixada[]>([]);
@@ -59,7 +64,7 @@ export function MembrosPorPapel({
     setCarregando(true);
     setErro(null);
     try {
-      const dados = await apiFetch<Membro[]>(`/membros/?papel=${papel}`, { token });
+      const dados = await apiFetch<Membro[]>(`/membros/?tipo=${tipo}`, { token });
       setLista(dados);
       if (ehDiretoria) {
         const listaEmbaixadas = await apiFetch<Embaixada[]>("/embaixadas/", { token });
@@ -70,7 +75,7 @@ export function MembrosPorPapel({
     } finally {
       setCarregando(false);
     }
-  }, [token, papel, ehDiretoria]);
+  }, [token, tipo, ehDiretoria]);
 
   useEffect(() => {
     carregar();
@@ -93,6 +98,8 @@ export function MembrosPorPapel({
       data_nascimento: m.data_nascimento,
       telefone_contato: m.telefone_contato,
       email: m.email ?? "",
+      posto_embaixador: m.posto_embaixador ?? "escudeiro",
+      cargo_embaixada: m.cargo_embaixada ?? "",
       nome_responsavel: m.nome_responsavel,
       telefone_responsavel: m.telefone_responsavel,
       embaixada_id: String(m.embaixada_id),
@@ -108,53 +115,55 @@ export function MembrosPorPapel({
     setEnviando(true);
     setErroFormulario(null);
 
-    const payloadBase = {
-      nome: formulario.nome,
-      data_nascimento: formulario.data_nascimento,
-      telefone_contato: formulario.telefone_contato,
-      email: formulario.email || null,
-      ...(mostraResponsavel
-        ? {
-            nome_responsavel: formulario.nome_responsavel,
-            telefone_responsavel: formulario.telefone_responsavel,
-          }
-        : {}),
-      ativo: formulario.ativo,
-    };
+  const payloadBase = {
+    nome: formulario.nome,
+    data_nascimento: formulario.data_nascimento,
+    telefone_contato: formulario.telefone_contato,
+    email: formulario.email || null,
+    tipo,
+    ...(mostraResponsavel
+      ? {
+          posto_embaixador: formulario.posto_embaixador,
+          nome_responsavel: formulario.nome_responsavel,
+          telefone_responsavel: formulario.telefone_responsavel,
+        }
+      : {}),
+    ativo: formulario.ativo,
+  };
 
-    try {
-      if (editandoId) {
-        await apiFetch(`/membros/${editandoId}/`, {
-          token,
-          method: "PUT",
-          body: JSON.stringify({
-            ...payloadBase,
-            embaixada_id: Number(formulario.embaixada_id),
-          }),
-        });
-      } else {
-        const embaixadaId = ehDiretoria
-          ? Number(formulario.embaixada_id)
-          : membroLogado?.embaixada_id;
-        const novoMembro = await apiFetch<Membro>("/membros/", {
-          token,
-          method: "POST",
-          body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
-        });
-        // Papel só é atribuído na criação — editar papel de alguém já existente
-        // é uma ação mais sensível (feita direto no Django Admin por enquanto).
-        await apiFetch("/papeis/", {
-          token,
-          method: "POST",
-          body: JSON.stringify({
-            membro_id: novoMembro.id,
-            tipo: papel,
-            data_inicio: new Date().toISOString().slice(0, 10),
-          }),
-        });
-      }
-      setFormularioAberto(false);
-      await carregar();
+  try {
+    let membroId = editandoId;
+    if (editandoId) {
+      await apiFetch(`/membros/${editandoId}/`, {
+        token,
+        method: "PUT",
+        body: JSON.stringify({
+          ...payloadBase,
+          embaixada_id: Number(formulario.embaixada_id),
+        }),
+      });
+    } else {
+      const embaixadaId = ehDiretoria
+        ? Number(formulario.embaixada_id)
+        : membroLogado?.embaixada_id;
+      const novoMembro = await apiFetch<Membro>("/membros/", {
+        token,
+        method: "POST",
+        body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
+      });
+      membroId = novoMembro.id;
+    }
+    // Cargo no quadro de oficiais é um endpoint à parte — o backend troca
+    // automaticamente o titular anterior se o cargo já estiver ocupado.
+    if (mostraResponsavel && membroId) {
+      await apiFetch(`/membros/${membroId}/cargo-embaixada/`, {
+        token,
+        method: "PUT",
+        body: JSON.stringify({ cargo: formulario.cargo_embaixada || null }),
+      });
+    }
+    setFormularioAberto(false);
+    await carregar();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -202,13 +211,31 @@ export function MembrosPorPapel({
               </span>
             ),
           },
-        ]
+          {
+            cabecalho: "Posto",
+            render: (m: Membro) => (
+              <span className="text-text-muted">
+                {m.posto_embaixador ? ROTULO_POSTO[m.posto_embaixador] : "—"}
+              </span>
+            ),
+          },
+          {
+            cabecalho: "Cargo",
+            render: (m: Membro) => (
+              <span className="text-text-muted">
+                {m.cargo_embaixada ? ROTULO_CARGO_DIRETORIA_EMBAIXADA[m.cargo_embaixada] : "—"}
+              </span>
+            ),
+          },
+      ]
       : []),
     {
       cabecalho: "Acesso",
       render: (m) =>
         m.tem_acesso ? (
           <span className="text-xs text-success">Criado</span>
+        ) : ehAuxiliar ? (
+          <span className="text-xs text-text-muted">Sem acesso</span>
         ) : (
           <button
             onClick={() => criarAcesso(m)}
@@ -236,15 +263,14 @@ export function MembrosPorPapel({
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-primary">{titulo}</h1>
-        <button
-          onClick={abrirNovo}
-          className="btn-primary"
-        >
-          + Novo
-        </button>
+        {!ehAuxiliar && (
+          <button onClick={abrirNovo} className="btn-primary">
+            + Novo
+          </button>
+        )}
       </div>
 
-      {formularioAberto && (
+      {formularioAberto && !ehAuxiliar && (
         <form
           onSubmit={salvar}
           className="mt-6 grid gap-4 rounded-lg border border-border bg-surface p-5 sm:grid-cols-2"
@@ -291,6 +317,40 @@ export function MembrosPorPapel({
 
           {mostraResponsavel && (
             <>
+              <div>
+                <label className="block text-sm text-text">Posto</label>
+                <select
+                  value={formulario.posto_embaixador}
+                  onChange={(e) => setFormulario({ ...formulario, posto_embaixador: e.target.value })}
+                  className="field"
+                >
+                  {Object.entries(ROTULO_POSTO).map(([valor, rotulo]) => (
+                    <option key={valor} value={valor}>
+                      {rotulo}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm text-text">Cargo no quadro de oficiais</label>
+                <select
+                  value={formulario.cargo_embaixada}
+                  onChange={(e) => setFormulario({ ...formulario, cargo_embaixada: e.target.value })}
+                  className="field"
+                >
+                  <option value="">Nenhum</option>
+                  {Object.entries(ROTULO_CARGO_DIRETORIA_EMBAIXADA).map(([valor, rotulo]) => (
+                    <option key={valor} value={valor}>
+                      {rotulo}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-text-muted">
+                  Atribuir um cargo já ocupado troca o titular anterior automaticamente.
+                </p>
+              </div>
+
               <div>
                 <label className="block text-sm text-text">Nome do responsável</label>
                 <input
@@ -374,8 +434,8 @@ export function MembrosPorPapel({
         carregando={carregando}
         erro={erro}
         mensagemVazio="Nenhum registro ainda."
-        onEditar={abrirEdicao}
-        onExcluir={excluir}
+        onEditar={ehAuxiliar ? undefined : abrirEdicao}
+        onExcluir={ehAuxiliar ? undefined : excluir}
         rotuloEditar={(m) => `Editar ${m.nome}`}
         rotuloExcluir={(m) => `Excluir ${m.nome}`}
       />

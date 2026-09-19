@@ -1,11 +1,16 @@
 from django.contrib import admin
 
-from .models import Carteirinha, Embaixada, HorarioReuniao, Igreja, Membro, Papel
-
-
-class PapelInline(admin.TabularInline):
-    model = Papel
-    extra = 0
+from .models import (
+    Carteirinha,
+    Diretoria,
+    DiretoriaEmbaixada,
+    Embaixada,
+    GrupoMembro,
+    GrupoTrabalho,
+    HorarioReuniao,
+    Igreja,
+    Membro,
+)
 
 
 class CarteirinhaInline(admin.StackedInline):
@@ -18,6 +23,26 @@ class HorarioReuniaoInline(admin.TabularInline):
     extra = 0
 
 
+class DiretoriaEmbaixadaInline(admin.TabularInline):
+    model = DiretoriaEmbaixada
+    fk_name = "embaixada"
+    extra = 0
+    autocomplete_fields = ("membro",)
+
+
+class MandatoDiretoriaInline(admin.TabularInline):
+    """Mostrado no MembroAdmin — histórico de mandatos daquele membro na Diretoria."""
+
+    model = Diretoria
+    extra = 0
+
+
+class GrupoMembroInline(admin.TabularInline):
+    model = GrupoMembro
+    extra = 0
+    autocomplete_fields = ("membro",)
+
+
 @admin.register(Igreja)
 class IgrejaAdmin(admin.ModelAdmin):
     list_display = ("nome", "municipio", "bairro", "contato_nome", "contato_telefone")
@@ -26,24 +51,36 @@ class IgrejaAdmin(admin.ModelAdmin):
 
 @admin.register(Embaixada)
 class EmbaixadaAdmin(admin.ModelAdmin):
-    list_display = ("nome", "igreja", "conselheiro_responsavel")
+    list_display = ("nome", "igreja")
     search_fields = ("nome",)
-    autocomplete_fields = ("igreja", "conselheiro_responsavel")
-    filter_horizontal = ("conselheiros",)
-    inlines = [HorarioReuniaoInline]
+    autocomplete_fields = ("igreja",)
+    inlines = [HorarioReuniaoInline, DiretoriaEmbaixadaInline]
 
 
 @admin.register(Membro)
 class MembroAdmin(admin.ModelAdmin):
-    list_display = ("nome", "embaixada", "idade", "faixa_etaria", "ativo")
-    list_filter = ("ativo", "embaixada")
+    list_display = ("nome", "tipo", "posto_embaixador", "embaixada", "idade", "faixa_etaria", "ativo")
+    list_filter = ("tipo", "posto_embaixador", "ativo", "embaixada")
     search_fields = ("nome", "email")
     autocomplete_fields = ("embaixada",)
-    inlines = [PapelInline, CarteirinhaInline]
+    inlines = [MandatoDiretoriaInline, CarteirinhaInline]
 
 
-@admin.register(Papel)
-class PapelAdmin(admin.ModelAdmin):
-    list_display = ("membro", "tipo", "cargo_diretoria", "data_inicio", "data_fim")
-    list_filter = ("tipo", "cargo_diretoria")
+@admin.register(Diretoria)
+class DiretoriaAdmin(admin.ModelAdmin):
+    list_display = ("membro", "cargo", "data_inicio", "data_fim")
+    list_filter = ("cargo",)
     autocomplete_fields = ("membro",)
+
+
+@admin.register(GrupoTrabalho)
+class GrupoTrabalhoAdmin(admin.ModelAdmin):
+    list_display = ("nome",)
+    inlines = [GrupoMembroInline]
+
+
+@admin.register(DiretoriaEmbaixada)
+class DiretoriaEmbaixadaAdmin(admin.ModelAdmin):
+    list_display = ("membro", "cargo", "embaixada", "data_inicio")
+    list_filter = ("cargo", "embaixada")
+    autocomplete_fields = ("membro", "embaixada")

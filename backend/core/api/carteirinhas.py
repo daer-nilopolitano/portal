@@ -1,5 +1,6 @@
 """
-Endpoints de Carteirinha digital.
+Endpoints de Carteirinha digital — exclusiva para Membro com
+tipo=embaixador_do_rei (conselheiro e auxiliar não têm carteirinha).
 
 O endpoint de verificação (`/carteirinhas/verificar/{identificador}/`) é
 público de propósito — é para onde o QR code da carteirinha aponta, então
@@ -8,11 +9,9 @@ válido, sem precisar estar logada. Ele só devolve o mínimo necessário
 (nome, embaixada, validade e se está válida) — nunca dados sensíveis como
 telefone, e-mail ou contato do responsável.
 
-Os demais endpoints exigem login: emitir/renovar seguem a mesma regra de
-Embaixada/Membro (Diretoria ou o conselheiro responsável pela embaixada do
-membro); `/carteirinhas/me/` é o que a PWA usa para mostrar a carteirinha de
-quem está logado, e funciona para qualquer papel (diretoria, conselheiro ou
-embaixador do rei).
+Os demais endpoints exigem login: emitir/renovar é permitido à Diretoria ou
+ao conselheiro da própria embaixada do membro; `/carteirinhas/me/` é o que
+a PWA usa pra mostrar a carteirinha de quem está logado.
 """
 from datetime import date
 from typing import Optional
@@ -23,7 +22,7 @@ from ninja import Router, Schema
 from ninja.errors import HttpError
 
 from ..auth import AuthBearer, membro_do_usuario
-from ..models import Carteirinha, Embaixada, Membro, Papel
+from ..models import Carteirinha, Membro, TipoMembro
 
 router = Router(tags=["carteirinhas"], auth=AuthBearer())
 
@@ -34,8 +33,7 @@ class CarteirinhaOut(Schema):
     membro_nome: str
     foto_url: Optional[str] = None
     embaixada_nome: str
-    papel: Optional[str] = None
-    cargo_diretoria: Optional[str] = None
+    posto: Optional[str] = None
     identificador: UUID
     validade: date
     emitida_em: date
@@ -53,14 +51,8 @@ class CarteirinhaOut(Schema):
         return obj.membro.embaixada.nome
 
     @staticmethod
-    def resolve_papel(obj: Carteirinha) -> Optional[str]:
-        papel = obj.membro.papel_atual
-        return papel.tipo if papel else None
-
-    @staticmethod
-    def resolve_cargo_diretoria(obj: Carteirinha) -> Optional[str]:
-        papel = obj.membro.papel_atual
-        return papel.cargo_diretoria if papel else None
+    def resolve_posto(obj: Carteirinha) -> Optional[str]:
+        return obj.membro.posto_embaixador
 
 
 class CarteirinhaIn(Schema):
@@ -82,14 +74,12 @@ class VerificacaoOut(Schema):
 
 
 def _pode_gerenciar_carteirinha_de(membro_logado: Membro, membro_alvo: Membro) -> bool:
-    papel = membro_logado.papel_atual
-    if papel and papel.tipo == Papel.Tipo.DIRETORIA:
+    if membro_logado.eh_diretoria:
         return True
-    if papel and papel.tipo == Papel.Tipo.CONSELHEIRO:
-        return Embaixada.objects.filter(
-            pk=membro_alvo.embaixada_id, conselheiro_responsavel=membro_logado
-        ).exists()
-    return False
+    return (
+        membro_logado.tipo == TipoMembro.CONSELHEIRO
+        and membro_logado.embaixada_id == membro_alvo.embaixada_id
+    )
 
 
 @router.get("/me/", response=CarteirinhaOut)
@@ -121,6 +111,8 @@ def emitir_carteirinha(request, payload: CarteirinhaIn):
     membro_alvo = get_object_or_404(Membro, pk=payload.membro_id)
     if not _pode_gerenciar_carteirinha_de(membro_logado, membro_alvo):
         raise HttpError(403, "Você só pode emitir carteirinha para membros da sua própria embaixada.")
+    if membro_alvo.tipo != TipoMembro.EMBAIXADOR_DO_REI:
+        raise HttpError(400, "Carteirinha é exclusiva para membros com tipo=embaixador_do_rei.")
 
     if Carteirinha.objects.filter(membro=membro_alvo).exists():
         raise HttpError(400, "Esse membro já tem uma carteirinha emitida — use PUT para renovar.")

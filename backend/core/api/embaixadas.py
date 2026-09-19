@@ -1,18 +1,20 @@
 """
 Endpoints de gestão de Embaixadas.
 
-Leitura liberada para qualquer usuário autenticado; criação/edição/exclusão
-restrita à Diretoria (a estrutura das embaixadas em si — quais existem, qual
-igreja, quem são os conselheiros — é definida pela diretoria, não pelos
-conselheiros).
+Leitura liberada para qualquer usuário autenticado. Criar/excluir uma
+embaixada, e editar nome/igreja de uma já existente, é restrito à
+Diretoria — são dados mais "estruturais". Editar os horários de reunião é
+liberado também para o conselheiro da própria embaixada (é quem lida com
+isso no dia a dia). Cadastro de Igreja continua só pelo Django Admin.
 """
 from typing import Optional
 
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
+from ninja.errors import HttpError
 
-from ..auth import AuthBearer, exigir_diretoria
-from ..models import Embaixada, HorarioReuniao, Igreja, Membro
+from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
+from ..models import Embaixada, HorarioReuniao, Igreja, TipoMembro
 
 router = Router(tags=["embaixadas"], auth=AuthBearer())
 
@@ -56,9 +58,6 @@ class EmbaixadaOut(Schema):
     nome: str
     igreja_id: int
     igreja_nome: str
-    conselheiro_responsavel_id: Optional[int] = None
-    conselheiro_responsavel_nome: Optional[str] = None
-    conselheiro_ids: list[int] = []
     conselheiro_nomes: list[str] = []
     horarios_reuniao: list[HorarioReuniaoOut] = []
 
@@ -67,16 +66,8 @@ class EmbaixadaOut(Schema):
         return obj.igreja.nome
 
     @staticmethod
-    def resolve_conselheiro_responsavel_nome(obj: Embaixada) -> Optional[str]:
-        return obj.conselheiro_responsavel.nome if obj.conselheiro_responsavel else None
-
-    @staticmethod
-    def resolve_conselheiro_ids(obj: Embaixada) -> list[int]:
-        return [p.id for p in obj.conselheiros.all()]
-
-    @staticmethod
     def resolve_conselheiro_nomes(obj: Embaixada) -> list[str]:
-        return [p.nome for p in obj.conselheiros.all()]
+        return [m.nome for m in obj.membros.filter(tipo=TipoMembro.CONSELHEIRO)]
 
     @staticmethod
     def resolve_horarios_reuniao(obj: Embaixada) -> list[HorarioReuniao]:
@@ -84,9 +75,9 @@ class EmbaixadaOut(Schema):
 
 
 class EmbaixadaPublicaOut(Schema):
-    """Somente o que o site institucional precisa mostrar — sem
-    conselheiro_responsavel_id nem qualquer dado pessoal (telefone, e-mail,
-    data de nascimento) que existe em Membro."""
+    """Somente o que o site institucional precisa mostrar — sem qualquer
+    dado pessoal (telefone, e-mail, data de nascimento) que existe em
+    Membro."""
 
     id: int
     nome: str
@@ -101,14 +92,7 @@ class EmbaixadaPublicaOut(Schema):
 
     @staticmethod
     def resolve_conselheiros_nomes(obj: Embaixada) -> list[str]:
-        # Responsável + demais conselheiros, sem duplicar caso a mesma
-        # membro apareça nos dois (ex.: cadastro feito de forma redundante).
-        nomes_vistos: dict[int, str] = {}
-        if obj.conselheiro_responsavel:
-            nomes_vistos[obj.conselheiro_responsavel.id] = obj.conselheiro_responsavel.nome
-        for membro in obj.conselheiros.all():
-            nomes_vistos.setdefault(membro.id, membro.nome)
-        return list(nomes_vistos.values())
+        return [m.nome for m in obj.membros.filter(tipo=TipoMembro.CONSELHEIRO)]
 
     @staticmethod
     def resolve_horarios_reuniao(obj: Embaixada) -> list[HorarioReuniao]:
@@ -123,16 +107,12 @@ class HorarioReuniaoIn(Schema):
 class EmbaixadaIn(Schema):
     nome: str
     igreja_id: int
-    conselheiro_responsavel_id: Optional[int] = None
-    conselheiro_ids: list[int] = []
     horarios_reuniao: list[HorarioReuniaoIn] = []
 
 
 class EmbaixadaUpdate(Schema):
     nome: Optional[str] = None
     igreja_id: Optional[int] = None
-    conselheiro_responsavel_id: Optional[int] = None
-    conselheiro_ids: Optional[list[int]] = None
     horarios_reuniao: Optional[list[HorarioReuniaoIn]] = None
 
 
@@ -151,17 +131,13 @@ def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]
 
 @router.get("/", response=list[EmbaixadaOut])
 def listar_embaixadas(request):
-    return Embaixada.objects.select_related("igreja", "conselheiro_responsavel").prefetch_related(
-        "conselheiros", "horarios_reuniao"
-    )
+    return Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao")
 
 
 @router.get("/{embaixada_id}/", response=EmbaixadaOut)
 def detalhar_embaixada(request, embaixada_id: int):
     return get_object_or_404(
-        Embaixada.objects.select_related("igreja", "conselheiro_responsavel").prefetch_related(
-            "conselheiros", "horarios_reuniao"
-        ),
+        Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao"),
         pk=embaixada_id,
     )
 
@@ -170,17 +146,8 @@ def detalhar_embaixada(request, embaixada_id: int):
 def criar_embaixada(request, payload: EmbaixadaIn):
     exigir_diretoria(request)
     igreja = get_object_or_404(Igreja, pk=payload.igreja_id)
-    conselheiro_responsavel = None
-    if payload.conselheiro_responsavel_id:
-        conselheiro_responsavel = get_object_or_404(Membro, pk=payload.conselheiro_responsavel_id)
 
-    embaixada = Embaixada.objects.create(
-        nome=payload.nome,
-        igreja=igreja,
-        conselheiro_responsavel=conselheiro_responsavel,
-    )
-    if payload.conselheiro_ids:
-        embaixada.conselheiros.set(Membro.objects.filter(pk__in=payload.conselheiro_ids))
+    embaixada = Embaixada.objects.create(nome=payload.nome, igreja=igreja)
     if payload.horarios_reuniao:
         _sincronizar_horarios(embaixada, payload.horarios_reuniao)
     return 201, embaixada
@@ -189,33 +156,35 @@ def criar_embaixada(request, payload: EmbaixadaIn):
 @router_publico.get("/", response=list[EmbaixadaPublicaOut])
 def listar_embaixadas_publicas(request):
     """Consumido pelo card de destaques da home — só os campos de EmbaixadaPublicaOut."""
-    return Embaixada.objects.select_related("igreja", "conselheiro_responsavel").prefetch_related(
-        "conselheiros", "horarios_reuniao"
-    )
+    return Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao")
 
 
 @router.put("/{embaixada_id}/", response=EmbaixadaOut)
 def atualizar_embaixada(request, embaixada_id: int, payload: EmbaixadaUpdate):
-    exigir_diretoria(request)
+    membro_logado = membro_do_usuario(request.auth)
     embaixada = get_object_or_404(Embaixada, pk=embaixada_id)
 
     dados = payload.dict(exclude_unset=True)
+    mudando_dados_estruturais = "nome" in dados or "igreja_id" in dados
+
+    if membro_logado.eh_diretoria:
+        pass
+    elif membro_logado.tipo == TipoMembro.CONSELHEIRO and membro_logado.embaixada_id == embaixada_id:
+        if mudando_dados_estruturais:
+            raise HttpError(
+                403, "Nome e igreja da embaixada só podem ser alterados pela Diretoria — você pode editar os horários de reunião."
+            )
+    else:
+        raise HttpError(403, "Ação restrita à Diretoria ou ao conselheiro desta embaixada.")
+
     if "igreja_id" in dados:
         embaixada.igreja = get_object_or_404(Igreja, pk=dados.pop("igreja_id"))
-    if "conselheiro_responsavel_id" in dados:
-        conselheiro_id = dados.pop("conselheiro_responsavel_id")
-        embaixada.conselheiro_responsavel = (
-            get_object_or_404(Membro, pk=conselheiro_id) if conselheiro_id else None
-        )
-    conselheiro_ids = dados.pop("conselheiro_ids", None)
     horarios_reuniao = dados.pop("horarios_reuniao", None)
 
     for campo, valor in dados.items():
         setattr(embaixada, campo, valor)
     embaixada.save()
 
-    if conselheiro_ids is not None:
-        embaixada.conselheiros.set(Membro.objects.filter(pk__in=conselheiro_ids))
     if horarios_reuniao is not None:
         _sincronizar_horarios(embaixada, [HorarioReuniaoIn(**h) for h in horarios_reuniao])
 

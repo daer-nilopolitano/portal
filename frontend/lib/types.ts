@@ -39,12 +39,22 @@ export interface Embaixada {
   nome: string;
   igreja_id: number;
   igreja_nome: string;
-  conselheiro_responsavel_id: number | null;
-  conselheiro_responsavel_nome: string | null;
-  conselheiro_ids: number[];
   conselheiro_nomes: string[];
   horarios_reuniao: HorarioReuniao[];
 }
+
+export type TipoMembro = "conselheiro" | "auxiliar" | "embaixador_do_rei";
+export type PostoEmbaixador = "escudeiro" | "arauto" | "senior" | "emerito";
+export type CargoDiretoriaEmbaixada =
+  | "embaixador_chefe"
+  | "embaixador_assistente"
+  | "secretario"
+  | "intendente"
+  | "porta_voz"
+  | "consul"
+  | "tesoureiro"
+  | "diretor_musica"
+  | "diretor_esportes";
 
 export interface Membro {
   id: number;
@@ -52,6 +62,9 @@ export interface Membro {
   data_nascimento: string;
   telefone_contato: string;
   email: string | null;
+  tipo: TipoMembro;
+  posto_embaixador: PostoEmbaixador | null;
+  cargo_embaixada: CargoDiretoriaEmbaixada | null;
   nome_responsavel: string;
   telefone_responsavel: string;
   embaixada_id: number;
@@ -62,9 +75,41 @@ export interface Membro {
   tem_acesso: boolean;
 }
 
+export type CargoDiretoria =
+  | "coordenador"
+  | "presidente"
+  | "vice_presidente"
+  | "primeiro_secretario"
+  | "segundo_secretario"
+  | "diretor_midia_comunicacao"
+  | "diretor_esportes";
+
+export interface Diretoria {
+  id: number;
+  membro_id: number;
+  membro_nome: string;
+  cargo: CargoDiretoria;
+  data_inicio: string;
+  data_fim: string | null;
+}
+
+export type PapelNoGrupo = "lider" | "membro";
+
+export interface ParticipanteGrupo {
+  membro_id: number;
+  membro_nome: string;
+  papel_no_grupo: PapelNoGrupo;
+}
+
+export interface GrupoTrabalho {
+  id: number;
+  nome: string;
+  participantes: ParticipanteGrupo[];
+}
+
 // Formato do endpoint público /embaixadas-publicas/ — só o que o site
-// institucional pode mostrar (sem conselheiro_responsavel_id nem qualquer
-// dado pessoal de Membro como telefone, e-mail ou data de nascimento).
+// institucional pode mostrar (sem qualquer dado pessoal de Membro como
+// telefone, e-mail ou data de nascimento).
 export interface HorarioReuniaoPublico {
   dia_semana: string;
   horario: string;

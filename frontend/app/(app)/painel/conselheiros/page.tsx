@@ -1,5 +1,5 @@
-import { MembrosPorPapel } from "@/components/painel/membros-por-papel";
+import { MembrosPorTipo } from "@/components/painel/membros-por-tipo";
 
 export default function PainelConselheirosPage() {
-  return <MembrosPorPapel papel="conselheiro" titulo="Conselheiros" />;
+  return <MembrosPorTipo tipo="conselheiro" titulo="Conselheiros" />;
 }

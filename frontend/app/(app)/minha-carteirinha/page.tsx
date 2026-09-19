@@ -6,16 +6,15 @@ import { useEffect, useState } from "react";
 import { apiFetch, mediaUrl } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatarDataBR } from "@/lib/format";
-import { ROTULO_CARGO_DIRETORIA, ROTULO_PAPEL } from "@/lib/labels";
+import { ROTULO_POSTO } from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
 
 interface CarteirinhaMe {
   id: number;
-  pessoa_nome: string;
+  membro_nome: string;
   foto_url: string | null;
   embaixada_nome: string;
-  papel: string | null;
-  cargo_diretoria: string | null;
+  posto: string | null;
   identificador: string;
   validade: string;
   emitida_em: string;
@@ -55,11 +54,7 @@ export default function MinhaCarteirinhaPage() {
       ? `${window.location.origin}/verificar/${carteirinha.identificador}`
       : "";
 
-  const rotuloFuncao = carteirinha.papel
-    ? carteirinha.papel === "diretoria" && carteirinha.cargo_diretoria
-      ? ROTULO_CARGO_DIRETORIA[carteirinha.cargo_diretoria] ?? ROTULO_PAPEL.diretoria
-      : ROTULO_PAPEL[carteirinha.papel]
-    : "Sem papel definido";
+  const rotuloFuncao = carteirinha.posto ? ROTULO_POSTO[carteirinha.posto] : "Embaixador do Rei";
 
   return (
     <div>
@@ -86,13 +81,13 @@ export default function MinhaCarteirinhaPage() {
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-gray-500">
-                {carteirinha.pessoa_nome.charAt(0)}
+                {carteirinha.membro_nome.charAt(0)}
               </div>
             )}
           </div>
 
           <p className="mt-4 text-center font-heading text-lg font-semibold text-daer-blue">
-            {carteirinha.pessoa_nome}
+            {carteirinha.membro_nome}
           </p>
           <p className="text-sm font-medium uppercase tracking-wide text-daer-blue-light">
             {rotuloFuncao}

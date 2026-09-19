@@ -3,24 +3,27 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useAuth, type Papel } from "@/lib/auth-context";
-import { ROTULO_PAPEL } from "@/lib/labels";
+import { useAuth, type Tipo } from "@/lib/auth-context";
+import { ROTULO_TIPO } from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 interface ItemNav {
   href: string;
   rotulo: string;
-  papeis: Papel[];
+  papeis: Tipo[];
 }
 
 const ITENS_NAV: ItemNav[] = [
-  { href: "/painel", rotulo: "Painel", papeis: ["diretoria", "conselheiro", "embaixador_do_rei"] },
-  { href: "/painel/embaixadas", rotulo: "Embaixadas", papeis: ["diretoria"] },
-  { href: "/painel/conselheiros", rotulo: "Conselheiros", papeis: ["diretoria"] },
-  { href: "/painel/embaixadores", rotulo: "Embaixadores", papeis: ["diretoria", "conselheiro"] },
-  { href: "/minha-carteirinha", rotulo: "Minha carteirinha", papeis: ["diretoria", "conselheiro", "embaixador_do_rei"] },
-  { href: "/painel/materiais", rotulo: "Materiais", papeis: ["diretoria", "conselheiro", "embaixador_do_rei"] },
+  { href: "/painel", rotulo: "Painel", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
+  { href: "/painel/embaixadas", rotulo: "Embaixadas", papeis: ["conselheiro"] },
+  { href: "/painel/conselheiros", rotulo: "Conselheiros", papeis: ["conselheiro", "auxiliar"] },
+  { href: "/painel/auxiliares", rotulo: "Auxiliares", papeis: ["conselheiro", "auxiliar"] },
+  { href: "/painel/embaixadores", rotulo: "Embaixadores", papeis: ["conselheiro", "auxiliar"] },
+  { href: "/painel/diretoria", rotulo: "Diretoria", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
+  { href: "/painel/grupos", rotulo: "Grupos", papeis: ["conselheiro"] },
+  { href: "/minha-carteirinha", rotulo: "Minha carteirinha", papeis: [ "embaixador_do_rei"] },
+  { href: "/painel/materiais", rotulo: "Materiais", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -37,7 +40,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
   if (!membro) return null;
 
-  const itensVisiveis = ITENS_NAV.filter((item) => membro.papel && item.papeis.includes(membro.papel));
+  const itensVisiveis = ITENS_NAV.filter((item) => membro.tipo && item.papeis.includes(membro.tipo));
 
   return (
     <div className="flex min-h-screen">
@@ -70,7 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1 flex-col bg-background">
         <header className="flex items-center justify-between border-b border-border bg-surface px-8 py-4">
           <div>
-            <p className="text-sm text-text-muted">{membro.papel ? ROTULO_PAPEL[membro.papel] : "Sem papel definido"}</p>
+            <p className="text-sm text-text-muted">{membro.tipo ? ROTULO_TIPO[membro.tipo] : "Sem tipo definido"}</p>
             <p className="font-heading text-base font-semibold text-primary">{membro.nome}</p>
           </div>
           <div className="flex items-center gap-3">

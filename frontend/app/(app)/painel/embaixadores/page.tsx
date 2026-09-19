@@ -1,5 +1,5 @@
-import { MembrosPorPapel } from "@/components/painel/membros-por-papel";
+import { MembrosPorTipo } from "@/components/painel/membros-por-tipo";
 
 export default function PainelEmbaixadoresPage() {
-  return <MembrosPorPapel papel="embaixador_do_rei" titulo="Embaixadores" />;
+  return <MembrosPorTipo tipo="embaixador_do_rei" titulo="Embaixadores" />;
 }

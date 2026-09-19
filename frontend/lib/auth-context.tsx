@@ -20,14 +20,15 @@ import {
   type ReactNode,
 } from "react";
 
-export type Papel = "diretoria" | "conselheiro" | "embaixador_do_rei";
+export type Tipo = "conselheiro" | "auxiliar" | "embaixador_do_rei";
 
 export interface MembroLogado {
   membro_id: number;
   nome: string;
   embaixada_id: number;
   embaixada_nome: string;
-  papel: Papel | null;
+  tipo: Tipo;
+  posto_embaixador: string | null;
   cargo_diretoria: string | null;
 }
 

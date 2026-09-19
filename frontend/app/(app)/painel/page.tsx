@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
-import { ROTULO_PAPEL } from "@/lib/labels";
+import { ROTULO_TIPO } from "@/lib/labels";
 
 export default function PainelPage() {
   const { membro } = useAuth();
@@ -14,7 +14,7 @@ export default function PainelPage() {
         Olá, {membro.nome.split(" ")[0]}
       </h1>
       <p className="mt-2 text-text-muted">
-        {membro.embaixada_nome} · {ROTULO_PAPEL[membro.papel ?? ""] ?? "Sem papel definido"}
+        {membro.embaixada_nome} · {ROTULO_TIPO[membro.tipo ?? ""] ?? "Sem tipo definido"}
       </p>
 
       {/*

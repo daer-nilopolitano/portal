@@ -11,6 +11,11 @@ from ..models import Membro
 router = Router(tags=["auth"])
 
 
+def _cargo_diretoria_ativo(membro: Membro) -> Optional[str]:
+    mandato = membro.mandatos_diretoria.filter(data_fim__isnull=True).first()
+    return mandato.cargo if mandato else None
+
+
 class LoginIn(Schema):
     email: str
     senha: str
@@ -20,7 +25,9 @@ class LoginOut(Schema):
     access_token: str
     membro_id: int
     nome: str
-    papel: Optional[str] = None
+    tipo: str
+    posto_embaixador: Optional[str] = None
+    cargo_diretoria: Optional[str] = None
 
 
 class MeOut(Schema):
@@ -28,7 +35,8 @@ class MeOut(Schema):
     nome: str
     embaixada_id: int
     embaixada_nome: str
-    papel: Optional[str] = None
+    tipo: str
+    posto_embaixador: Optional[str] = None
     cargo_diretoria: Optional[str] = None
 
 
@@ -43,24 +51,25 @@ def login(request, payload: LoginIn):
     if membro is None:
         raise HttpError(403, "Este usuário não está vinculado a nenhum Membro cadastrado.")
 
-    papel = membro.papel_atual
     return LoginOut(
         access_token=gerar_token(user),
         membro_id=membro.id,
         nome=membro.nome,
-        papel=papel.tipo if papel else None,
+        tipo=membro.tipo,
+        posto_embaixador=membro.posto_embaixador,
+        cargo_diretoria=_cargo_diretoria_ativo(membro),
     )
 
 
 @router.get("/me/", response=MeOut, auth=AuthBearer())
 def me(request):
     membro = membro_do_usuario(request.auth)
-    papel = membro.papel_atual
     return MeOut(
         membro_id=membro.id,
         nome=membro.nome,
         embaixada_id=membro.embaixada_id,
         embaixada_nome=membro.embaixada.nome,
-        papel=papel.tipo if papel else None,
-        cargo_diretoria=papel.cargo_diretoria if papel else None,
+        tipo=membro.tipo,
+        posto_embaixador=membro.posto_embaixador,
+        cargo_diretoria=_cargo_diretoria_ativo(membro),
     )
