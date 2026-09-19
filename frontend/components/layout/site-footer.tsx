@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-const EMAIL_CONTATO = "daernil.oficial@gmail.com";
+import {EMAIL_CONTATO} from "@/lib/content/site";
 
 const LINKS_NAVEGACAO = [
   { href: "/#sobre", rotulo: "Sobre" },
@@ -52,9 +51,44 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <p className="mt-8 text-xs text-text-muted/70">
-          © {new Date().getFullYear()} DAER Nilopolitano.
-        </p>
+        <div className="mt-8 flex flex-col gap-2 border-t border-border/60 pt-6 text-xs text-text-muted/70">
+          <p>© {new Date().getFullYear()} DAER Nilopolitano.</p>
+
+          <p>
+            Seus dados são usados apenas para fins de identificação e gestão
+            interna, em conformidade com a LGPD.{" "}
+            <a
+              href="https://github.com/daer-nilopolitano/site/blob/main/PRIVACIDADE.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-primary"
+            >
+              Aviso de Privacidade
+            </a>
+            .
+          </p>
+
+          <p className="text-text-muted/50">
+            Desenvolvido por{" "}
+            <a
+              href="https://portfolio-mu-henna-52.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary"
+            >
+              Alan de O. Gonçalves
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://github.com/Alan-oliveir"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary"
+            >
+              GitHub
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
