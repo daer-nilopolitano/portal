@@ -3,11 +3,12 @@ Páginas do Wagtail: conteúdo público editável pela diretoria sem precisar
 mexer em código (home, notícias, sobre, contato, eventos).
 """
 from django.db import models
+from modelcluster.fields import ParentalKey
 from rest_framework.fields import Field
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.api import APIField
 from wagtail.fields import RichTextField
-from wagtail.models import Page
+from wagtail.models import Orderable, Page
 from wagtail.rich_text import expand_db_html
 
 
@@ -17,19 +18,45 @@ class RichTextHTMLField(Field):
     def to_representation(self, value):
         return expand_db_html(value)
 
+
 class HomePage(Page):
-    """Página inicial: apresentação do DAER + chamadas para notícias/eventos."""
+    """Página inicial: apresentação do DAER + links rápidos."""
 
     introducao = RichTextField(blank=True)
+    logo = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Opcional. Se vazio, usa a logo padrão (static/img/logo_daer.png).",
+    )
 
     content_panels = Page.content_panels + [
+        FieldPanel("logo"),
         FieldPanel("introducao"),
+        InlinePanel("links_rapidos", label="Link", heading="Links da página inicial"),
     ]
 
     subpage_types = [
         "cms.PaginaInstitucionalPage",
         "cms.NoticiaIndexPage",
         "cms.EventoIndexPage",
+    ]
+
+
+class LinkHome(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name="links_rapidos")
+    titulo = models.CharField(max_length=100)
+    descricao = models.CharField("Descrição", max_length=200, blank=True)
+    url = models.CharField(
+        "URL", max_length=300, help_text="Ex.: /django-admin/, /cms-admin/ ou https://..."
+    )
+
+    panels = [
+        FieldPanel("titulo"),
+        FieldPanel("descricao"),
+        FieldPanel("url"),
     ]
 
 
