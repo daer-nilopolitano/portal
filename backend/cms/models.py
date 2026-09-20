@@ -3,10 +3,19 @@ Páginas do Wagtail: conteúdo público editável pela diretoria sem precisar
 mexer em código (home, notícias, sobre, contato, eventos).
 """
 from django.db import models
+from rest_framework.fields import Field
 from wagtail.admin.panels import FieldPanel
+from wagtail.api import APIField
 from wagtail.fields import RichTextField
 from wagtail.models import Page
+from wagtail.rich_text import expand_db_html
 
+
+class RichTextHTMLField(Field):
+    """Devolve o rich text como HTML pronto (links e imagens internos resolvidos)."""
+
+    def to_representation(self, value):
+        return expand_db_html(value)
 
 class HomePage(Page):
     """Página inicial: apresentação do DAER + chamadas para notícias/eventos."""
@@ -114,6 +123,14 @@ class EventoPage(Page):
         FieldPanel("tipo"),
         FieldPanel("cooperacao_externa"),
         FieldPanel("descricao"),
+    ]
+
+    api_fields = [
+        APIField("data_evento"),
+        APIField("local_descricao"),
+        APIField("tipo"),
+        APIField("cooperacao_externa"),
+        APIField("descricao", serializer=RichTextHTMLField(read_only=True)),
     ]
 
     parent_page_types = ["cms.EventoIndexPage"]

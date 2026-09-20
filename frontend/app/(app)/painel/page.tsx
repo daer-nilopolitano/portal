@@ -7,17 +7,18 @@ import { apiFetch, mediaUrl } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatarDataBR } from "@/lib/format";
 import { ROTULO_FAIXA_ETARIA, ROTULO_TIPO } from "@/lib/labels";
-import { CRONOGRAMA_EVENTOS } from "@/lib/content/institucional";
 import type { Embaixada, Estatisticas } from "@/lib/types";
+import type { TimelineItem } from "@/components/public/timeline";
+import { getCronogramaEventos } from "@/lib/eventos";
 
 interface CarteirinhaResumo {
   foto_url: string | null;
   validade: string;
 }
 
-function proximoEvento() {
-  const hoje = new Date().toISOString().slice(0, 10);
-  return CRONOGRAMA_EVENTOS.find((e) => e.dataISO && e.dataISO >= hoje) ?? null;
+function proximoEvento(eventos: TimelineItem[]) {
+  const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+  return eventos.find((e) => e.dataISO && e.dataISO >= hoje) ?? null;
 }
 
 export default function PainelPage() {
@@ -31,6 +32,8 @@ export default function PainelPage() {
   const [carteirinha, setCarteirinha] = useState<CarteirinhaResumo | null>(null);
   const [carregando, setCarregando] = useState(true);
 
+  const [eventos, setEventos] = useState<TimelineItem[]>([]);
+
   useEffect(() => {
     if (!token || !membro) return;
     setCarregando(true);
@@ -41,6 +44,7 @@ export default function PainelPage() {
 
     if (ehDiretoria) {
       pedidos.push(apiFetch<Embaixada[]>("/embaixadas/", { token }).then(setTodasEmbaixadas));
+      pedidos.push(getCronogramaEventos().then(setEventos));
     } else {
       pedidos.push(
         apiFetch<Embaixada>(`/embaixadas/${membro.embaixada_id}/`, { token }).then(setMinhaEmbaixada)
@@ -72,7 +76,7 @@ export default function PainelPage() {
       ) : ehEmbaixador ? (
         <PainelEmbaixador embaixada={minhaEmbaixada} carteirinha={carteirinha} estatisticas={estatisticas} />
       ) : ehDiretoria ? (
-        <PainelDiretoria estatisticas={estatisticas} totalEmbaixadas={todasEmbaixadas?.length ?? 0} />
+        <PainelDiretoria estatisticas={estatisticas} totalEmbaixadas={todasEmbaixadas?.length ?? 0} eventos={eventos} />
       ) : (
         <PainelEmbaixada
           embaixada={minhaEmbaixada}
@@ -116,11 +120,13 @@ function ListaNomes({ nomes, vazio }: { nomes: string[]; vazio: string }) {
 function PainelDiretoria({
   estatisticas,
   totalEmbaixadas,
+  eventos,
 }: {
   estatisticas: Estatisticas | null;
   totalEmbaixadas: number;
+  eventos: TimelineItem[];
 }) {
-  const evento = proximoEvento();
+  const evento = proximoEvento(eventos);
   if (!estatisticas) return null;
 
   return (

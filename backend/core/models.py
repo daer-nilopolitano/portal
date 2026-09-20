@@ -2,10 +2,7 @@
 Entidades principais do sistema de gestão do DAER Nilopolitano.
 
 Ver o plano de desenvolvimento para o desenho completo dessas entidades.
-Evento fica, por enquanto, como página do Wagtail (app `cms`) — o modelo
-equivalente está comentado no final deste arquivo, pronto para ser
-ativado se a diretoria precisar de inscrição/confirmação de presença
-por evento no futuro.
+Eventos ficam como páginas do Wagtail (app `cms`, modelo `EventoPage`).
 """
 import uuid
 
@@ -331,30 +328,3 @@ class Carteirinha(models.Model):
 
     def __str__(self):
         return f"Carteirinha de {self.membro}"
-
-
-# ---------------------------------------------------------------------------
-# Evento fica como página do Wagtail por enquanto (ver cms/models.py).
-# O modelo abaixo é só uma referência pronta para o dia em que a diretoria
-# precisar de inscrição/confirmação de presença por evento — não é usado
-# hoje e não tem migração gerada.
-# ---------------------------------------------------------------------------
-# class Evento(models.Model):
-#     class Tipo(models.TextChoices):
-#         CONCLAVE = "conclave", "Conclave"
-#         INTERCAMBIO = "intercambio", "Intercâmbio"
-#         MUTIRAO = "mutirao", "Mutirão"
-#         PROGRAMACAO_ESPECIAL = "programacao_especial", "Programação especial"
-#         OUTRO = "outro", "Outro"
-#
-#     titulo = models.CharField(max_length=200)
-#     data = models.DateTimeField()
-#     local_descricao = models.CharField(max_length=200, blank=True)
-#     igreja = models.ForeignKey(
-#         Igreja, on_delete=models.SET_NULL, null=True, blank=True
-#     )
-#     tipo = models.CharField(max_length=30, choices=Tipo.choices)
-#     cooperacao_externa = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.titulo
