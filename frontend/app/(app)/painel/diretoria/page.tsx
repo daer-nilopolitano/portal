@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { revalidarTudo, useApi } from "@/lib/use-api";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import { ROTULO_CARGO_DIRETORIA } from "@/lib/labels";
 import type { Diretoria, Membro } from "@/lib/types";
@@ -25,40 +26,20 @@ export default function PainelDiretoriaPage() {
   const { token, membro: membroLogado } = useAuth();
   const ehDiretoria = !!membroLogado?.cargo_diretoria;
 
-  const [lista, setLista] = useState<Diretoria[]>([]);
-  const [conselheiros, setConselheiros] = useState<MembroConselheiro[]>([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  const { data: listaCarregada, isLoading: carregando, error: erroCarga } =
+    useApi<Diretoria[]>("/diretoria/");
+  const { data: conselheirosCarregados } = useApi<MembroConselheiro[]>(
+    ehDiretoria ? "/membros/?tipo=conselheiro" : null
+  );
+  const lista = listaCarregada ?? [];
+  const conselheiros = conselheirosCarregados ?? [];
+  const erro = erroCarga ? "Não foi possível carregar a Diretoria." : null;
 
   const [formularioAberto, setFormularioAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [formulario, setFormulario] = useState<FormularioMandato>(FORMULARIO_VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
-
-  const carregar = useCallback(async () => {
-    if (!token) return;
-    setCarregando(true);
-    setErro(null);
-    try {
-      const listaDiretoria = await apiFetch<Diretoria[]>("/diretoria/", { token });
-      setLista(listaDiretoria);
-      if (ehDiretoria) {
-        const listaConselheiros = await apiFetch<MembroConselheiro[]>("/membros/?tipo=conselheiro", {
-          token,
-        });
-        setConselheiros(listaConselheiros);
-      }
-    } catch {
-      setErro("Não foi possível carregar a Diretoria.");
-    } finally {
-      setCarregando(false);
-    }
-  }, [token, ehDiretoria]);
-
-  useEffect(() => {
-    carregar();
-  }, [carregar]);
 
   function abrirNovo() {
     setEditandoId(null);
@@ -102,7 +83,7 @@ export default function PainelDiretoriaPage() {
         });
       }
       setFormularioAberto(false);
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -118,14 +99,14 @@ export default function PainelDiretoriaPage() {
       method: "PUT",
       body: JSON.stringify({ data_fim: new Date().toISOString().slice(0, 10) }),
     });
-    await carregar();
+    await revalidarTudo();
   }
 
   async function excluir(d: Diretoria) {
     if (!token) return;
     if (!window.confirm("Excluir este registro de mandato? Essa ação não pode ser desfeita.")) return;
     await apiFetch(`/diretoria/${d.id}/`, { token, method: "DELETE" });
-    await carregar();
+    await revalidarTudo();
   }
 
   const colunas: Coluna<Diretoria>[] = [

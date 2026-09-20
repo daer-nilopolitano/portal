@@ -9,12 +9,13 @@ isso no dia a dia). Cadastro de Igreja continua só pelo Django Admin.
 """
 from typing import Optional
 
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 from ninja.errors import HttpError
 
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
-from ..models import Embaixada, HorarioReuniao, Igreja, TipoMembro
+from ..models import Embaixada, HorarioReuniao, Igreja, Membro, TipoMembro
 
 router = Router(tags=["embaixadas"], auth=AuthBearer())
 
@@ -23,6 +24,34 @@ router = Router(tags=["embaixadas"], auth=AuthBearer())
 # gestão: garante que campos adicionados no futuro para uso interno não
 # vazem aqui sem decisão explícita — os dois nunca compartilham definição.
 router_publico = Router(tags=["embaixadas-publico"])
+
+
+def _com_relacionados():
+    """
+    Embaixadas já com tudo que os schemas de saída usam, em 3 consultas fixas
+    (embaixadas+igreja, conselheiros, horários) — independente de quantas
+    embaixadas existam. Os conselheiros vêm num Prefetch já filtrado: chamar
+    `obj.membros.filter(...)` dentro do resolver ignora o prefetch e faz uma
+    consulta nova por embaixada.
+    """
+    return Embaixada.objects.select_related("igreja").prefetch_related(
+        Prefetch(
+            "membros",
+            queryset=Membro.objects.filter(tipo=TipoMembro.CONSELHEIRO).only(
+                "id", "nome", "embaixada_id"
+            ),
+            to_attr="conselheiros_carregados",
+        ),
+        "horarios_reuniao",
+    )
+
+
+def _nomes_conselheiros(obj: Embaixada) -> list[str]:
+    carregados = getattr(obj, "conselheiros_carregados", None)
+    if carregados is None:
+        # Objeto que não veio de _com_relacionados() (ex.: recém-criado/atualizado).
+        carregados = obj.membros.filter(tipo=TipoMembro.CONSELHEIRO)
+    return [m.nome for m in carregados]
 
 
 class HorarioReuniaoOut(Schema):
@@ -67,7 +96,7 @@ class EmbaixadaOut(Schema):
 
     @staticmethod
     def resolve_conselheiro_nomes(obj: Embaixada) -> list[str]:
-        return [m.nome for m in obj.membros.filter(tipo=TipoMembro.CONSELHEIRO)]
+        return _nomes_conselheiros(obj)
 
     @staticmethod
     def resolve_horarios_reuniao(obj: Embaixada) -> list[HorarioReuniao]:
@@ -92,7 +121,7 @@ class EmbaixadaPublicaOut(Schema):
 
     @staticmethod
     def resolve_conselheiros_nomes(obj: Embaixada) -> list[str]:
-        return [m.nome for m in obj.membros.filter(tipo=TipoMembro.CONSELHEIRO)]
+        return _nomes_conselheiros(obj)
 
     @staticmethod
     def resolve_horarios_reuniao(obj: Embaixada) -> list[HorarioReuniao]:
@@ -131,15 +160,12 @@ def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]
 
 @router.get("/", response=list[EmbaixadaOut])
 def listar_embaixadas(request):
-    return Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao")
+    return _com_relacionados()
 
 
 @router.get("/{embaixada_id}/", response=EmbaixadaOut)
 def detalhar_embaixada(request, embaixada_id: int):
-    return get_object_or_404(
-        Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao"),
-        pk=embaixada_id,
-    )
+    return get_object_or_404(_com_relacionados(), pk=embaixada_id)
 
 
 @router.post("/", response={201: EmbaixadaOut})
@@ -156,7 +182,7 @@ def criar_embaixada(request, payload: EmbaixadaIn):
 @router_publico.get("/", response=list[EmbaixadaPublicaOut])
 def listar_embaixadas_publicas(request):
     """Consumido pelo card de destaques da home — só os campos de EmbaixadaPublicaOut."""
-    return Embaixada.objects.select_related("igreja").prefetch_related("membros", "horarios_reuniao")
+    return _com_relacionados()
 
 
 @router.put("/{embaixada_id}/", response=EmbaixadaOut)

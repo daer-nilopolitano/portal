@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { revalidarTudo, useApi } from "@/lib/use-api";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import { DIAS_SEMANA } from "@/lib/labels";
 import type { Embaixada, Igreja } from "@/lib/types";
@@ -33,38 +34,20 @@ export default function PainelEmbaixadasPage() {
   const ehDiretoria = !!membro?.cargo_diretoria;
   const ehConselheiro = membro?.tipo === "conselheiro";
 
-  const [lista, setLista] = useState<Embaixada[]>([]);
-  const [igrejas, setIgrejas] = useState<IgrejaOpcao[]>([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  // As duas buscas saem em paralelo e ficam em cache: ao voltar para esta
+  // tela, a lista aparece na hora e atualiza em segundo plano.
+  const { data: listaCarregada, isLoading: carregando, error: erroCarga } =
+    useApi<Embaixada[]>("/embaixadas/");
+  const { data: igrejasCarregadas } = useApi<IgrejaOpcao[]>(ehDiretoria ? "/igrejas/" : null);
+  const lista = listaCarregada ?? [];
+  const igrejas = igrejasCarregadas ?? [];
+  const erro = erroCarga ? "Não foi possível carregar a lista." : null;
 
   const [formularioAberto, setFormularioAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [formulario, setFormulario] = useState<FormularioEmbaixada>(FORMULARIO_VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
-
-  const carregar = useCallback(async () => {
-    if (!token) return;
-    setCarregando(true);
-    setErro(null);
-    try {
-      const listaEmbaixadas = await apiFetch<Embaixada[]>("/embaixadas/", { token });
-      setLista(listaEmbaixadas);
-      if (ehDiretoria) {
-        const listaIgrejas = await apiFetch<IgrejaOpcao[]>("/igrejas/", { token });
-        setIgrejas(listaIgrejas);
-      }
-    } catch {
-      setErro("Não foi possível carregar a lista.");
-    } finally {
-      setCarregando(false);
-    }
-  }, [token, ehDiretoria]);
-
-  useEffect(() => {
-    carregar();
-  }, [carregar]);
 
   // Conselheiro comum não vê lista — cai direto no formulário da própria
   // embaixada, assim que ela chega da API.
@@ -164,7 +147,7 @@ export default function PainelEmbaixadasPage() {
         });
       }
       setFormularioAberto(false);
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -176,7 +159,7 @@ export default function PainelEmbaixadasPage() {
     if (!token) return;
     if (!window.confirm(`Excluir a embaixada "${e.nome}"? Essa ação não pode ser desfeita.`)) return;
     await apiFetch(`/embaixadas/${e.id}/`, { token, method: "DELETE" });
-    await carregar();
+    await revalidarTudo();
   }
 
   if (!ehDiretoria && !ehConselheiro) {

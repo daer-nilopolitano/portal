@@ -43,7 +43,11 @@ class AuthBearer(HttpBearer):
             return None
 
         try:
-            return User.objects.get(pk=payload["user_id"], is_active=True)
+            # select_related traz usuário, membro e embaixada numa consulta só
+            # (senão cada request pagaria uma consulta extra por user.membro).
+            return User.objects.select_related("membro__embaixada").get(
+                pk=payload["user_id"], is_active=True
+            )
         except User.DoesNotExist:
             return None
 

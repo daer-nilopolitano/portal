@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { apiFetch, mediaUrl } from "@/lib/api";
+import useSWR from "swr";
+import { mediaUrl } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { useApi } from "@/lib/use-api";
 import { formatarDataBR } from "@/lib/format";
 import { ROTULO_FAIXA_ETARIA, ROTULO_TIPO } from "@/lib/labels";
 import type { Embaixada, Estatisticas } from "@/lib/types";
@@ -22,45 +23,37 @@ function proximoEvento(eventos: TimelineItem[]) {
 }
 
 export default function PainelPage() {
-  const { token, membro } = useAuth();
+  const { membro } = useAuth();
   const ehDiretoria = !!membro?.cargo_diretoria;
   const ehEmbaixador = membro?.tipo === "embaixador_do_rei";
 
-  const [estatisticas, setEstatisticas] = useState<Estatisticas | null>(null);
-  const [minhaEmbaixada, setMinhaEmbaixada] = useState<Embaixada | null>(null);
-  const [todasEmbaixadas, setTodasEmbaixadas] = useState<Embaixada[] | null>(null);
-  const [carteirinha, setCarteirinha] = useState<CarteirinhaResumo | null>(null);
-  const [carregando, setCarregando] = useState(true);
+  // Cada busca vira uma chave de cache: saem todas em paralelo e, ao voltar
+  // para o painel depois de visitar outra seção, os dados aparecem na hora e
+  // atualizam em segundo plano. Perfis que não usam uma chamada passam `null`.
+  const estatisticasQ = useApi<Estatisticas>("/estatisticas/");
+  const todasEmbaixadasQ = useApi<Embaixada[]>(ehDiretoria ? "/embaixadas/" : null);
+  const minhaEmbaixadaQ = useApi<Embaixada>(
+    membro && !ehDiretoria ? `/embaixadas/${membro.embaixada_id}/` : null
+  );
+  const carteirinhaQ = useApi<CarteirinhaResumo>(ehEmbaixador ? "/carteirinhas/me/" : null);
+  const eventosQ = useSWR<TimelineItem[]>(
+    ehDiretoria ? "eventos-cronograma" : null,
+    () => getCronogramaEventos(),
+    { revalidateOnFocus: false, dedupingInterval: 30_000 }
+  );
 
-  const [eventos, setEventos] = useState<TimelineItem[]>([]);
+  const estatisticas = estatisticasQ.data ?? null;
+  const todasEmbaixadas = todasEmbaixadasQ.data ?? null;
+  const minhaEmbaixada = minhaEmbaixadaQ.data ?? null;
+  const carteirinha = carteirinhaQ.data ?? null; // 404 = ainda não emitida
+  const eventos = eventosQ.data ?? [];
 
-  useEffect(() => {
-    if (!token || !membro) return;
-    setCarregando(true);
-
-    const pedidos: Promise<unknown>[] = [
-      apiFetch<Estatisticas>("/estatisticas/", { token }).then(setEstatisticas),
-    ];
-
-    if (ehDiretoria) {
-      pedidos.push(apiFetch<Embaixada[]>("/embaixadas/", { token }).then(setTodasEmbaixadas));
-      pedidos.push(getCronogramaEventos().then(setEventos));
-    } else {
-      pedidos.push(
-        apiFetch<Embaixada>(`/embaixadas/${membro.embaixada_id}/`, { token }).then(setMinhaEmbaixada)
-      );
-    }
-
-    if (ehEmbaixador) {
-      pedidos.push(
-        apiFetch<CarteirinhaResumo>("/carteirinhas/me/", { token })
-          .then(setCarteirinha)
-          .catch(() => setCarteirinha(null))
-      );
-    }
-
-    Promise.all(pedidos).finally(() => setCarregando(false));
-  }, [token, membro, ehDiretoria, ehEmbaixador]);
+  const carregando =
+    estatisticasQ.isLoading ||
+    todasEmbaixadasQ.isLoading ||
+    minhaEmbaixadaQ.isLoading ||
+    carteirinhaQ.isLoading ||
+    eventosQ.isLoading;
 
   if (!membro) return null;
 

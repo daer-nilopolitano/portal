@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect, useState } from "react";
-import { apiFetch, mediaUrl } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
+import { mediaUrl } from "@/lib/api";
+import { useApi } from "@/lib/use-api";
 import { formatarDataBR } from "@/lib/format";
 import { ROTULO_POSTO } from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
@@ -21,20 +20,11 @@ interface CarteirinhaMe {
 }
 
 export default function MinhaCarteirinhaPage() {
-  const { token } = useAuth();
-  const [carteirinha, setCarteirinha] = useState<CarteirinhaMe | null>(null);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!token) return;
-    apiFetch<CarteirinhaMe>("/carteirinhas/me/", { token })
-      .then(setCarteirinha)
-      .catch(() =>
-        setErro("Sua carteirinha ainda não foi emitida. Fale com seu conselheiro ou com a Diretoria.")
-      )
-      .finally(() => setCarregando(false));
-  }, [token]);
+  const { data: carteirinha, isLoading: carregando, error: erroCarga } =
+    useApi<CarteirinhaMe>("/carteirinhas/me/");
+  const erro = erroCarga
+    ? "Sua carteirinha ainda não foi emitida. Fale com seu conselheiro ou com a Diretoria."
+    : null;
 
   if (carregando) {
     return <p className="text-sm text-text-muted">Carregando…</p>;

@@ -49,8 +49,10 @@ class MembroOut(Schema):
 
     @staticmethod
     def resolve_cargo_embaixada(obj: Membro) -> Optional[str]:
-        cargo = obj.cargos_embaixada.first()
-        return cargo.cargo if cargo else None
+        # .all() aproveita o prefetch de _queryset_visivel; .first() sempre
+        # faria uma consulta nova por membro. Um membro tem no máximo 1 cargo.
+        cargos = list(obj.cargos_embaixada.all())
+        return cargos[0].cargo if cargos else None
 
     @staticmethod
     def resolve_tem_acesso(obj: Membro) -> bool:
@@ -111,7 +113,7 @@ def _pode_gerenciar_embaixada(membro_logado: Membro, embaixada_id: int) -> bool:
 def _queryset_visivel(request):
     """Leitura — Diretoria vê tudo; conselheiro e auxiliar veem a própria embaixada."""
     membro_logado = membro_do_usuario(request.auth)
-    qs = Membro.objects.select_related("embaixada")
+    qs = Membro.objects.select_related("embaixada").prefetch_related("cargos_embaixada")
 
     if membro_logado.eh_diretoria:
         return qs

@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { revalidarTudo, useApi } from "@/lib/use-api";
 import { ROTULO_CARGO_DIRETORIA_EMBAIXADA, ROTULO_FAIXA_ETARIA, ROTULO_POSTO } from "@/lib/labels";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import type { Membro, Embaixada as EmbaixadaCompleta } from "@/lib/types";
@@ -48,38 +49,18 @@ export function MembrosPorTipo({
   const ehAuxiliar = membroLogado?.tipo === "auxiliar";
   const mostraCamposEmbaixador = tipo === "embaixador_do_rei";
 
-  const [lista, setLista] = useState<Membro[]>([]);
-  const [embaixadas, setEmbaixadas] = useState<Embaixada[]>([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  const { data: listaCarregada, isLoading: carregando, error: erroCarga } =
+    useApi<Membro[]>(`/membros/?tipo=${tipo}`);
+  const { data: embaixadasCarregadas } = useApi<Embaixada[]>(ehDiretoria ? "/embaixadas/" : null);
+  const lista = listaCarregada ?? [];
+  const embaixadas = embaixadasCarregadas ?? [];
+  const erro = erroCarga ? "Não foi possível carregar a lista." : null;
 
   const [formularioAberto, setFormularioAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [formulario, setFormulario] = useState<FormularioMembro>(FORMULARIO_VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
-
-  const carregar = useCallback(async () => {
-    if (!token) return;
-    setCarregando(true);
-    setErro(null);
-    try {
-      const dados = await apiFetch<Membro[]>(`/membros/?tipo=${tipo}`, { token });
-      setLista(dados);
-      if (ehDiretoria) {
-        const listaEmbaixadas = await apiFetch<Embaixada[]>("/embaixadas/", { token });
-        setEmbaixadas(listaEmbaixadas);
-      }
-    } catch {
-      setErro("Não foi possível carregar a lista.");
-    } finally {
-      setCarregando(false);
-    }
-  }, [token, tipo, ehDiretoria]);
-
-  useEffect(() => {
-    carregar();
-  }, [carregar]);
 
   function abrirNovo() {
     setEditandoId(null);
@@ -165,7 +146,7 @@ export function MembrosPorTipo({
       }
 
       setFormularioAberto(false);
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -177,7 +158,7 @@ export function MembrosPorTipo({
     if (!token) return;
     if (!window.confirm(`Excluir ${m.nome}? Essa ação não pode ser desfeita.`)) return;
     await apiFetch(`/membros/${m.id}/`, { token, method: "DELETE" });
-    await carregar();
+    await revalidarTudo();
   }
 
   async function criarAcesso(m: Membro) {
@@ -194,7 +175,7 @@ export function MembrosPorTipo({
         method: "POST",
         body: JSON.stringify({ senha }),
       });
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       window.alert(e instanceof Error ? e.message : "Erro ao criar acesso.");
     }

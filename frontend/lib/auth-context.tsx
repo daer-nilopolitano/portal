@@ -19,6 +19,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { limparCache } from "@/lib/cache";
 
 export type Tipo = "conselheiro" | "auxiliar" | "embaixador_do_rei";
 
@@ -87,12 +88,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error("E-mail ou senha inválidos.");
     }
     const dados = await res.json();
+    limparCache(); // nada de dados do usuário anterior sobrando em memória
     localStorage.setItem(CHAVE_TOKEN, dados.access_token);
     setToken(dados.access_token);
     setMembro(await buscarMembroLogado(dados.access_token));
   }, []);
 
   const logout = useCallback(() => {
+    limparCache();
     localStorage.removeItem(CHAVE_TOKEN);
     setToken(null);
     setMembro(null);

@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { revalidarTudo, useApi } from "@/lib/use-api";
 import type { GrupoTrabalho, Membro } from "@/lib/types";
 
 type MembroOpcao = Pick<Membro, "id" | "nome" | "tipo">;
@@ -11,40 +12,24 @@ export default function PainelGruposPage() {
   const { token, membro: membroLogado } = useAuth();
   const ehDiretoria = !!membroLogado?.cargo_diretoria;
 
-  const [grupos, setGrupos] = useState<GrupoTrabalho[]>([]);
-  const [membros, setMembros] = useState<MembroOpcao[]>([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  const { data: gruposCarregados, isLoading: carregando, error: erroCarga } =
+    useApi<GrupoTrabalho[]>("/grupos/");
+  // Só conselheiro (diretoria ou líder de algum grupo) pode gerenciar —
+  // busca a lista de candidatos só nesse caso.
+  const { data: membrosCarregados } = useApi<MembroOpcao[]>(
+    membroLogado?.tipo === "conselheiro" ? "/membros/" : null
+  );
+  const grupos = gruposCarregados ?? [];
+  const membros = (membrosCarregados ?? []).filter(
+    (m) => m.tipo === "conselheiro" || m.tipo === "auxiliar"
+  );
+  const erro = erroCarga ? "Não foi possível carregar os grupos." : null;
 
   const [grupoAbertoId, setGrupoAbertoId] = useState<number | null>(null);
   const [membroSelecionado, setMembroSelecionado] = useState("");
   const [papelSelecionado, setPapelSelecionado] = useState<"lider" | "membro">("membro");
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
-
-  const carregar = useCallback(async () => {
-    if (!token) return;
-    setCarregando(true);
-    setErro(null);
-    try {
-      const listaGrupos = await apiFetch<GrupoTrabalho[]>("/grupos/", { token });
-      setGrupos(listaGrupos);
-      // Só conselheiro (diretoria ou líder de algum grupo) pode gerenciar —
-      // busca a lista de candidatos só nesse caso.
-      if (membroLogado?.tipo === "conselheiro") {
-        const listaMembros = await apiFetch<MembroOpcao[]>("/membros/", { token });
-        setMembros(listaMembros.filter((m) => m.tipo === "conselheiro" || m.tipo === "auxiliar"));
-      }
-    } catch {
-      setErro("Não foi possível carregar os grupos.");
-    } finally {
-      setCarregando(false);
-    }
-  }, [token, membroLogado?.tipo]);
-
-  useEffect(() => {
-    carregar();
-  }, [carregar]);
 
   function podeGerenciar(grupo: GrupoTrabalho): boolean {
     if (ehDiretoria) return true;
@@ -71,7 +56,7 @@ export default function PainelGruposPage() {
         body: JSON.stringify({ membro_id: Number(membroSelecionado), papel_no_grupo: papelSelecionado }),
       });
       setGrupoAbertoId(null);
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao adicionar participante.");
     } finally {
@@ -83,7 +68,7 @@ export default function PainelGruposPage() {
     if (!token) return;
     if (!window.confirm("Remover este participante do grupo?")) return;
     await apiFetch(`/grupos/${grupoId}/membros/${membroId}/`, { token, method: "DELETE" });
-    await carregar();
+    await revalidarTudo();
   }
 
   async function alternarLideranca(grupoId: number, membroId: number, papelAtual: "lider" | "membro") {
@@ -95,7 +80,7 @@ export default function PainelGruposPage() {
         method: "PUT",
         body: JSON.stringify({ membro_id: membroId, papel_no_grupo: novoPapel }),
       });
-      await carregar();
+      await revalidarTudo();
     } catch (e) {
       window.alert(e instanceof Error ? e.message : "Erro ao atualizar.");
     }

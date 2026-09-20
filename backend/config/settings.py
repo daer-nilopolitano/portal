@@ -88,13 +88,9 @@ DATABASES = {
     "default": dj_database_url.config(
         default=os.environ.get(
             "DATABASE_URL", "postgres://postgres:postgres@db:5432/daer"
-        ),
-        conn_max_age=60,
-        conn_health_checks=True,
+        )
     )
 }
-
-DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

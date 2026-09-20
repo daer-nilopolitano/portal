@@ -36,7 +36,7 @@ class GrupoOut(Schema):
             ParticipanteOut(
                 membro_id=p.membro_id, membro_nome=p.membro.nome, papel_no_grupo=p.papel_no_grupo
             )
-            for p in obj.participantes.select_related("membro")
+            for p in obj.participantes.all()
         ]
 
 
@@ -85,8 +85,8 @@ def definir_participante(request, grupo_id: int, payload: ParticipanteIn):
     GrupoMembro.objects.update_or_create(
         grupo=grupo, membro=membro_alvo, defaults={"papel_no_grupo": payload.papel_no_grupo}
     )
-    grupo.refresh_from_db()
-    return grupo
+    # Recarrega já com participantes+membros (o resolver usa o prefetch).
+    return GrupoTrabalho.objects.prefetch_related("participantes__membro").get(pk=grupo.pk)
 
 
 @router.delete("/{grupo_id}/membros/{membro_id}/", response={204: None})

@@ -5,6 +5,7 @@ Ver o plano de desenvolvimento para o desenho completo dessas entidades.
 Eventos ficam como páginas do Wagtail (app `cms`, modelo `EventoPage`).
 """
 import uuid
+from functools import cached_property
 
 from django.conf import settings
 from django.db import models
@@ -171,9 +172,13 @@ class Membro(models.Model):
             return "juvenil"
         return None
 
-    @property
+    @cached_property
     def eh_diretoria(self) -> bool:
-        """Tem mandato ativo (sem data_fim) na Diretoria da associação."""
+        """Tem mandato ativo (sem data_fim) na Diretoria da associação.
+
+        cached_property: o Membro logado é carregado de novo a cada request,
+        então o valor fica guardado só durante ele — no máximo 1 consulta
+        por request, em vez de 1 por chamada."""
         return self.mandatos_diretoria.filter(data_fim__isnull=True).exists()
 
 

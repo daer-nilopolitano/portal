@@ -14,10 +14,16 @@ export function mediaUrl(caminho: string | null | undefined): string | null {
 
 interface ApiFetchOptions extends RequestInit {
   token?: string | null;
+  /**
+   * Segundos de cache no servidor do Next.js (só para dados públicos).
+   * Sem isso, a chamada nunca usa cache (`no-store`) — o padrão para tudo
+   * que é autenticado ou precisa estar sempre atual.
+   */
+  revalidate?: number;
 }
 
 export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): Promise<T> {
-  const { token, headers, ...resto } = options;
+  const { token, headers, revalidate, ...resto } = options;
 
   const res = await fetch(`${API_URL}${path}`, {
     ...resto,
@@ -26,7 +32,9 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
-    cache: "no-store",
+    ...(revalidate !== undefined
+      ? { next: { revalidate } }
+      : { cache: "no-store" as const }),
   });
 
   if (!res.ok) {
@@ -40,7 +48,13 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   return res.json() as Promise<T>;
 }
 
-/** Atalho para dados públicos (sem token) — Igreja, páginas do CMS, etc. */
-export async function getFromApi<T>(path: string): Promise<T> {
-  return apiFetch<T>(path);
+/**
+ * Atalho para dados públicos (sem token) — Igreja, páginas do CMS, etc.
+ * Passe `{ revalidate: 60 }` para guardar a resposta em cache por 60 s.
+ */
+export async function getFromApi<T>(
+  path: string,
+  options: { revalidate?: number } = {}
+): Promise<T> {
+  return apiFetch<T>(path, options);
 }

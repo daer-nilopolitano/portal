@@ -5,8 +5,8 @@ import type { Igreja, EmbaixadaPublica, EmbaixadaDestaque } from "@/lib/types";
 
 export async function EmbaixadasSecao() {
   const [igrejas, embaixadas] = await Promise.all([
-    getFromApi<Igreja[]>("/igrejas/").catch(() => []),
-    getFromApi<EmbaixadaPublica[]>("/embaixadas-publicas/").catch(() => []),
+    getFromApi<Igreja[]>("/igrejas/", { revalidate: 60 }).catch(() => []),
+    getFromApi<EmbaixadaPublica[]>("/embaixadas-publicas/", { revalidate: 60 }).catch(() => []),
   ]);
 
   // Junta os dois por igreja_id — só entram igrejas que já têm embaixada
