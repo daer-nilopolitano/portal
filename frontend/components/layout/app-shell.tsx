@@ -24,6 +24,7 @@ const ITENS_NAV: ItemNav[] = [
   { href: "/painel/grupos", rotulo: "Grupos", papeis: ["conselheiro"] },
   { href: "/minha-carteirinha", rotulo: "Minha carteirinha", papeis: ["embaixador_do_rei"] },
   { href: "/painel/materiais", rotulo: "Materiais", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
+  { href: "/cursos", rotulo: "Cursos", papeis: ["conselheiro", "auxiliar"] },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

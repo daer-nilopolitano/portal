@@ -1,0 +1,206 @@
+{
+  "title": "Tecnologia a serviço do cuidado",
+  "summary": "Cadastro, comunicação, redes sociais, uso de imagem e reuniões virtuais: o que as TICs fazem pela embaixada hoje.",
+  "blocks": [
+    {
+      "type": "quote",
+      "content": "Onde não há conselho os projetos saem vãos, mas, com a multidão de conselheiros, se confirmarão.",
+      "source": "Provérbios 15:22"
+    },
+    {
+      "type": "text",
+      "content": "A tecnologia não substitui o cuidado pessoal com cada Embaixador do Rei, mas pode facilitar bastante o trabalho do conselheiro, do controle de quem está na embaixada até a divulgação das atividades para a igreja e as famílias."
+    },
+    {
+      "type": "text",
+      "content": "Este curso mostra onde as TICs realmente ajudam hoje, e onde o presencial continua sendo a melhor opção."
+    },
+
+    {
+      "type": "heading",
+      "text": "Cadastro e controle administrativo dos embaixadores"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender por que manter um registro atualizado dos membros é essencial, independentemente da ferramenta usada para isso."
+    },
+    {
+      "type": "text",
+      "content": "Com a rotina cheia de atividades pessoais e ministeriais, é fácil perder o controle de informações importantes dos embaixadores: dados pessoais, histórico médico, situação familiar, nível de envolvimento com a igreja e outros ministérios, frequência nas atividades."
+    },
+    {
+      "type": "text",
+      "content": "**O que importa aqui não é a ferramenta, e sim o hábito de manter o registro em dia.** Historicamente, esse cadastro já passou por diferentes formatos:"
+    },
+    {
+      "type": "timeline",
+      "items": [
+        {
+          "date": "Antes de 2010",
+          "title": "Fichas de membros em papel"
+        },
+        {
+          "date": "Anos 2010",
+          "title": "Planilhas",
+          "text": "Com a popularização dos computadores, o Excel e ferramentas similares passaram a substituir o papel."
+        },
+        {
+          "date": "Hoje",
+          "title": "Formulários digitais",
+          "text": "Como Microsoft Forms ou Google Forms: o próprio responsável preenche os dados e eles alimentam automaticamente uma planilha de respostas."
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "content": "Qualquer um desses formatos (papel, planilha ou formulário digital) é válido. O essencial é que a embaixada tenha, sempre atualizado, um registro dos ER membros com:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Nome completo e data de nascimento;",
+        "Dados de contato do responsável (nome, célula, rede);",
+        "Informações relevantes de saúde (condições, alergias);",
+        "Situação de autorização de uso de imagem (veja o tópico sobre redes sociais)."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Escolha a ferramenta que for mais prática para a sua embaixada. Não existe uma “certa”. O que não pode faltar é a atualização periódica desse cadastro, especialmente antes de eventos e viagens."
+    },
+
+    {
+      "type": "heading",
+      "text": "Comunicação com a igreja, responsáveis e embaixadores"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** usar cada canal de comunicação para o público certo."
+    },
+    {
+      "type": "table",
+      "caption": "Um canal para cada público",
+      "columns": ["Público", "Canal", "Para quê"],
+      "rows": [
+        [
+          "Responsáveis (pais e mães)",
+          "Grupos de WhatsApp ou Telegram",
+          "Programação semanal, avisos de eventos, pedidos de autorização e comunicados gerais."
+        ],
+        [
+          "Embaixadores",
+          "Avisos nas reuniões presenciais",
+          "Garante que a informação chegue e evita a dispersão típica de grupos com muitos adolescentes."
+        ],
+        [
+          "Igreja e comunidade",
+          "Redes sociais (Instagram, YouTube, Facebook)",
+          "Divulgar quem são, quando se reúnem e o que fazem."
+        ]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "Com os **responsáveis**, grupos de WhatsApp ou Telegram continuam sendo uma ferramenta válida e prática. Entre os **próprios embaixadores**, a prática mais comum e recomendada hoje é dar os avisos diretamente durante as reuniões presenciais, em vez de depender de grupos virtuais."
+    },
+    {
+      "type": "text",
+      "content": "Com a **igreja e a comunidade**, as redes sociais ajudam tanto no engajamento das famílias já envolvidas quanto na visibilidade do trabalho para o restante da igreja."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Separe os canais por público. Um grupo de pais não deve virar canal de recado entre embaixadores, e vice-versa. Isso ajuda a manter cada grupo focado e evita ruído."
+    },
+
+    {
+      "type": "heading",
+      "text": "Redes sociais e uso de imagem de crianças e adolescentes"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender que divulgar o trabalho da embaixada nas redes sociais é importante, mas exige cuidado com a imagem de menores."
+    },
+    {
+      "type": "text",
+      "content": "Ter redes sociais é uma boa prática para divulgar as atividades e reuniões da embaixada: fortalece a identidade do grupo e comunica o trabalho para a igreja e a comunidade."
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "title": "Autorização de imagem é indispensável",
+      "content": "Antes de publicar fotos ou vídeos de um Embaixador do Rei, é preciso ter a autorização de uso de imagem do responsável legal. Só devem ser publicados conteúdos de participantes com essa autorização."
+    },
+    {
+      "type": "text",
+      "content": "Um bom modelo de referência é o termo usado em eventos como o III Conclamad (Embaixadores do Rei, PIB Madureira), que reúne em um único documento:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Autorização do responsável legal para a participação do Embaixador do Rei no evento ou atividade;",
+        "Autorização para uso gratuito de imagem, voz e nome em fotos, vídeos e materiais de divulgação (impressos ou digitais), sem finalidade comercial;",
+        "Declaração do responsável sobre condições de saúde, restrições médicas ou alergias do participante;",
+        "Dados de identificação do responsável e do Embaixador do Rei, com assinatura e data."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Mantenha uma lista simples de quem tem autorização de imagem válida (pode ser o próprio cadastro do primeiro tópico) e consulte-a antes de postar qualquer foto ou vídeo de atividades, acampamentos ou eventos."
+    },
+
+    {
+      "type": "heading",
+      "text": "Reuniões virtuais: apoio, não regra"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender o lugar das reuniões virtuais hoje, sem repetir o contexto excepcional da pandemia."
+    },
+    {
+      "type": "text",
+      "content": "Durante a pandemia, reuniões online (por ferramentas como Microsoft Teams, Zoom ou Google Meet) eram essenciais para manter o funcionamento da embaixada. Hoje esse cenário mudou: o presencial voltou a ser a prioridade e é o formato preferido sempre que possível."
+    },
+    {
+      "type": "text",
+      "content": "Ainda assim, algumas embaixadas seguem usando reuniões virtuais pontualmente, para treinamentos de conselheiros, reposição de algum encontro ou participação de quem está impossibilitado de comparecer, mas com frequência bem menor do que no período pandêmico."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Use a reunião virtual como exceção útil (treinamento, reposição, imprevisto), não como substituto do encontro presencial com os embaixadores."
+    },
+
+    {
+      "type": "heading",
+      "text": "Encerramento"
+    },
+    {
+      "type": "text",
+      "content": "A tecnologia é uma ferramenta a serviço do cuidado com os embaixadores, nunca o contrário."
+    },
+    {
+      "type": "summary",
+      "title": "Boas práticas do curso",
+      "items": [
+        {
+          "text": "Mantenha o cadastro dos membros sempre atualizado, na ferramenta que funcionar melhor para sua embaixada."
+        },
+        {
+          "text": "Use cada canal de comunicação para o público certo: responsáveis, embaixadores, igreja e comunidade."
+        },
+        {
+          "text": "Priorize o presencial nas reuniões e nos avisos entre embaixadores."
+        },
+        {
+          "text": "Nunca publique fotos ou vídeos de um Embaixador do Rei sem autorização de uso de imagem do responsável."
+        },
+        {
+          "text": "Reserve as reuniões virtuais para situações pontuais, não como rotina."
+        }
+      ]
+    }
+  ]
+}

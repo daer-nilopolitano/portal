@@ -1,0 +1,119 @@
+{
+  "title": "Quiz: revise o que você aprendeu",
+  "summary": "Nove perguntas sobre o capítulo anterior. Cada resposta vem com uma explicação.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Responda às perguntas abaixo para revisar o conteúdo do capítulo anterior. Depois de cada resposta, você vê a explicação. Ao final, é possível refazer o quiz quantas vezes quiser."
+    },
+    {
+      "type": "heading",
+      "text": "Perguntas"
+    },
+    {
+      "type": "quiz",
+      "title": "TICs na organização Embaixadores do Rei",
+      "questions": [
+        {
+          "question": "No cadastro dos embaixadores, o que é mais importante?",
+          "options": [
+            "Usar sempre planilhas do Excel",
+            "Manter o registro atualizado, seja qual for a ferramenta",
+            "Usar apenas formulários digitais",
+            "Guardar tudo somente em fichas de papel"
+          ],
+          "answer": 1,
+          "explanation": "Papel, planilha ou formulário digital são todos válidos. O essencial é o hábito de manter o registro em dia."
+        },
+        {
+          "question": "Quando é especialmente importante atualizar o cadastro?",
+          "options": [
+            "Somente no início do ano",
+            "Apenas quando entra um novo embaixador",
+            "Antes de eventos e viagens",
+            "Só quando os responsáveis pedirem"
+          ],
+          "answer": 2,
+          "explanation": "Dados de contato, saúde e autorização de imagem precisam estar corretos antes de eventos e viagens."
+        },
+        {
+          "question": "Qual formato passou a substituir as fichas de papel a partir dos anos 2010, com a popularização dos computadores?",
+          "options": [
+            "Planilhas, como o Excel",
+            "Grupos de WhatsApp",
+            "Reuniões virtuais",
+            "Redes sociais"
+          ],
+          "answer": 0,
+          "explanation": "As planilhas substituíram o papel. Hoje, os formulários digitais também permitem que o responsável preencha os dados e alimentem uma planilha de respostas."
+        },
+        {
+          "question": "Qual canal continua sendo indicado para a comunicação com os responsáveis (pais e mães)?",
+          "options": [
+            "Redes sociais públicas, como o Instagram",
+            "Avisos dados nas reuniões presenciais",
+            "Reuniões virtuais toda semana",
+            "Grupos de WhatsApp ou Telegram"
+          ],
+          "answer": 3,
+          "explanation": "Os grupos de WhatsApp ou Telegram são práticos para programação semanal, avisos, pedidos de autorização e comunicados gerais."
+        },
+        {
+          "question": "Como é recomendado dar avisos aos próprios embaixadores?",
+          "options": [
+            "Por um grupo virtual com todos os embaixadores",
+            "Diretamente durante as reuniões presenciais",
+            "Pelo grupo dos pais",
+            "Por publicações nas redes sociais"
+          ],
+          "answer": 1,
+          "explanation": "O contato presencial garante que a informação chegue e evita a dispersão típica de grupos com muitos adolescentes."
+        },
+        {
+          "question": "Para que servem as redes sociais da embaixada?",
+          "options": [
+            "Para substituir as reuniões presenciais",
+            "Para trocar recados entre os embaixadores",
+            "Para divulgar as atividades e a identidade da embaixada à igreja e à comunidade",
+            "Para guardar o cadastro dos membros"
+          ],
+          "answer": 2,
+          "explanation": "Elas mostram quem são os embaixadores, quando se reúnem e o que fazem, e ajudam no engajamento das famílias."
+        },
+        {
+          "question": "O que é indispensável antes de publicar uma foto ou vídeo de um Embaixador do Rei?",
+          "options": [
+            "A autorização de uso de imagem do responsável legal",
+            "A autorização do pastor da igreja",
+            "A aprovação de todos os embaixadores do grupo",
+            "Nada, se a foto foi tirada dentro da igreja"
+          ],
+          "answer": 0,
+          "explanation": "Só devem ser publicados conteúdos de participantes cujo responsável legal autorizou o uso de imagem."
+        },
+        {
+          "question": "O que o termo usado no III Conclamad reúne em um único documento?",
+          "options": [
+            "Apenas a lista de presença do evento",
+            "Apenas a autorização de uso de imagem",
+            "O regulamento completo do evento",
+            "Autorização de participação, uso de imagem, declaração de saúde e dados de identificação com assinatura"
+          ],
+          "answer": 3,
+          "explanation": "É um bom modelo de referência: reúne a autorização de participação, o uso gratuito de imagem, voz e nome sem fins comerciais, a declaração de saúde e alergias, e os dados do responsável e do embaixador."
+        },
+        {
+          "question": "Qual é o lugar das reuniões virtuais hoje?",
+          "options": [
+            "Substituir os encontros presenciais",
+            "Ser a regra, com o presencial como exceção",
+            "Apoio pontual, como treinamento, reposição ou imprevisto",
+            "Serem usadas apenas entre os embaixadores"
+          ],
+          "answer": 2,
+          "explanation": "O presencial voltou a ser a prioridade. As reuniões virtuais ficam como exceção útil, com frequência bem menor do que na pandemia."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-labelledby="t d">
+  <title id="t">As duas vias de origem do trabalho batista no Brasil</title>
+  <desc id="d">Duas caixas lado a lado, imigração em 1871 em Santa Bárbara d'Oeste e missão em 1882 em Salvador, convergem para a organização da Convenção Batista Brasileira em 1907.</desc>
+  <rect width="800" height="470" fill="#F3EEE4"/>
+
+  <text x="32" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#1F1B18">Duas vias, uma denominação</text>
+  <text x="32" y="68" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#6B645E">Como o trabalho batista se estabeleceu no Brasil</text>
+
+  <!-- via da imigração -->
+  <rect x="32" y="96" width="340" height="184" fill="#FAF8F5" stroke="#3B3530" stroke-width="1.5"/>
+  <text x="52" y="124" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2" fill="#6B645E">VIA DA IMIGRAÇÃO</text>
+  <text x="52" y="168" font-family="Georgia, 'Times New Roman', serif" font-size="38" fill="#3B3530">1871</text>
+  <text x="52" y="196" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F1B18">Santa Bárbara d'Oeste (SP)</text>
+  <text x="52" y="218" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">Colonos norte-americanos, os “confederados”</text>
+  <text x="52" y="238" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">Pastor Richard Ratcliff</text>
+  <text x="52" y="258" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">Cultos em inglês, para a própria comunidade</text>
+
+  <!-- via da missão -->
+  <rect x="428" y="96" width="340" height="184" fill="#FAF8F5" stroke="#9E2A2B" stroke-width="1.5"/>
+  <text x="448" y="124" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2" fill="#9E2A2B">VIA DA MISSÃO</text>
+  <text x="448" y="168" font-family="Georgia, 'Times New Roman', serif" font-size="38" fill="#9E2A2B">1882</text>
+  <text x="448" y="196" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1F1B18">Salvador (BA)</text>
+  <text x="448" y="218" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">Casais Bagby e Taylor e Antônio Teixeira</text>
+  <text x="448" y="238" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">Primeira igreja voltada à evangelização</text>
+  <text x="448" y="258" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#4B453F">de brasileiros</text>
+
+  <!-- conectores -->
+  <path d="M202 280 V330 H400 V352" fill="none" stroke="#3B3530" stroke-width="1.5"/>
+  <path d="M598 280 V330 H400" fill="none" stroke="#9E2A2B" stroke-width="1.5"/>
+  <polygon points="393,346 407,346 400,358" fill="#9E2A2B"/>
+
+  <!-- convenção -->
+  <rect x="230" y="362" width="340" height="86" fill="#9E2A2B"/>
+  <text x="400" y="394" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#FFFFFF">1907</text>
+  <text x="400" y="416" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">Convenção Batista Brasileira</text>
+  <text x="400" y="435" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#F6EAE8">Salvador, 22 de junho, 43 mensageiros</text>
+</svg>

@@ -1,0 +1,17 @@
+{
+  "title": "Uso das Tecnologias (TICs) na Organização Embaixadores do Rei",
+  "eyebrow": "Material de estudo",
+  "subtitle": "Onde a tecnologia ajuda o conselheiro no dia a dia da embaixada, e onde o presencial continua sendo a melhor opção.",
+  "about": "Material de apoio do DAER Nilopolitano para conselheiros de Embaixadores do Rei. Baseado no material “TICs na Organização ER” (Curso de Formação e Reciclagem de Conselheiro), atualizado para o contexto atual: o original foi produzido no fim da pandemia, quando as reuniões online eram essenciais. Hoje o presencial voltou a ser prioridade, e a tecnologia funciona como apoio, não como substituto.",
+  "author": {
+    "name": "DAER Nilopolitano",
+    "role": "Material de estudo para conselheiros"
+  },
+  "status": "published",
+  "order": 2,
+  "updatedAt": "2026-09",
+  "chapters": [
+    "tecnologia-a-servico-do-cuidado",
+    "quiz"
+  ]
+}

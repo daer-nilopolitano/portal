@@ -3,38 +3,19 @@ import { EmbaixadasSecao } from "@/components/public/embaixadas/secao";
 import { EmbaixadoresDoReiSecao } from "@/components/public/embaixadores-do-rei-secao";
 import { EventosSecao } from "@/components/public/eventos-secao";
 import { SobreSecao } from "@/components/public/sobre-secao";
-import { NOME_SITE, TAGLINE } from "@/lib/content/site";
 
 export default function HomePage() {
   return (
     <>
       <section className="relative flex h-[420px] items-center justify-center overflow-hidden text-center md:h-[480px]">
         <Image
-          src="/capa-daer.jpg"
+          src="/capa-daer.svg"
           alt=""
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
-        {/* Véu escuro neutro (não a cor primary) sobre a montagem já desfocada — reforça o duotone e garante contraste do texto em qualquer trecho da foto. */}
-        <div className="absolute inset-0 bg-slate-950/55" />
-        <div className="relative px-6">
-          <Image
-            src="/logo-daer.png"
-            alt="Brasão do DAER Nilopolitano"
-            width={96}
-            height={104}
-            priority
-            className="mx-auto"
-          />
-          <h1 className="mt-4 text-4xl font-bold text-white">
-            {NOME_SITE}
-          </h1>
-          <p className="mt-3 text-lg text-white/90">
-            {TAGLINE}.
-          </p>
-        </div>
       </section>
 
       <SobreSecao />

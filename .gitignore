@@ -17,6 +17,7 @@ backend/db.sqlite3
 # Next.js
 frontend/.next/
 frontend/out/
+frontend/public/course-assets/
 
 # Editor / SO
 .idea/

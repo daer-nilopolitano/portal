@@ -1,0 +1,71 @@
+{
+  "title": "1882: a via da missão",
+  "summary": "A chegada dos missionários, a decisão de começar em Salvador e a fundação da primeira igreja batista voltada aos brasileiros.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "Os Bagby chegam ao Brasil"
+    },
+    {
+      "type": "text",
+      "content": "O casal **William Buck Bagby** e **Anne Luther Bagby** desembarcou no Rio de Janeiro e seguiu para o interior de São Paulo. Depois de aprender português no Seminário Presbiteriano de Campinas, uniram-se ao casal **Zacharias Clay Taylor** e **Kate Stevens Crawford Taylor**, também missionários americanos, e ao ex-padre **Antônio Teixeira de Albuquerque**, batizado em Santa Bárbara d'Oeste."
+    },
+    {
+      "type": "heading",
+      "text": "Por que Salvador"
+    },
+    {
+      "type": "text",
+      "content": "O grupo decidiu iniciar a missão em **Salvador (BA)**, então uma cidade de 250.000 habitantes. Inicialmente, alugaram uma casa na parte alta da cidade, que servia ao mesmo tempo de residência e de espaço de pregação. Chegaram a Salvador em **agosto de 1882**."
+    },
+    {
+      "type": "heading",
+      "text": "A Primeira Igreja Batista da Bahia"
+    },
+    {
+      "type": "text",
+      "content": "Em **15 de outubro de 1882**, os missionários fundaram a **Primeira Igreja Batista da Bahia**, no bairro do Canela. Foi a primeira igreja batista voltada à evangelização de brasileiros."
+    },
+    {
+      "type": "table",
+      "caption": "Os cinco membros fundadores",
+      "columns": ["Membro", "Papel"],
+      "rows": [
+        ["William Buck Bagby", "Missionário"],
+        ["Anne Luther Bagby", "Missionária"],
+        ["Zacharias Clay Taylor", "Missionário"],
+        ["Kate Stevens Crawford Taylor", "Missionária"],
+        ["Antônio Teixeira de Albuquerque", "Ex-padre e único brasileiro entre os cinco"]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Cinco membros, um brasileiro",
+      "content": "A igreja nasceu pequena: dois casais missionários e um ex-padre. A partir dela, o trabalho passou a contar com um número crescente de brasileiros convertidos, como você verá no próximo capítulo."
+    },
+    {
+      "type": "quiz",
+      "questions": [
+        {
+          "question": "Em qual cidade os missionários decidiram iniciar a missão?",
+          "options": ["Rio de Janeiro", "Salvador (BA)", "Recife (PE)", "Campinas (SP)"],
+          "answer": 1,
+          "explanation": "A escolha foi Salvador, então uma cidade de 250.000 habitantes."
+        },
+        {
+          "question": "Quantos membros tinha a Primeira Igreja Batista da Bahia quando foi fundada?",
+          "options": ["12", "29", "5", "83"],
+          "answer": 2,
+          "explanation": "Eram cinco: os dois casais missionários e o ex-padre Antônio Teixeira de Albuquerque."
+        },
+        {
+          "question": "Quem era o único brasileiro entre os membros fundadores?",
+          "options": ["Zacharias Clay Taylor", "Antônio Teixeira de Albuquerque", "Richard Ratcliff", "William Buck Bagby"],
+          "answer": 1,
+          "explanation": "Antônio Teixeira de Albuquerque, ex-padre, batizado em Santa Bárbara d'Oeste."
+        }
+      ]
+    }
+  ]
+}

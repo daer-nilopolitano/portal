@@ -1,0 +1,78 @@
+{
+  "title": "Imprensa e formação teológica",
+  "summary": "O Jornal Batista e os seminários que prepararam pastores e obreiros para o crescimento do trabalho.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Antes mesmo da Convenção, os batistas já investiam em comunicação e em formação. O **Jornal Batista** é de 1901 e o primeiro seminário, de 1902, ou seja, anteriores à organização da CBB em 1907."
+    },
+    {
+      "type": "table",
+      "caption": "Imprensa e seminários",
+      "columns": ["Instituição", "Data", "O que marcou"],
+      "rows": [
+        [
+          "Jornal Batista",
+          "10/01/1901",
+          "Fundado no Rio de Janeiro, unificou os periódicos “As Boas Novas” e “Echos da Verdade”."
+        ],
+        [
+          "Seminário Teológico Batista do Norte do Brasil",
+          "01/04/1902",
+          "Instalado em Recife, sob direção de Salomão Ginsburg."
+        ],
+        [
+          "Seminário Teológico Batista do Sul do Brasil",
+          "15/03/1908",
+          "Aberto no Rio de Janeiro, com 36 alunos."
+        ],
+        [
+          "Seminário Teológico Batista Equatorial",
+          "02/08/1955",
+          "Primeira aula, voltada ao preparo de obreiros para a Missão Equatorial."
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Jornal Batista"
+    },
+    {
+      "type": "text",
+      "content": "Fundado em **10 de janeiro de 1901**, no Rio de Janeiro, o Jornal Batista unificou os periódicos “As Boas Novas” e “Echos da Verdade”. O missionário **William Edwin Entzminger**, que já tinha experiência em jornalismo, foi selecionado como diretor."
+    },
+    {
+      "type": "heading",
+      "text": "Os seminários"
+    },
+    {
+      "type": "text",
+      "content": "O **Seminário Teológico Batista do Norte do Brasil** foi instalado em **1º de abril de 1902**, em Recife, sob a direção de Salomão Ginsburg."
+    },
+    {
+      "type": "text",
+      "content": "A ideia do **Seminário Teológico Batista do Sul do Brasil** surgiu já na primeira assembleia da CBB, em 1907. Um grupo de trabalho foi formado por J. W. Shepard, Deter, Bagby, Hamilton, Maddox, Taylor e Cannada. O seminário abriu as portas em **15 de março de 1908**, no Rio de Janeiro, com 36 alunos."
+    },
+    {
+      "type": "text",
+      "content": "O **Seminário Teológico Batista Equatorial** teve sua primeira aula em **2 de agosto de 1955**. Ele foi dedicado ao preparo de obreiros para a Missão Equatorial, que abrangia Ceará, Piauí, Maranhão, Pará, Amapá, Amazonas e Guaporé."
+    },
+    {
+      "type": "quiz",
+      "questions": [
+        {
+          "question": "Qual é a data de fundação do Jornal Batista?",
+          "options": ["15/03/1908", "01/04/1902", "10/01/1901", "22/06/1907"],
+          "answer": 2,
+          "explanation": "O Jornal Batista foi fundado em 10 de janeiro de 1901, no Rio de Janeiro."
+        },
+        {
+          "question": "Quem dirigiu o Seminário Teológico Batista do Norte do Brasil, instalado em Recife em 1902?",
+          "options": ["William Edwin Entzminger", "Salomão Ginsburg", "Zacharias Taylor", "Francisco Fulgêncio Soren"],
+          "answer": 1,
+          "explanation": "A direção ficou com Salomão Ginsburg. Entzminger foi o diretor do Jornal Batista."
+        }
+      ]
+    }
+  ]
+}
