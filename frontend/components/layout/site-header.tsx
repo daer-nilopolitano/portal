@@ -12,6 +12,7 @@ const ITENS_NAV = [
   { href: "/#sobre", rotulo: "Sobre" },
   { href: "/#embaixadores-do-rei", rotulo: "Embaixadores do Rei" },
   { href: "/#eventos", rotulo: "Eventos" },
+  { href: "/noticias", rotulo: "Notícias" },
   { href: "/#embaixadas", rotulo: "Embaixadas" },
 ];
 

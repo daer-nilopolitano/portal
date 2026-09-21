@@ -1,0 +1,369 @@
+{
+  "title": "Noções do ECA para o conselheiro",
+  "summary": "Fundamentos, disciplina sem castigo físico, viagens e hospedagem, consequências do descumprimento da lei e a proteção também no ambiente digital.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Como conselheiro, você atua diretamente na vida de crianças e adolescentes, em atividades, viagens, eventos e no dia a dia da igreja. Conhecer o ECA não é só uma exigência legal: é uma ferramenta para proteger quem está sob seu cuidado e para exercer essa responsabilidade com segurança, dentro dos limites da lei."
+    },
+    {
+      "type": "text",
+      "content": "Este curso apresenta os pontos do Estatuto mais relevantes para quem trabalha com crianças e adolescentes em um contexto de igreja e eventos."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Base legal do curso",
+      "content": "Lei nº 8.069/1990 (ECA), Lei nº 13.010/2014 e Lei nº 15.211/2025 (ECA Digital)."
+    },
+
+    {
+      "type": "heading",
+      "text": "Fundamentos do ECA"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender o que é o ECA, a quem ele se aplica e os princípios que orientam toda a lei."
+    },
+    {
+      "type": "text",
+      "content": "O Estatuto da Criança e do Adolescente (Lei nº 8.069/1990) dispõe sobre a **proteção integral** de crianças e adolescentes."
+    },
+    {
+      "type": "table",
+      "caption": "Quem é quem, segundo a lei",
+      "columns": ["Termo", "Definição"],
+      "rows": [
+        ["Criança", "Pessoa até 12 anos de idade incompletos."],
+        ["Adolescente", "Pessoa entre 12 e 18 anos de idade."],
+        ["Exceção", "Em casos previstos em lei, o Estatuto pode se aplicar excepcionalmente até os 21 anos."]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Princípio central:** crianças e adolescentes têm todos os direitos fundamentais da pessoa humana, com proteção integral para seu desenvolvimento físico, mental, moral, espiritual e social, em condições de liberdade e dignidade, sem qualquer discriminação (de nascimento, situação familiar, raça, etnia, religião, deficiência, condição econômica, etc.)."
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "title": "Proibição geral",
+      "content": "Nenhuma criança ou adolescente pode ser objeto de negligência, discriminação, exploração, violência, crueldade ou opressão, seja por ação ou por omissão."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Toda a atuação com o grupo (dinâmicas, viagens, disciplina, comunicação) deve ser lida à luz desse princípio de proteção integral."
+    },
+
+    {
+      "type": "heading",
+      "text": "Liberdade, respeito e dignidade"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** conhecer os direitos de liberdade e respeito da criança e do adolescente, e entender por que certas formas de disciplina são proibidas por lei."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Direito à liberdade"
+    },
+    {
+      "type": "text",
+      "content": "Inclui, entre outros aspectos:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Ir, vir e estar em espaços públicos e comunitários;",
+        "Ter opinião e liberdade de expressão;",
+        "Ter crença e culto religioso;",
+        "Brincar, praticar esportes e se divertir;",
+        "Participar da vida familiar e comunitária, sem discriminação;",
+        "Participar da vida política, na forma da lei;",
+        "Buscar refúgio, auxílio e orientação."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Direito ao respeito e dever de dignidade"
+    },
+    {
+      "type": "text",
+      "content": "**Direito ao respeito:** inviolabilidade da integridade física, psíquica e moral, incluindo a preservação da imagem, identidade, autonomia, valores e espaços pessoais."
+    },
+    {
+      "type": "text",
+      "content": "**Dever de dignidade:** é dever de todos proteger a criança e o adolescente de tratamento desumano, violento, aterrorizante, vexatório ou constrangedor."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Proibição do castigo físico"
+    },
+    {
+      "type": "text",
+      "content": "Pela Lei nº 13.010/2014, a criança e o adolescente têm o direito de ser educados e cuidados **sem uso de castigo físico ou tratamento cruel ou degradante**, seja pelos pais, responsáveis, agentes públicos ou qualquer pessoa encarregada de cuidar deles. Na prática, isso inclui conselheiros de embaixadores do Rei."
+    },
+    {
+      "type": "table",
+      "columns": ["Conceito", "O que significa"],
+      "rows": [
+        ["Castigo físico", "Uso de força física que resulte em sofrimento ou lesão."],
+        ["Tratamento cruel ou degradante", "Humilhar, ameaçar gravemente ou ridicularizar."]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "Quem descumpre essa proibição fica sujeito a medidas aplicadas pelo Conselho Tutelar, como encaminhamento a programa de proteção à família, tratamento psicológico, cursos de orientação ou advertência."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Disciplina em atividades e acampamentos nunca pode envolver força física, humilhação pública, ameaças ou ridicularização, ainda que “sem querer” ou “de brincadeira”. Formas de correção devem ser sempre verbais, respeitosas e proporcionais."
+    },
+
+    {
+      "type": "heading",
+      "text": "Educação, trabalho e convívio social"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** conhecer os direitos relacionados à educação e ao trabalho, como referência geral do Estatuto."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Direito à educação"
+    },
+    {
+      "type": "text",
+      "content": "A educação visa ao pleno desenvolvimento da pessoa e assegura, entre outros pontos:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Igualdade de acesso e permanência na escola;",
+        "Direito de ser respeitado pelos educadores;",
+        "Direito de contestar critérios avaliativos;",
+        "Direito de organização e participação estudantil;",
+        "Acesso à escola pública e gratuita próxima da residência."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "title": "Trabalho infantil",
+      "content": "É proibido qualquer trabalho a menores de 14 anos, salvo na condição de aprendiz."
+    },
+
+    {
+      "type": "heading",
+      "text": "Viagens e hospedagem"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** este é um dos tópicos mais aplicáveis à rotina de conselheiros. Cobre as regras que valem diretamente para acampamentos, conclaves e viagens do grupo."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Hospedagem"
+    },
+    {
+      "type": "text",
+      "content": "É proibido hospedar criança ou adolescente em hotel, motel, pensão ou estabelecimento congênere sem autorização ou acompanhamento dos pais ou do responsável."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Viagem dentro do país"
+    },
+    {
+      "type": "text",
+      "content": "Regra em vigor, conforme redação dada pela Lei nº 13.812/2019:"
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "content": "Nenhuma criança ou adolescente **menor de 16 anos** pode viajar para fora da comarca onde reside, desacompanhado dos pais ou responsáveis, sem autorização judicial expressa."
+    },
+    {
+      "type": "text",
+      "content": "A autorização **não é exigida** quando:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "o destino é comarca contígua à da residência, na mesma unidade da Federação ou na mesma região metropolitana; **ou**",
+        "a criança ou o adolescente menor de 16 anos estiver acompanhado de ascendente ou colateral maior até o 3º grau (com parentesco comprovado documentalmente); **ou**",
+        "a criança ou o adolescente menor de 16 anos estiver acompanhado de pessoa maior expressamente autorizada pelo pai, mãe ou responsável."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "A autoridade judiciária pode conceder autorização válida por até 2 anos, a pedido dos pais ou do responsável."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Viagem ao exterior"
+    },
+    {
+      "type": "text",
+      "content": "A autorização é dispensada se a criança ou o adolescente estiver acompanhado de ambos os pais, ou de um deles com autorização expressa do outro (documento com firma reconhecida)."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Em conclaves, acampamentos e passeios que cruzam comarcas, é essencial verificar se cada participante menor de 16 anos tem autorização válida (dos pais ou responsável, ou judicial) e se o conselheiro ou acompanhante se enquadra nas exceções previstas em lei (parentesco comprovado ou autorização expressa dos pais)."
+    },
+
+    {
+      "type": "heading",
+      "text": "Quando a lei é descumprida: crimes e infrações"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** ter noção geral das consequências previstas em lei para quem viola os direitos da criança e do adolescente. O objetivo não é atuar como especialista jurídico, e sim reconhecer a gravidade dessas condutas."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Vexame ou constrangimento"
+    },
+    {
+      "type": "text",
+      "content": "Submeter criança ou adolescente sob autoridade, guarda ou vigilância a vexame ou constrangimento é crime, com pena de detenção de 6 meses a 2 anos."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "E a tortura?",
+      "content": "A tortura contra criança ou adolescente sob guarda, antes prevista no próprio ECA, hoje é tratada pela Lei de Tortura (Lei nº 9.455/1997), que revogou o artigo correspondente do Estatuto."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Pornografia infantil"
+    },
+    {
+      "type": "text",
+      "content": "Produzir, reproduzir, dirigir, fotografar, filmar ou registrar, por qualquer meio, cena de sexo explícito ou pornográfica envolvendo criança ou adolescente é crime, com pena de reclusão de 4 a 8 anos e multa (redação dada pela Lei nº 11.829/2008). Incorre nas mesmas penas quem agencia, facilita, recruta, coage ou intermedeia a participação de criança ou adolescente nessas cenas, ou contracena com eles."
+    },
+    {
+      "type": "text",
+      "content": "A pena aumenta em um terço quando o crime é cometido no exercício de cargo ou função pública, aproveitando relações domésticas ou de hospitalidade, ou por quem tem autoridade sobre a vítima."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Infrações administrativas"
+    },
+    {
+      "type": "table",
+      "caption": "Infrações administrativas e multas",
+      "columns": ["Conduta", "Consequência"],
+      "rows": [
+        ["Hospedar criança ou adolescente sem autorização", "Multa"],
+        ["Transportar em desacordo com as regras de viagem", "Multa de 3 a 20 salários de referência, dobrada em caso de reincidência"],
+        ["Anunciar espetáculo sem indicar a faixa etária", "Multa de 3 a 20 salários de referência, duplicada em caso de reincidência"],
+        ["Exibir conteúdo inadequado admitindo crianças e adolescentes", "Multa de 20 a 100 salários de referência. A reincidência pode gerar suspensão ou fechamento do local"]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "ECA Digital: a proteção também vale online"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender que a proteção prevista no ECA de 1990 foi estendida ao ambiente digital por uma lei mais recente, um tema cada vez mais relevante para conselheiros que lidam com adolescentes conectados o tempo todo."
+    },
+    {
+      "type": "timeline",
+      "items": [
+        {
+          "date": "17/09/2025",
+          "title": "Sanção da Lei nº 15.211/2025",
+          "text": "O Estatuto Digital da Criança e do Adolescente (ECA Digital)."
+        },
+        {
+          "date": "17/03/2026",
+          "title": "Entrada em vigor"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "content": "O ECA Digital **não substitui** o ECA de 1990. É uma lei federal complementar e autônoma, que trata especificamente da proteção de crianças e adolescentes no ambiente online, usando as mesmas faixas etárias já definidas no ECA (criança até 12 anos incompletos; adolescente de 12 a 18 anos)."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "A quem se aplica"
+    },
+    {
+      "type": "text",
+      "content": "A qualquer produto ou serviço de tecnologia da informação direcionado a crianças e adolescentes, ou com acesso provável por esse público no Brasil. Isso inclui redes sociais, aplicativos, jogos eletrônicos, sistemas operacionais, lojas de aplicativos e serviços de streaming, mesmo quando operados por empresas sediadas no exterior."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "O que a lei busca enfrentar"
+    },
+    {
+      "type": "text",
+      "content": "Problemas que o ECA de 1990 não previa, por ser anterior à internet e às redes sociais:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Cyberbullying;",
+        "Exposição indevida de imagens;",
+        "Compartilhamento de conteúdos íntimos sem autorização;",
+        "Aliciamento digital (*grooming*);",
+        "Uso inadequado de dados pessoais de crianças e adolescentes."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Deveres das plataformas"
+    },
+    {
+      "type": "text",
+      "content": "Prevenção, proteção, informação e segurança, à luz do melhor interesse e da proteção integral e prioritária da criança e do adolescente. A lei traz regras sobre publicidade direcionada a esse público, verificação de idade, mecanismos de supervisão e controle parental e remoção de conteúdos impróprios."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Mesmo sem ser especialista em tecnologia, vale orientar os adolescentes do grupo (e conversar com os pais) sobre supervisão parental, cuidado com o compartilhamento de imagens e conteúdos íntimos, e atenção a sinais de aliciamento digital. Esses temas agora têm respaldo legal específico."
+    },
+
+    {
+      "type": "heading",
+      "text": "Encerramento"
+    },
+    {
+      "type": "text",
+      "content": "O ECA existe para garantir que crianças e adolescentes cresçam com dignidade, liberdade e segurança: dentro e fora de casa, na escola, em viagens e, hoje, também no ambiente digital."
+    },
+    {
+      "type": "summary",
+      "title": "O que levar deste curso",
+      "items": [
+        {
+          "text": "Planeje atividades e viagens dentro da lei: autorizações, acompanhamento e hospedagem."
+        },
+        {
+          "text": "Exerça a disciplina de forma respeitosa, sem castigo físico ou humilhação."
+        },
+        {
+          "text": "Reconheça situações de risco, inclusive digitais, e saiba que existem canais legais de proteção, como o Conselho Tutelar."
+        }
+      ]
+    }
+  ]
+}

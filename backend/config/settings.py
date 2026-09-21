@@ -124,6 +124,10 @@ WAGTAIL_SITE_NAME = SITE_NAME
 WAGTAILADMIN_BASE_URL = os.environ.get(
     "WAGTAILADMIN_BASE_URL", "http://localhost:8000"
 )
+# Necessário para a Wagtail API devolver URLs absolutas de imagem (capa/galeria das
+# notícias) — sem isso, o campo "url" das renditions vem relativo e quebra no
+# frontend, que roda em outra origem (Next.js).
+WAGTAILAPI_BASE_URL = os.environ.get("WAGTAILAPI_BASE_URL", WAGTAILADMIN_BASE_URL)
 
 # Autenticação da API (JWT simples, sem refresh token por enquanto — ver core/auth.py).
 # Por padrão reaproveita a SECRET_KEY do Django; em produção, defina um valor próprio em JWT_SECRET_KEY no .env.

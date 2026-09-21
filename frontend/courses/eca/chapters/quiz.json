@@ -1,0 +1,178 @@
+{
+  "title": "Quiz: revise o que você aprendeu",
+  "summary": "Treze perguntas, em três blocos, sobre o capítulo anterior. Cada resposta vem com uma explicação.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Responda às perguntas abaixo para revisar o conteúdo do capítulo anterior. Depois de cada resposta, você vê a explicação. Cada bloco tem sua própria pontuação e pode ser refeito quantas vezes quiser."
+    },
+    {
+      "type": "heading",
+      "text": "Fundamentos e disciplina"
+    },
+    {
+      "type": "quiz",
+      "title": "Fundamentos, respeito e dignidade",
+      "questions": [
+        {
+          "question": "Segundo o ECA, quem é considerado criança?",
+          "options": [
+            "Pessoa até 10 anos de idade",
+            "Pessoa até 14 anos de idade",
+            "Pessoa até 12 anos de idade incompletos",
+            "Pessoa até 18 anos de idade"
+          ],
+          "answer": 2,
+          "explanation": "Criança é a pessoa até 12 anos incompletos. Adolescente é a pessoa entre 12 e 18 anos."
+        },
+        {
+          "question": "Qual princípio orienta toda a lei?",
+          "options": [
+            "A proteção integral de crianças e adolescentes",
+            "A correção rigorosa como forma de educar",
+            "A responsabilidade exclusiva da escola",
+            "A autonomia total dos adolescentes"
+          ],
+          "answer": 0,
+          "explanation": "Crianças e adolescentes têm todos os direitos fundamentais da pessoa humana, com proteção integral ao seu desenvolvimento, sem discriminação."
+        },
+        {
+          "question": "De acordo com a Lei nº 13.010/2014, o que é castigo físico?",
+          "options": [
+            "Uma conversa reservada e respeitosa com o adolescente",
+            "O uso de força física que resulte em sofrimento ou lesão",
+            "Uma correção verbal e proporcional",
+            "Uma orientação dada em particular"
+          ],
+          "answer": 1,
+          "explanation": "Castigo físico é o uso de força física que resulte em sofrimento ou lesão. A proibição vale também para líderes e conselheiros."
+        },
+        {
+          "question": "Qual destas condutas é tratamento cruel ou degradante?",
+          "options": [
+            "Explicar uma regra do acampamento ao grupo",
+            "Corrigir com uma orientação respeitosa",
+            "Ridicularizar um adolescente na frente do grupo, mesmo “de brincadeira”",
+            "Chamar a atenção em particular, com respeito"
+          ],
+          "answer": 2,
+          "explanation": "Humilhar, ameaçar gravemente ou ridicularizar é tratamento cruel ou degradante, ainda que “sem querer” ou “de brincadeira”."
+        },
+        {
+          "question": "Quem descumpre a proibição do castigo físico fica sujeito a quê?",
+          "options": [
+            "Medidas aplicadas pelo Conselho Tutelar, como advertência, programa de proteção à família ou curso de orientação",
+            "Apenas a uma multa de trânsito",
+            "A nenhuma consequência, por se tratar de correção educativa",
+            "Somente à perda da função na igreja"
+          ],
+          "answer": 0,
+          "explanation": "O Conselho Tutelar pode aplicar medidas como encaminhamento a programa de proteção à família, tratamento psicológico, cursos de orientação ou advertência."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Trabalho, hospedagem e viagens"
+    },
+    {
+      "type": "quiz",
+      "title": "Trabalho, hospedagem e viagens",
+      "questions": [
+        {
+          "question": "É proibido qualquer trabalho a menores de qual idade, salvo na condição de aprendiz?",
+          "options": ["12 anos", "16 anos", "18 anos", "14 anos"],
+          "answer": 3,
+          "explanation": "O trabalho é proibido a menores de 14 anos, salvo como aprendiz."
+        },
+        {
+          "question": "Um adolescente pode ser hospedado em hotel, motel ou pensão sem os pais?",
+          "options": [
+            "Sim, sempre que estiver em uma viagem da igreja",
+            "Não, é proibido sem autorização ou acompanhamento dos pais ou do responsável",
+            "Sim, desde que tenha mais de 12 anos",
+            "Sim, se o grupo tiver mais de 10 pessoas"
+          ],
+          "answer": 1,
+          "explanation": "A hospedagem sem autorização ou acompanhamento dos pais ou do responsável é proibida e sujeita o estabelecimento a multa."
+        },
+        {
+          "question": "O que é exigido de um menor de 16 anos que viaja para fora da comarca onde reside, desacompanhado dos pais?",
+          "options": [
+            "Nada, se estiver com o grupo da igreja",
+            "Apenas o aviso ao Conselho Tutelar",
+            "Autorização judicial expressa, salvo nas exceções previstas em lei",
+            "Somente um documento com firma reconhecida"
+          ],
+          "answer": 2,
+          "explanation": "A regra geral é a autorização judicial expressa, dispensada apenas nas hipóteses previstas em lei, como destino em comarca contígua ou acompanhante autorizado pelos pais."
+        },
+        {
+          "question": "Qual destas situações dispensa a autorização judicial para um menor de 16 anos?",
+          "options": [
+            "Viajar com um amigo da mesma idade",
+            "Estar acompanhado de pessoa maior expressamente autorizada pelo pai, mãe ou responsável",
+            "Viajar com o conselheiro sem nenhuma autorização",
+            "Viajar para outro estado sem os pais"
+          ],
+          "answer": 1,
+          "explanation": "A autorização também é dispensada quando o destino é comarca contígua ou quando o menor viaja com ascendente ou colateral maior até o 3º grau, com parentesco comprovado."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Infrações e ECA Digital"
+    },
+    {
+      "type": "quiz",
+      "title": "Infrações e ECA Digital",
+      "questions": [
+        {
+          "question": "Submeter criança ou adolescente sob sua autoridade, guarda ou vigilância a vexame ou constrangimento é:",
+          "options": [
+            "Apenas falta de educação, sem consequência legal",
+            "Uma infração punida só com advertência da igreja",
+            "Crime, com pena de detenção de 6 meses a 2 anos",
+            "Permitido quando é de brincadeira"
+          ],
+          "answer": 2,
+          "explanation": "É crime previsto no Estatuto, com pena de detenção de 6 meses a 2 anos."
+        },
+        {
+          "question": "Qual lei trata hoje da tortura contra criança ou adolescente sob guarda, que antes era prevista no próprio ECA?",
+          "options": [
+            "Lei nº 13.010/2014",
+            "Lei nº 15.211/2025",
+            "Lei nº 13.812/2019",
+            "Lei nº 9.455/1997 (Lei de Tortura)"
+          ],
+          "answer": 3,
+          "explanation": "A Lei de Tortura revogou o artigo correspondente do Estatuto."
+        },
+        {
+          "question": "O ECA Digital (Lei nº 15.211/2025) substitui o ECA de 1990?",
+          "options": [
+            "Sim, revogou o ECA por completo",
+            "Não, é uma lei federal complementar e autônoma para o ambiente online",
+            "Sim, mas só nas redes sociais",
+            "Não, e só vale para escolas"
+          ],
+          "answer": 1,
+          "explanation": "O ECA Digital não substitui o ECA de 1990. Ele trata especificamente da proteção de crianças e adolescentes no ambiente online e usa as mesmas faixas etárias."
+        },
+        {
+          "question": "Qual destes problemas o ECA Digital busca enfrentar?",
+          "options": [
+            "A falta de vagas nas escolas",
+            "O transporte escolar",
+            "O aliciamento digital (grooming) e o compartilhamento de conteúdos íntimos sem autorização",
+            "O horário das aulas"
+          ],
+          "answer": 2,
+          "explanation": "A lei enfrenta problemas que o ECA de 1990 não previa, como cyberbullying, exposição indevida de imagens, aliciamento digital e uso inadequado de dados pessoais."
+        }
+      ]
+    }
+  ]
+}

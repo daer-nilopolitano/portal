@@ -2,6 +2,7 @@ import Image from "next/image";
 import { EmbaixadasSecao } from "@/components/public/embaixadas/secao";
 import { EmbaixadoresDoReiSecao } from "@/components/public/embaixadores-do-rei-secao";
 import { EventosSecao } from "@/components/public/eventos-secao";
+import { NoticiasSecao } from "@/components/public/noticias-secao";
 import { SobreSecao } from "@/components/public/sobre-secao";
 
 export default function HomePage() {
@@ -21,6 +22,7 @@ export default function HomePage() {
       <SobreSecao />
       <EmbaixadoresDoReiSecao />
       <EventosSecao />
+      <NoticiasSecao />
       <EmbaixadasSecao />
     </>
   );

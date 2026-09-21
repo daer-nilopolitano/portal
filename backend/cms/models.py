@@ -8,6 +8,7 @@ from rest_framework.fields import Field
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.api import APIField
 from wagtail.fields import RichTextField
+from wagtail.images.api.fields import ImageRenditionField
 from wagtail.models import Orderable, Page
 from wagtail.rich_text import expand_db_html
 
@@ -91,6 +92,9 @@ class NoticiaPage(Page):
     """Um post de notícia individual."""
 
     data_publicacao = models.DateField("Data de publicação", null=True, blank=True)
+    autor = models.CharField(
+        "Autor", max_length=150, blank=True, help_text="Ex.: 'Dc. Júlio'."
+    )
     resumo = models.CharField(max_length=300, blank=True)
     corpo = RichTextField(blank=True)
     imagem_capa = models.ForeignKey(
@@ -103,12 +107,43 @@ class NoticiaPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("data_publicacao"),
+        FieldPanel("autor"),
         FieldPanel("resumo"),
         FieldPanel("imagem_capa"),
         FieldPanel("corpo"),
+        InlinePanel("galeria", label="Foto", heading="Galeria de fotos"),
+    ]
+
+    api_fields = [
+        APIField("data_publicacao"),
+        APIField("autor"),
+        APIField("resumo"),
+        APIField("corpo", serializer=RichTextHTMLField(read_only=True)),
+        APIField("imagem_capa", serializer=ImageRenditionField("fill-1200x675")),
+        APIField("galeria"),
     ]
 
     parent_page_types = ["cms.NoticiaIndexPage"]
+
+
+class NoticiaGaleriaImagem(Orderable):
+    """Uma foto da galeria de uma notícia (ex.: fotos de um evento coberto)."""
+
+    page = ParentalKey(NoticiaPage, on_delete=models.CASCADE, related_name="galeria")
+    imagem = models.ForeignKey(
+        "wagtailimages.Image", on_delete=models.CASCADE, related_name="+"
+    )
+    legenda = models.CharField(max_length=200, blank=True)
+
+    panels = [
+        FieldPanel("imagem"),
+        FieldPanel("legenda"),
+    ]
+
+    api_fields = [
+        APIField("imagem", serializer=ImageRenditionField("fill-1600x1067")),
+        APIField("legenda"),
+    ]
 
 
 class EventoIndexPage(Page):

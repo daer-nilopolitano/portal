@@ -158,3 +158,36 @@ export interface Estatisticas {
   // Só populado para quem está logado como embaixador_do_rei.
   conselheiros_embaixada: string[];
 }
+
+// Formato do campo de imagem devolvido pela Wagtail API (via ImageRenditionField).
+// `url` é relativo ao backend (ex.: "/media/..."); use `full_url` (absoluto) como
+// `src` de <Image>, já que o frontend roda em outra origem.
+export interface ImagemRendition {
+  url: string;
+  full_url?: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
+export interface NoticiaFoto {
+  imagem: ImagemRendition | null;
+  legenda: string;
+}
+
+// Campos usados na listagem de /noticias (sem corpo/galeria, mais leve).
+export interface NoticiaResumo {
+  id: number;
+  slug: string;
+  title: string;
+  data_publicacao: string | null;
+  autor: string;
+  resumo: string;
+  imagem_capa: ImagemRendition | null;
+}
+
+// Notícia completa, usada na página de detalhe (/noticias/[slug]).
+export interface Noticia extends NoticiaResumo {
+  corpo: string;
+  galeria: NoticiaFoto[];
+}

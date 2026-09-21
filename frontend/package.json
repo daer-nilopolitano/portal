@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "embla-carousel-fade": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.383.0",

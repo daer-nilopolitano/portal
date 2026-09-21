@@ -1,0 +1,17 @@
+{
+  "title": "Noções sobre o Estatuto da Criança e do Adolescente (ECA)",
+  "eyebrow": "Material de estudo",
+  "subtitle": "Os pontos do Estatuto mais relevantes para quem cuida de crianças e adolescentes em atividades, viagens e eventos da igreja.",
+  "about": "Material de apoio do DAER Nilopolitano para conselheiros de Embaixadores do Rei. Base legal: Lei nº 8.069/1990 (ECA), Lei nº 13.010/2014 e Lei nº 15.211/2025 (ECA Digital). O curso oferece noções gerais para reconhecer situações e responsabilidades, e não substitui orientação jurídica.",
+  "author": {
+    "name": "DAER Nilopolitano",
+    "role": "Material de estudo para conselheiros"
+  },
+  "status": "published",
+  "order": 3,
+  "updatedAt": "2026-09",
+  "chapters": [
+    "nocoes-do-eca",
+    "quiz"
+  ]
+}
