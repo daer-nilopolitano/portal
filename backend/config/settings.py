@@ -117,6 +117,15 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 
+# Necessário atrás de proxy (Northflank termina o TLS antes do container) —
+# sem isso o Django acha que a conexão é HTTP e falha a checagem de CSRF/CSRF cookie em produção.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Origens confiáveis para POST (login do django-admin/cms-admin). Precisa do scheme completo, igual ao CORS_ALLOWED_ORIGINS.
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS", "http://localhost:8000"
+).split(",")
+
 # Constante de identificação do site
 SITE_NAME = "DAER Nilopolitano"
 
