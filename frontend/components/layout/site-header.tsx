@@ -8,12 +8,11 @@ import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const ITENS_NAV = [
-  { href: "/", rotulo: "Início" },
   { href: "/#sobre", rotulo: "Sobre" },
   { href: "/#embaixadores-do-rei", rotulo: "Embaixadores do Rei" },
   { href: "/#eventos", rotulo: "Eventos" },
-  { href: "/noticias", rotulo: "Notícias" },
   { href: "/#embaixadas", rotulo: "Embaixadas" },
+  { href: "/noticias", rotulo: "Notícias" },
 ];
 
 export function SiteHeader() {

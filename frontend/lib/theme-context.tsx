@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Tema = "light" | "dark" | "system";
+type Tema = "light" | "dark";
 
 interface ThemeContextValue {
   tema: Tema;
@@ -11,27 +11,45 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
+function temaDoSistema(): Tema {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function temaSalvo(): Tema | null {
+  const salvo = localStorage.getItem("tema");
+  return salvo === "light" || salvo === "dark" ? salvo : null;
+}
+
 function aplicarClasse(tema: Tema) {
-  const escuro =
-    tema === "dark" ||
-    (tema === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  document.documentElement.classList.toggle("dark", escuro);
+  document.documentElement.classList.toggle("dark", tema === "dark");
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [tema, setTema] = useState<Tema>("system");
+  // Sempre inicia em "light", igual ao servidor (que não tem window pra saber o
+  // valor real) — senão o cliente já nasce com o tema real nessa mesma primeira
+  // renderização e diverge do HTML vindo do servidor, causando erro de hidratação.
+  // O useEffect abaixo corrige pro valor real logo depois, já com a página montada.
+  const [tema, setTema] = useState<Tema>("light");
 
   useEffect(() => {
-    const salvo = (localStorage.getItem("tema") as Tema | null) ?? "system";
-    setTema(salvo);
-    aplicarClasse(salvo);
+    const atualizarTema = () => {
+      const preferencia = temaSalvo();
+      const proximoTema = preferencia ?? temaDoSistema();
+      setTema(proximoTema);
+      aplicarClasse(proximoTema);
+    };
 
-    if (salvo === "system") {
-      const media = window.matchMedia("(prefers-color-scheme: dark)");
-      const escutar = () => aplicarClasse("system");
-      media.addEventListener("change", escutar);
-      return () => media.removeEventListener("change", escutar);
-    }
+    atualizarTema();
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const escutar = () => {
+      if (temaSalvo() === null) {
+        atualizarTema();
+      }
+    };
+
+    media.addEventListener("change", escutar);
+    return () => media.removeEventListener("change", escutar);
   }, []);
 
   function definirTema(novoTema: Tema) {

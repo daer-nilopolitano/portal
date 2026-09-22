@@ -1,11 +1,12 @@
 import Link from "next/link";
-import {EMAIL_CONTATO} from "@/lib/content/site";
+import { EMAIL_CONTATO } from "@/lib/content/site";
 
 const LINKS_NAVEGACAO = [
   { href: "/#sobre", rotulo: "Sobre" },
   { href: "/#embaixadores-do-rei", rotulo: "Embaixadores do Rei" },
   { href: "/#eventos", rotulo: "Eventos" },
   { href: "/#embaixadas", rotulo: "Embaixadas" },
+  { href: "/noticias", rotulo: "Notícias" },
 ];
 
 export function SiteFooter() {
@@ -27,13 +28,19 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm">
               {LINKS_NAVEGACAO.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-text-muted hover:text-primary">
+                  <Link
+                    href={link.href}
+                    className="text-text-muted hover:text-primary"
+                  >
                     {link.rotulo}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/login" className="text-text-muted hover:text-primary">
+                <Link
+                  href="/login"
+                  className="text-text-muted hover:text-primary"
+                >
                   Entrar
                 </Link>
               </li>

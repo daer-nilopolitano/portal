@@ -4,17 +4,18 @@
 
 @layer base {
   :root {
-    --color-background: 248 250 252;
-    --color-surface: 255 255 255;
-    --color-surface-2: 241 245 249;
-    --color-surface-soft: 250 250 249; /* tom "quase branco", mais suave que o puro */
+    --color-background: 250 249 246;
+    --color-surface: 255 253 250;
+    --color-surface-2: 243 240 235;
+    --color-surface-soft: 250 249 246; /* mesmo tom do background — usado nas faixas de seção da home */
     --color-primary: 30 64 175;
     --color-primary-hover: 30 58 138;
     --color-on-primary: 255 255 255;
     --color-accent: 245 158 11;
-    --color-text: 15 23 42;
-    --color-text-muted: 71 85 105;
-    --color-border: 226 232 240;
+    --color-text: 28 25 23;
+    --color-text-muted: 87 82 77;
+    --color-border: 231 226 218;
+    --color-chrome: 58 61 68; /* cinza-carvão da sidebar do painel — mais claro fica melhor no tema claro */
     /* Papéis semânticos — validados em WCAG AA (4.5:1) sobre background, surface e surface-2 */
     --color-danger: 220 38 38;
     --color-danger-hover: 185 28 28;
@@ -23,17 +24,18 @@
   }
 
   .dark {
-    --color-background: 2 6 23;
-    --color-surface: 15 23 42;
-    --color-surface-2: 30 41 59;
-    --color-surface-soft: 15 23 42;
+    --color-background: 13 12 11;
+    --color-surface: 24 23 21;
+    --color-surface-2: 38 36 33;
+    --color-surface-soft: 13 12 11;
     --color-primary: 96 165 250;
     --color-primary-hover: 147 197 253;
     --color-on-primary: 15 23 42;
     --color-accent: 251 191 36;
-    --color-text: 241 245 249;
-    --color-text-muted: 148 163 184;
-    --color-border: 51 65 85;
+    --color-text: 244 244 243;
+    --color-text-muted: 161 158 154;
+    --color-border: 55 52 48;
+    --color-chrome: 35 37 42; /* mesma sidebar, mas mais escura — fica melhor no tema escuro */
     /* Vermelho/verde mais claros no escuro — versões -600 abaixo de 4.5:1 sobre surface */
     --color-danger: 248 113 113;
     --color-danger-hover: 252 165 165;

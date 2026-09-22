@@ -35,6 +35,11 @@ module.exports = {
         },
         success: "rgb(var(--color-success) / <alpha-value>)",
         "focus-ring": "rgb(var(--color-focus-ring) / <alpha-value>)",
+        // Cinza-carvão da sidebar do painel — acompanha o tema (ver globals.css),
+        // mais claro no claro e mais escuro no escuro. Não é cor da marca, por
+        // isso fica fora do grupo "daer" abaixo. Texto branco sobre ele dá
+        // ~11:1 no claro e ~15:1 no escuro — folga de sobra nos dois.
+        chrome: "rgb(var(--color-chrome) / <alpha-value>)",
         daer: {
           blue: "#1B3A6B",
           "blue-light": "#2E5AA8",

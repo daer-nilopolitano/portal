@@ -46,12 +46,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       {/*
-        Sidebar é "chrome" de marca — fica sempre com o azul/amarelo do DAER,
-        não amarra no token `primary` (que clareia no escuro pra contrastar
-        com fundo escuro; não faz sentido pra um painel inteiro). Mesmo
-        raciocínio do rodapé do site público.
+        Sidebar é "chrome" de painel — cinza-carvão que acompanha o tema (ver
+        --color-chrome no globals.css), não o token `primary` (que clareia no
+        escuro pra contrastar com fundo escuro; não faz sentido pra um painel
+        inteiro), com o dourado da marca só no indicador do item ativo.
       */}
-      <aside className="flex w-60 flex-shrink-0 flex-col bg-daer-blue text-white">
+      <aside className="flex w-60 flex-shrink-0 flex-col bg-chrome text-white">
         <div className="px-6 py-5 font-heading text-base font-semibold">{NOME_SITE}</div>
         <nav className="flex-1 px-3">
           {itensVisiveis.map((item) => {
