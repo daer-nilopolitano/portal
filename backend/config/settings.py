@@ -119,7 +119,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
@@ -169,26 +169,15 @@ JAZZMIN_SETTINGS = {
     "site_icon": "img/favicon.png",
 }
 
-# Sem isso, com DEBUG=False, erros 500 não aparecem em lugar nenhum (o Django
-# só tenta mandar por e-mail pros ADMINS, que não está configurado). Isso
-# força o traceback a ir pro stdout/stderr, visível nos logs do Northflank.
+# Configuração de logging — envia logs para stdout.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
+        "console": {"class": "logging.StreamHandler"},
     },
     "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-        "django.request": {
-            "handlers": ["console"],
-            "level": "ERROR",
-            "propagate": False,
-        },
+        "django": {"handlers": ["console"], "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
     },
 }
