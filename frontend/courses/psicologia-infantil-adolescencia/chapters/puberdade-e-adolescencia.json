@@ -1,0 +1,172 @@
+{
+  "title": "Puberdade e adolescência",
+  "summary": "O impacto emocional da puberdade, as mudanças sociais e físicas da adolescência, sinais de alerta e o lugar do ministério com adolescentes na vida da igreja.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "O que é a puberdade"
+    },
+    {
+      "type": "text",
+      "content": "A puberdade é um período de transição, descrito como complicado e instigante: ao mesmo tempo em que o adolescente vive a euforia de muitas descobertas, também enfrenta confusão e, por vezes, irritabilidade. Costuma ocorrer entre os **10 e 17 anos**, com variação individual conforme diversos fatores."
+    },
+
+    {
+      "type": "heading",
+      "text": "Impacto emocional da puberdade"
+    },
+    {
+      "type": "text",
+      "content": "A transição da infância para a adolescência é um momento de alto potencial de estresse, com o surgimento comum de problemas emocionais e de comportamento."
+    },
+    {
+      "type": "text",
+      "content": "Sem saber lidar com sentimentos e sensações novas, adolescentes tendem a reagir de forma impulsiva. Pais, tutores e outros adultos de referência podem ajudar, tornando essa transição mais harmoniosa."
+    },
+    {
+      "type": "text",
+      "content": "Ocorrem alterações neurológicas, cognitivas, sociais e psicológicas simultâneas, o que explica comportamentos inusitados ou a dificuldade de o próprio adolescente administrá-los."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "A busca pela identidade",
+      "content": "A principal fonte de confusão emocional é associada à busca pela identidade, expressa por meio de atividades, hobbies e grupos (“panelinhas”) em que o adolescente busca identificação."
+    },
+    {
+      "type": "text",
+      "content": "Sentimentos comuns nessa fase: inadequação, solidão, baixa autoestima, estresse, vergonha do corpo ou da personalidade, e medo do aumento de responsabilidades."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "title": "Observar, acolher, encaminhar",
+      "content": "Distinguir uma conduta típica da adolescência de uma conduta associada a um transtorno mental exige observação cuidadosa. O conselheiro não deve fazer diagnósticos: seu papel é observar, acolher e, quando necessário, encaminhar para apoio profissional qualificado."
+    },
+
+    {
+      "type": "heading",
+      "text": "Mudanças sociais na adolescência"
+    },
+    {
+      "type": "text",
+      "content": "A vida social ganha protagonismo, e as opiniões de terceiros passam a pesar nas decisões: moda, vestuário e interesses podem mudar por influência externa."
+    },
+    {
+      "type": "text",
+      "content": "Até certo ponto, o desejo de se afastar dos pais, mudar hábitos, sair com amigos e namorar é considerado normal. Quando esses comportamentos viram obsessão ou geram problemas de conduta, podem sinalizar que algo não vai bem."
+    },
+
+    {
+      "type": "heading",
+      "text": "Sinais de alerta ligados à puberdade"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Preocupação excessiva com a aparência;",
+        "Baixa autoestima;",
+        "Dúvidas sobre a própria identidade;",
+        "Necessidade de se comportar como os amigos, mesmo contra a própria vontade;",
+        "Ruptura com a segurança da infância;",
+        "Pressão para agir de certa forma ou obter excelência escolar;",
+        "Desenvolvimento de depressão, ansiedade e fobias — filhos de pais com histórico de transtorno mental têm maior suscetibilidade;",
+        "Preocupação com reputação e popularidade;",
+        "Envolvimento em atividades sexuais sem segurança;",
+        "Mudança na dinâmica das amizades da infância;",
+        "Isolamento social;",
+        "Frustração exagerada diante de objetivos não atingidos;",
+        "Necessidade de demonstrar amadurecimento;",
+        "Desejo de afastamento de pais e familiares;",
+        "Ocultação de emoções e sentimentos, evitando buscar ajuda;",
+        "Bullying, como vítima ou agressor."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Mudanças físicas e seus efeitos psicológicos"
+    },
+    {
+      "type": "text",
+      "content": "Estirão de crescimento, problemas de pele, oscilações de peso, cansaço periódico, surgimento de pelos, mudança do tom de voz e outras alterações físicas podem afetar psicologicamente o adolescente."
+    },
+    {
+      "type": "text",
+      "content": "Muitos adolescentes hoje têm baixa aptidão física, associada a hábitos alimentares inadequados e falta de exercício."
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "content": "Adolescentes que amadurecem mais tarde correm o risco de serem tratados como crianças por colegas e adultos, o que pode gerar problemas de ajustamento social e sentimento de rejeição. Em alguns casos, essas inseguranças persistem até a vida adulta."
+    },
+    {
+      "type": "text",
+      "content": "*(Fonte citada no material: Collins, G. R. Aconselhamento Cristão, p. 199; e Eckert, Cláudio. Conselhos para Adolescentes: princípios práticos a partir da exegese da adolescência de Jesus.)*"
+    },
+
+    {
+      "type": "heading",
+      "text": "O ministério com adolescentes"
+    },
+    {
+      "type": "text",
+      "content": "O ministério com adolescentes é uma modalidade do ministério cristão, que deve manter sempre as dimensões de discipulado e cuidado presentes em qualquer forma de ministério, e estar integrado à vida geral da igreja, mesmo quando ocorre em ambientes específicos (grupos de jovens, acampamentos) ou programas pontuais (orientação sexual e vocacional, apoio em crises e traumas)."
+    },
+    {
+      "type": "text",
+      "content": "*(Fonte citada no material: Santos, H. N. Dimensões do Cuidado e Aconselhamento Pastoral, p. 286.)*"
+    },
+
+    {
+      "type": "heading",
+      "text": "Reflexão final da aula"
+    },
+    {
+      "type": "quote",
+      "content": "O papel da igreja é acompanhar o adolescente em sua caminhada, mas, acima de tudo, ajudá-lo a perceber o amor de Deus manifesto em Jesus.",
+      "author": "Cláudio Eckert",
+      "source": "citado no material da aula"
+    },
+    {
+      "type": "text",
+      "content": "O mais importante não são apenas estratégias e alternativas práticas, mas oferecer ao adolescente conhecimento e oportunidade de se relacionar com Deus."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar desta aula",
+      "items": [
+        {
+          "text": "A puberdade traz alterações simultâneas nos planos neurológico, cognitivo, social e psicológico, e a busca pela identidade é a principal fonte de confusão emocional."
+        },
+        {
+          "text": "O papel do conselheiro é observar, acolher e encaminhar, nunca diagnosticar."
+        },
+        {
+          "text": "Sinais de alerta pedem atenção, mas parte do afastamento e das mudanças de comportamento é esperada nessa fase."
+        },
+        {
+          "text": "O ministério com adolescentes deve estar integrado à vida da igreja, com discipulado e cuidado, e ter como centro o relacionamento do adolescente com Deus."
+        }
+      ]
+    },
+
+    {
+      "type": "references",
+      "title": "Bibliografia citada no material",
+      "items": [
+        { "label": "BEE, Helen", "detail": "A criança em desenvolvimento. Porto Alegre: Artmed, 2003." },
+        { "label": "PIAGET, J.; INHELDER, B.", "detail": "A psicologia da Criança. São Paulo: Bertrand Brasil, 1995." },
+        { "label": "COLLINS, G. R.", "detail": "Aconselhamento Cristão (citação da p. 199)." },
+        { "label": "ECKERT, Cláudio", "detail": "Conselhos para Adolescentes: princípios práticos a partir da exegese da adolescência de Jesus." },
+        { "label": "SANTOS, H. N.", "detail": "Dimensões do Cuidado e Aconselhamento Pastoral (citação da p. 286)." },
+        { "label": "FAY, Roberta; JOHNSON, Eunice V.", "detail": "Psicologia da Criança. APEC." },
+        { "label": "LOPES, Jamiel de Oliveira", "detail": "Psicologia Aplicada à Educação Cristã. CPAD." },
+        { "label": "NÚÑEZ PEREIRA, Cristina", "detail": "Emocionário: Diga o que você sente. Editora Sextante." },
+        { "label": "SPURGEON, Charles H.", "detail": "Pescadores de Crianças. Editora Penkall." },
+        { "label": "BAKER, Mark W.", "detail": "Jesus, o maior psicólogo que já existiu." }
+      ]
+    }
+  ]
+}

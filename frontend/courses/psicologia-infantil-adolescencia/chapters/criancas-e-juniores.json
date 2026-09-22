@@ -1,0 +1,332 @@
+{
+  "title": "Cuidando dos Embaixadores do Rei na faixa de crianças e juniores",
+  "summary": "O perfil da criança e do junior de hoje, suas características mentais, emocionais, físicas, sociais e espirituais, e como o conselheiro pode reconhecer sinais de sofrimento e de bullying.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "Realidade atual dessa faixa etária"
+    },
+    {
+      "type": "text",
+      "content": "As crianças e juniores de hoje passam por mudanças e dificuldades, e têm inabilidade para lidar com regras. Isso exige do conselheiro mais conhecimento sobre essa fase, a capacidade de transmitir noções de vida social e emocional, e o exercício constante de habilidades humanas no tempo de convivência com os Embaixadores do Rei."
+    },
+
+    {
+      "type": "heading",
+      "text": "Perfil da criança e do junior de hoje"
+    },
+    {
+      "type": "text",
+      "content": "A criança nasce explorando o universo ao seu redor. Ela busca vencer nas atividades propostas, gosta de repetição e organização padrão, é altamente curiosa e observadora do ambiente em que vive, e tem dificuldade para obedecer."
+    },
+
+    {
+      "type": "heading",
+      "text": "O perfil esperado do líder de Embaixador do Rei"
+    },
+    {
+      "type": "text",
+      "content": "O conselheiro precisa ser **autêntico e responsável**, e se identificar com essa faixa etária. Ele se torna uma referência para quem o observa, por isso deve cuidar das palavras diante das ideias que surgem no ambiente onde convive com os ER."
+    },
+    {
+      "type": "text",
+      "content": "Também é esperado que o conselheiro leia livros de psicologia infantil e participe de cursos de capacitação, para compreender o desenvolvimento nas áreas física, emocional e intelectual dessa fase."
+    },
+    {
+      "type": "table",
+      "caption": "Referências de faixa etária para atividades",
+      "columns": ["Faixa etária", "Perfil", "O que gostam"],
+      "rows": [
+        ["7 a 8 anos", "“Idade fantástica”", "Histórias com poder, aventura e alegria."],
+        ["9 a 11 anos", "“Idade heroica”", "Narrativas de viagem, exploração, mistério e imaginação."]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Características dos juniores"
+    },
+    {
+      "type": "text",
+      "content": "O material organiza as características dos juniores em cinco áreas: mental, emocional, física, social e espiritual."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Mentais (intelectuais)"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Ótima memória; pesquisadores, ansiosos por investigar e aprender;",
+        "Encontram formas próprias de responder suas perguntas; aprendem rápido;",
+        "Boa capacidade de raciocínio; valorizam o conhecimento prático;",
+        "Sabem distinguir certo de errado; cultivam a leitura;",
+        "São colecionadores e competitivos; grande interesse por novidades;",
+        "Gostam de ar livre; atenção crescente, mas ainda de curta duração;",
+        "Questionam a autoridade (“cobradores”); são “justiceiros” (do bem);",
+        "Costumam gostar de animais;",
+        "Começam a desenvolver o pensamento abstrato e a relacionar causa e efeito."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Emocionais"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Inseguros; emoções ainda descontroladas; curiosos; sinceros; críticos; ciumentos;",
+        "Exigem mais respeito dos adultos; não gostam de autoritarismo;",
+        "Carentes; autoestima baixa; mudanças de humor;",
+        "Entediam-se sem propósito claro; ansiosos por sucesso e aprovação;",
+        "Gostam de aparecer; sentem-se independentes;",
+        "Estão adquirindo valores; levam a si mesmos a sério."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Físicas (mudanças)"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Período mais saudável da vida; cheios de energia, barulhentos e conversadores;",
+        "Comportamento de extremos (muito parados ou muito agitados);",
+        "Mudanças na voz; boa habilidade verbal;",
+        "Mudanças hormonais; crescimento corporal desproporcional."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Sociais — relacionais"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Gostam de códigos secretos e aventuras; preocupam-se em agradar os colegas;",
+        "Querem ser aceitos pelo grupo; o modelo dos amigos começa a se sobrepor ao dos pais;",
+        "São orientados pela ação; querem seguir a moda;",
+        "O convívio social é por vezes prejudicado por atividades individuais (como videogame);",
+        "Cultuam o heroísmo e dão muita credibilidade a pessoas importantes;",
+        "Interesse mínimo pelo sexo oposto, mas já pensam em namoro;",
+        "Começam a desenvolver papéis conforme o sexo."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Espirituais"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Interesse vivo pelas coisas da igreja; questionadores;",
+        "Gostam de atividades de testemunho e de usar seus uniformes;",
+        "Gostam de regras, mesmo sem parecer;",
+        "Credulidade, o que facilita a instrução religiosa;",
+        "Já tomam decisões; buscam exemplos a seguir;",
+        "Sentem responsabilidade pelos próprios pecados."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "A importância dos amigos para os juniores"
+    },
+    {
+      "type": "text",
+      "content": "O grupo de amigos é muito importante para o pré-adolescente, que passa a viver “em dois mundos”: o dos amigos e o da família, que podem se complementar ou entrar em conflito. As amizades surgem por afinidade de interesses, independentemente de diferenças de personalidade ou origem."
+    },
+    {
+      "type": "text",
+      "content": "É através do grupo de amigos que a criança aprende sobre relacionamentos e diferenças entre famílias. Nessa fase, o modelo dado pelos amigos começa a se sobrepor ao dos pais, e surge a preocupação com a aceitação pelo grupo."
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "content": "Em casos de rejeição pelo grupo, essa preocupação pode desencadear problemas psicológicos, como depressão ou transtornos alimentares."
+    },
+
+    {
+      "type": "heading",
+      "text": "Última etapa da infância"
+    },
+    {
+      "type": "list",
+      "items": [
+        "É a fase em que a criança começa a se diferenciar dos pais, viver novas interações sociais e formar sua própria identidade, muitas vezes buscando romper com a fase anterior para se aproximar dos amigos.",
+        "Pode surgir o comportamento de “ficar doente para chamar atenção”, associado à carência afetiva.",
+        "É uma etapa marcada por segredos entre colegas."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Fundamentação teórica do desenvolvimento infantil"
+    },
+    {
+      "type": "text",
+      "content": "O desenvolvimento humano é complexo. Cada faixa etária deve ser respeitada em seu próprio tempo, com semelhanças e diferenças entre crianças conforme suas relações e experiências. O ser humano é biopsicossocial e se desenvolve de forma inter-relacional."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Estágio operatório concreto (Piaget), 6 a 12 anos",
+      "content": "Ao entrar na “segunda infância”, a criança se torna capaz de operações mentais internalizadas e organizadas em um sistema lógico, o que lhe permite combinar, separar, ordenar e transformar objetos e ações mentalmente. Essas operações são chamadas “concretas” porque dependem da presença real dos objetos e eventos envolvidos. (Fonte citada no material: Bee, 2003.)"
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Um ambiente com segurança, proteção física, regras claras e relacionamentos saudáveis é a base para o desenvolvimento sadio dessa fase."
+    },
+
+    {
+      "type": "heading",
+      "text": "O que é psicologia infantil"
+    },
+    {
+      "type": "text",
+      "content": "É o ramo da psicologia dedicado ao estudo dos comportamentos próprios da infância, a serviço do bem-estar da criança e de sua família. Busca acolher a criança, oferecer um ambiente seguro para sua expressão e ajudá-la a enfrentar conflitos e restabelecer o equilíbrio emocional."
+    },
+    {
+      "type": "text",
+      "content": "Também é descrita como área da psicoterapia voltada a cuidar da saúde mental infantil e ajudar a criança a compreender e lidar melhor com o mundo. A infância é uma fase de descobertas constantes, em que a falta de experiência pode gerar ansiedade, medo e insegurança diante de novos desafios. Daí a importância de estratégias lúdicas, como jogos e brincadeiras, para que a criança expresse o que sente."
+    },
+
+    {
+      "type": "heading",
+      "text": "Sinais de que a criança pode estar sofrendo"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Choro intenso e frequente;",
+        "Resistência repentina a ir à escola;",
+        "Dificuldade de aprendizado;",
+        "Isolamento ou agressividade exacerbada;",
+        "Mudança de comportamento após a chegada de um irmão;",
+        "Violência física ou psicológica sofrida;",
+        "Medo intenso;",
+        "Separação dos pais;",
+        "Falecimento de alguém próximo."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Inteligência emocional na infância"
+    },
+    {
+      "type": "text",
+      "content": "O material cita Daniel Goleman: a inteligência emocional começa a se desenvolver nos primeiros anos de vida, e todas as trocas sociais que a criança vive com pais, professores e colegas carregam “mensagens emocionais”."
+    },
+    {
+      "type": "text",
+      "content": "Por isso, integrar desde cedo orientações e habilidades emocionais favorece um desenvolvimento mais completo, inclusive no manejo de traumas, para os quais existiria uma “reserva biopsíquica” que, quando acessada, ajuda a pessoa a seguir em frente."
+    },
+
+    {
+      "type": "heading",
+      "text": "Necessidades das crianças de 8 a 11 anos"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Afeto e atenção;",
+        "Limites e segurança;",
+        "Estímulos;",
+        "Bons exemplos de identificação."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "content": "Segundo o material, a ausência desses cuidados pode levar a um adulto com carências afetivas e emocionais, com problemas de autoestima, dificuldade de convivência e autoconfiança, e questões mais sérias, como ansiedade, raiva e depressão."
+    },
+
+    {
+      "type": "heading",
+      "text": "Bullying"
+    },
+    {
+      "type": "text",
+      "content": "*Bullying* vem do termo inglês *bully* (brigão, valentão, tirano). Como verbo, significa oprimir, ameaçar, intimidar ou maltratar: é a prática de agressividade intencional e permanente contra outra pessoa."
+    },
+    {
+      "type": "text",
+      "content": "Tanto o agressor quanto a vítima precisam de ajuda: o agressor, para desenvolver empatia e transformar a agressividade em relações sociais mais saudáveis; a vítima, para reconstruir a autoestima e a segurança em conviver com outros."
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "title": "Sinais de possível bullying ou cyberbullying em uma criança",
+      "content": "Fica muito retraída; se isola dos colegas da mesma idade; prefere a companhia de adultos; apresenta insegurança e muitos medos; tem dificuldade em se expressar e não fala sobre a convivência com outras crianças; disfarça o problema; machucados sem justificativa; queda no desempenho escolar; evita festas e reuniões da embaixada; tristeza e choro frequentes; sintomas físicos como dor de cabeça, dor de barriga, perda de apetite e baixa imunidade."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "title": "Papel do conselheiro diante do bullying",
+      "content": "Criar um ambiente de confiança para que a criança conte o que está sofrendo; ouvir com atenção e interesse genuíno; acolher o relato sem minimizar; fortalecer o vínculo de confiança; ajudar tanto o agressor, desenvolvendo empatia, quanto a vítima, reconstruindo autoestima e segurança."
+    },
+
+    {
+      "type": "heading",
+      "text": "Ferramenta prática: “Conhecendo meus Embaixadores do Rei”"
+    },
+    {
+      "type": "text",
+      "content": "O material sugere uma ficha de acompanhamento individual por ER, com campos como: nome do ER, o que está acontecendo, o que o conselheiro pode fazer diante da situação, e qual foi a resposta ao cuidado oferecido."
+    },
+
+    {
+      "type": "heading",
+      "text": "O trabalho do conselheiro de Embaixador do Rei"
+    },
+    {
+      "type": "quote",
+      "content": "Somos embaixadores da parte de Cristo...",
+      "source": "2 Coríntios 5:20"
+    },
+    {
+      "type": "text",
+      "content": "Com base nesse versículo, o trabalho do conselheiro é resumido em três pontos:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Representar a mensagem do Rei.",
+        "Representar os métodos do Rei.",
+        "Representar o caráter do Rei."
+      ]
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar desta aula",
+      "items": [
+        {
+          "text": "O junior de hoje é curioso, competitivo e questionador, mas ainda tem dificuldade para lidar com regras e para controlar as próprias emoções."
+        },
+        {
+          "text": "O grupo de amigos ganha peso crescente nessa fase, e a rejeição pelo grupo pode desencadear problemas psicológicos mais sérios."
+        },
+        {
+          "text": "Um ambiente com segurança, regras claras e relacionamentos saudáveis é a base para o desenvolvimento sadio da criança."
+        },
+        {
+          "text": "O bullying exige atenção a sinais indiretos, e cuidado tanto com a vítima quanto com o agressor."
+        }
+      ]
+    }
+  ]
+}

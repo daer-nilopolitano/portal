@@ -1,0 +1,18 @@
+{
+  "title": "Noções de Psicologia Infantil e da Adolescência para Conselheiros",
+  "eyebrow": "Material de estudo",
+  "subtitle": "Como entender o desenvolvimento mental, emocional, físico, social e espiritual dos Embaixadores do Rei, da infância à adolescência.",
+  "about": "Material de apoio do DAER Nilopolitano para conselheiros de Embaixadores do Rei, consolidado a partir do PDF e da apresentação da matéria “Psicologia Infantil”, ministrada pela psicóloga Marilane Flores Tavares Soares no Curso de Conselheiros de Embaixadores do Rei. O curso oferece noções gerais de desenvolvimento infantil e adolescente para apoiar o cuidado pastoral, e não substitui avaliação ou acompanhamento psicológico profissional.",
+  "author": {
+    "name": "DAER Nilopolitano",
+    "role": "Material de estudo para conselheiros"
+  },
+  "status": "published",
+  "order": 4,
+  "updatedAt": "2026-09",
+  "chapters": [
+    "criancas-e-juniores",
+    "puberdade-e-adolescencia",
+    "quiz"
+  ]
+}

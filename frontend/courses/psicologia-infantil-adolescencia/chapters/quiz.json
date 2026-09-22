@@ -1,0 +1,170 @@
+{
+  "title": "Quiz: revise o que você aprendeu",
+  "summary": "Doze perguntas, uma para cada aula, sobre crianças e juniores e sobre puberdade e adolescência.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Responda às perguntas abaixo para revisar o conteúdo das duas aulas. Depois de cada resposta, você vê a explicação. Cada bloco tem sua própria pontuação e pode ser refeito quantas vezes quiser."
+    },
+
+    {
+      "type": "heading",
+      "text": "Aula 1 — Crianças e juniores"
+    },
+    {
+      "type": "quiz",
+      "title": "Crianças e juniores",
+      "questions": [
+        {
+          "question": "Segundo o material, qual é uma das principais dificuldades dos juniores de hoje?",
+          "options": [
+            "Excesso de obediência às regras",
+            "Inabilidade para lidar com regras",
+            "Falta de curiosidade pelo ambiente",
+            "Desinteresse total por atividades em grupo"
+          ],
+          "answer": 1,
+          "explanation": "A realidade atual dessa faixa etária inclui mudanças, dificuldades e inabilidade para lidar com regras, o que exige mais conhecimento e habilidades humanas do conselheiro."
+        },
+        {
+          "question": "Na faixa de 9 a 11 anos, chamada de “idade heroica”, do que os juniores mais gostam?",
+          "options": [
+            "Histórias com poder, aventura e alegria",
+            "Narrativas de viagem, exploração, mistério e imaginação",
+            "Atividades sem nenhuma regra",
+            "Apenas jogos individuais"
+          ],
+          "answer": 1,
+          "explanation": "Já a faixa de 7 a 8 anos, a “idade fantástica”, prefere histórias com poder, aventura e alegria."
+        },
+        {
+          "question": "Qual destas é uma característica emocional dos juniores?",
+          "options": [
+            "Emoções já totalmente controladas",
+            "Autoestima alta e constante",
+            "Insegurança e mudanças de humor",
+            "Indiferença à aprovação dos adultos"
+          ],
+          "answer": 2,
+          "explanation": "Entre as características emocionais estão insegurança, emoções ainda descontroladas, carência e mudanças de humor."
+        },
+        {
+          "question": "O que acontece com o modelo dos pais na fase dos juniores, segundo o material?",
+          "options": [
+            "Ele se fortalece ainda mais",
+            "Ele começa a se sobrepor ao modelo dos amigos",
+            "O modelo dos amigos começa a se sobrepor ao dos pais",
+            "Ele deixa de existir completamente"
+          ],
+          "answer": 2,
+          "explanation": "Nessa fase, o grupo de amigos ganha peso crescente, e o modelo dado pelos amigos começa a se sobrepor ao dos pais."
+        },
+        {
+          "question": "No estágio operatório concreto de Piaget (6 a 12 anos), por que as operações mentais são chamadas de “concretas”?",
+          "options": [
+            "Porque a criança ainda não consegue pensar logicamente",
+            "Porque dependem da presença real dos objetos e eventos envolvidos",
+            "Porque só ocorrem durante os estudos escolares",
+            "Porque substituem qualquer forma de pensamento abstrato"
+          ],
+          "answer": 1,
+          "explanation": "A criança se torna capaz de operações mentais internalizadas e organizadas em um sistema lógico, mas essas operações ainda dependem da presença real dos objetos ou eventos envolvidos."
+        },
+        {
+          "question": "Qual destes é apontado como sinal de que a criança pode estar sofrendo?",
+          "options": [
+            "Interesse crescente por novos hobbies",
+            "Resistência repentina a ir à escola",
+            "Aumento da sociabilidade com colegas",
+            "Melhora no desempenho escolar"
+          ],
+          "answer": 1,
+          "explanation": "Resistência repentina a ir à escola, isolamento, agressividade exacerbada e mudança de comportamento após a chegada de um irmão são sinais de possível sofrimento."
+        },
+        {
+          "question": "Diante de um caso de bullying, qual é o papel indicado para o conselheiro?",
+          "options": [
+            "Cuidar apenas da vítima, e ignorar o agressor",
+            "Punir publicamente o agressor diante do grupo",
+            "Criar um ambiente de confiança, ouvir com atenção e ajudar tanto o agressor quanto a vítima",
+            "Aguardar que a situação se resolva sozinha"
+          ],
+          "answer": 2,
+          "explanation": "O agressor precisa de ajuda para desenvolver empatia, e a vítima precisa reconstruir a autoestima e a segurança em conviver com outros. Ambos precisam de cuidado do conselheiro."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Aula 2 — Puberdade e adolescência"
+    },
+    {
+      "type": "quiz",
+      "title": "Puberdade e adolescência",
+      "questions": [
+        {
+          "question": "Entre que idades costuma ocorrer a puberdade, segundo o material?",
+          "options": ["6 a 12 anos", "8 a 14 anos", "10 a 17 anos", "12 a 20 anos"],
+          "answer": 2,
+          "explanation": "A puberdade costuma ocorrer entre os 10 e 17 anos, com variação individual conforme diversos fatores."
+        },
+        {
+          "question": "Qual é apontada como a principal fonte de confusão emocional na adolescência?",
+          "options": [
+            "A busca pela identidade",
+            "A escolha da profissão futura",
+            "A relação com os professores",
+            "O desempenho em atividades físicas"
+          ],
+          "answer": 0,
+          "explanation": "A busca pela identidade se expressa por meio de atividades, hobbies e grupos (“panelinhas”) em que o adolescente busca identificação."
+        },
+        {
+          "question": "Qual é o papel do conselheiro diante de um comportamento adolescente fora do comum?",
+          "options": [
+            "Fazer um diagnóstico e informar a família",
+            "Observar, acolher e, se necessário, encaminhar para apoio profissional qualificado",
+            "Ignorar, já que é uma fase normal",
+            "Corrigir imediatamente o comportamento diante do grupo"
+          ],
+          "answer": 1,
+          "explanation": "Distinguir uma conduta típica da adolescência de uma conduta associada a um transtorno mental exige observação cuidadosa. O conselheiro não deve diagnosticar."
+        },
+        {
+          "question": "Segundo o material, até que ponto o desejo de se afastar dos pais e sair com amigos é considerado normal?",
+          "options": [
+            "Nunca é normal e deve ser sempre corrigido",
+            "É normal até virar obsessão ou gerar problemas de conduta",
+            "Só é normal depois dos 18 anos",
+            "É normal apenas se os pais concordarem"
+          ],
+          "answer": 1,
+          "explanation": "Até certo ponto, esse desejo é considerado normal. Quando vira obsessão ou gera problemas de conduta, pode sinalizar que algo não vai bem."
+        },
+        {
+          "question": "Quais adolescentes correm mais risco de serem tratados como crianças por colegas e adultos?",
+          "options": [
+            "Os que amadurecem fisicamente mais cedo",
+            "Os que amadurecem fisicamente mais tarde",
+            "Os que praticam mais atividades físicas",
+            "Os que têm mais amigos"
+          ],
+          "answer": 1,
+          "explanation": "Adolescentes que amadurecem mais tarde correm esse risco, o que pode gerar problemas de ajustamento social e sentimento de rejeição."
+        },
+        {
+          "question": "Como o material descreve o ministério com adolescentes?",
+          "options": [
+            "Uma atividade separada da vida geral da igreja",
+            "Uma modalidade do ministério cristão, integrada à vida geral da igreja, com discipulado e cuidado",
+            "Um programa apenas para orientação vocacional",
+            "Uma responsabilidade exclusiva dos pais"
+          ],
+          "answer": 1,
+          "explanation": "O ministério com adolescentes deve manter sempre as dimensões de discipulado e cuidado, e estar integrado à vida geral da igreja, mesmo em ambientes ou programas específicos."
+        }
+      ]
+    }
+  ]
+}
