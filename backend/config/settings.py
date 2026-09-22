@@ -134,6 +134,9 @@ if os.environ.get("R2_ACCESS_KEY_ID"):
     AWS_DEFAULT_ACL = None  # R2 não suporta ACL do S3; precisa ser None
     AWS_QUERYSTRING_AUTH = False  # URLs públicas simples, sem assinatura
     AWS_S3_FILE_OVERWRITE = False
+    AWS_S3_REGION_NAME = "auto"
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
+    AWS_S3_ADDRESSING_STYLE = "virtual"
 
     STORAGES["default"] = {
         "BACKEND": "storages.backends.s3.S3Storage",
