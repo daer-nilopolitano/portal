@@ -123,6 +123,22 @@ STORAGES = {
     },
 }
 
+# Cloudflare R2 (S3-compatível) para mídia — fotos de membro, documentos, imagens do Wagtail.
+# Ativado só quando as credenciais estão presentes.
+if os.environ.get("R2_ACCESS_KEY_ID"):
+    AWS_ACCESS_KEY_ID = os.environ["R2_ACCESS_KEY_ID"]
+    AWS_SECRET_ACCESS_KEY = os.environ["R2_SECRET_ACCESS_KEY"]
+    AWS_STORAGE_BUCKET_NAME = os.environ["R2_BUCKET_NAME"]
+    AWS_S3_ENDPOINT_URL = os.environ["R2_ENDPOINT_URL"]
+    AWS_S3_CUSTOM_DOMAIN = os.environ["R2_PUBLIC_DOMAIN"]  # ex: pub-xxxx.r2.dev (sem https://)
+    AWS_DEFAULT_ACL = None  # R2 não suporta ACL do S3; precisa ser None
+    AWS_QUERYSTRING_AUTH = False  # URLs públicas simples, sem assinatura
+    AWS_S3_FILE_OVERWRITE = False
+
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    }
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CORS — libera o frontend Next.js a chamar a API
