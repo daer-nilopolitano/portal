@@ -1,0 +1,256 @@
+{
+  "title": "Fundamentos, texto, objetivo e tema do sermão",
+  "summary": "O que é pregação e o que se espera do pregador, como escolher bem o texto bíblico, como definir o objetivo do sermão e como formular um assunto claro e único.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Pregar é uma das tarefas mais sérias que um cristão pode assumir: é falar em nome de Deus para o coração das pessoas. Homilética é a área que estuda como preparar e apresentar um sermão com clareza, organização e propósito."
+    },
+    {
+      "type": "text",
+      "content": "Este capítulo apresenta os fundamentos dessa preparação: o que é pregação, o texto bíblico, o objetivo e o tema do sermão. O capítulo seguinte trata da organização e da apresentação."
+    },
+
+    {
+      "type": "heading",
+      "text": "Fundamentos da pregação"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender o que é pregação e o que se espera de quem prega."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "O que é pregação?",
+      "content": "É a comunicação ou transmissão oral da verdade divina com o fim de persuadir. É o processo pelo qual Deus, por meio do Seu mensageiro escolhido, se introduz na família humana."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Quanto ao mensageiro (o pregador)"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Sua vocação** — no Velho Testamento, o pregador era o Profeta, tradução livre de *Nabhi*: “alguém chamado por Deus”.",
+        "**Seu caráter** — o Espírito Santo não se identifica com os impuros ou não consagrados.",
+        "**Sua função** — é advogado de uma causa, com a eternidade pesando na balança; pode não ter eloquência de língua, mas terá a eloquência do coração."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Seus requisitos pessoais:**"
+    },
+    {
+      "type": "list",
+      "items": [
+        "*Piedade* — comunhão íntima com Deus e amor pelas almas perdidas;",
+        "*Dons naturais* — raciocínio claro, rápido e lógico; imaginação criadora; voz cheia; dom da palavra; sentimentos profundos e expressão entusiasta;",
+        "*Cultura* — boa base geral (teologia, história eclesiástica, psicologia, filosofia, sociologia), para ter noções seguras sobre as relações humanas."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "O texto bíblico do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender por que todo sermão deve partir de um texto bíblico, e como escolhê-lo bem."
+    },
+    {
+      "type": "text",
+      "content": "O **texto** é a passagem bíblica que serve de base ao sermão. Ele deve sempre fornecer a ideia ou verdade central da mensagem."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Vantagens de ter um texto bíblico como base"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Confere autoridade ao sermão: através dele, o pregador ensina as Escrituras ao povo;",
+        "Ajuda a reter a ideia principal, inclusive em assuntos difíceis;",
+        "Fornece o tema do sermão."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Regras para escolher o texto"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Escolha um texto que fale ao seu coração e atenda à necessidade da congregação;",
+        "Deve ser claro: evite textos controvertidos ou de difícil interpretação, a não ser que o objetivo seja justamente esclarecê-los;",
+        "Estude o sentido exato de cada palavra do texto;",
+        "Entenda o contexto (o que vem antes e depois) e o propósito do livro, com atenção às figuras de linguagem;",
+        "Estude o texto à luz da época histórica em que foi escrito;",
+        "Se houver dúvida quanto à interpretação correta, não use esse texto como base do sermão;",
+        "Aplique o texto à situação atual, sem torcer seu ensinamento original."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Uso devido do texto:** cuidado para não usá-lo como mero pretexto daquilo que se quer dizer. Estude o contexto com o auxílio de um comentário bíblico, e considere ler outras versões da Bíblia para ajudar na compreensão."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Se ficar em dúvida sobre o sentido de um texto, é melhor trocar de texto do que arriscar uma interpretação equivocada."
+    },
+
+    {
+      "type": "heading",
+      "text": "O objetivo do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** aprender a definir com clareza aonde o sermão quer chegar. É o requisito mais importante para um sermão eficaz."
+    },
+    {
+      "type": "text",
+      "content": "Todo sermão precisa de um alvo. Sem ele, o pregador não sabe aonde quer chegar, e o sermão não será claro para os ouvintes. Antes de escolher o texto, o pregador deve se perguntar:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "“Qual é o desejo de Deus para os corações dos meus ouvintes com este sermão?”",
+        "“Qual efeito eu gostaria que este sermão produzisse na vida do povo?”"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Objetivos gerais"
+    },
+    {
+      "type": "table",
+      "columns": ["Objetivo", "Foco", "Características"],
+      "rows": [
+        ["Evangelístico", "Salvação", "Declara a condição do homem sem Cristo, proclama a obra redentora, anuncia como receber a salvação, convida o pecador a aceitar Jesus."],
+        ["Doutrinário", "Ensino", "Desperta o desejo de aprender a Bíblia, prepara contra falsas doutrinas, anima o trabalho cristão, contribui para o crescimento espiritual e intelectual."],
+        ["Ético", "Relacionamento", "Apresenta padrões bíblicos de conduta no relacionamento com o próximo."],
+        ["Devocional", "Comunhão com Deus", "Trata de oração, estudo da Bíblia, adoração, frequência à igreja, devoção pessoal e familiar."],
+        ["Consagração", "Serviço", "Estimula o crente a dedicar talentos, tempo, influência e bens ao serviço de Deus."],
+        ["Pastoral", "Consolo", "Fortalece o crente diante de crises: morte, sofrimento, doença, desemprego, culpa, solidão, dúvida, medo."]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Objetivo específico"
+    },
+    {
+      "type": "text",
+      "content": "É o alvo imediato do sermão: aquilo que o pregador espera que o ouvinte faça como resultado da mensagem. Deve ser formulado para cada sermão, sendo preciso, claro e relacionado a atitudes."
+    },
+    {
+      "type": "text",
+      "content": "**Como formular o objetivo específico**, conforme a meta pretendida:"
+    },
+    {
+      "type": "table",
+      "columns": ["Meta", "Verbos sugeridos"],
+      "rows": [
+        ["Conhecimento", "Relembrar, conhecer, ter consciência de, tomar conhecimento de, reconhecer."],
+        ["Compreensão", "Disciplinar entre, diferenciar entre, comparar, contrastar, selecionar, avaliar, examinar, refletir sobre, compreender, descobrir."],
+        ["Atitude", "Resolver fazer, desenvolver, ter confiança em, ser convicto de, ser sensível a, dedicar-se a, desejar, planejar."],
+        ["Habilidade", "Interpretar, aplicar, produzir, praticar, estudar, solucionar, experimentar, explicar, comunicar, orar acerca de."]
+      ]
+    },
+    {
+      "type": "table",
+      "caption": "Exemplos de objetivo geral e específico",
+      "columns": ["Texto", "Objetivo geral", "Objetivo específico"],
+      "rows": [
+        ["II Coríntios 12:7-10", "Pastoral", "Levar o crente a compreender que Deus, muitas vezes, não tira seus filhos da provação, mas lhe dá força para suportar."],
+        ["Ezequiel 3:17-21", "Consagração", "Os ouvintes compreenderão que são responsáveis por transmitir a mensagem de Deus."],
+        ["Gênesis 45:1-15", "Ético", "Levar os ouvintes a compreender que quem ama, perdoa."],
+        ["Lucas 19:1-10", "Evangelístico", "O ouvinte desejará ter um encontro com Jesus e terá oportunidade para isso."],
+        ["Isaías 1:18", "—", "O ouvinte compreenderá que Cristo pode perdoar todos os seus pecados e terá oportunidade de se entregar a Cristo."],
+        ["Salmo 23", "—", "Levar os crentes a confiarem totalmente em Deus como supremo Pastor."],
+        ["Mateus 16:15-19", "—", "O crente conhecerá que a igreja pertence a Cristo e é vitoriosa contra o inferno."]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Atividade prática",
+      "content": "Escolha um texto bíblico e, seguindo o modelo acima, formule seu objetivo geral e específico para cada uma destas metas: (a) levar o ouvinte a entender e explicar a justificação pela fé; (b) levar o ouvinte a desejar uma vida de oração; (c) levar o ouvinte a estudar mais a Palavra; (d) levar o crente a saber explicar o caminho da salvação; (e) levar a congregação a entender o amor de Deus por cada membro; (f) levar os ouvintes a se matricularem na EBD."
+    },
+
+    {
+      "type": "heading",
+      "text": "O tema (assunto) do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** aprender a definir um assunto único e claro para cada sermão."
+    },
+    {
+      "type": "text",
+      "content": "Tema e assunto são sinônimos: é a ideia central do sermão. Cada sermão deve tratar de um único assunto, nunca dois ou mais, para não confundir os ouvintes."
+    },
+    {
+      "type": "text",
+      "content": "**Assunto geral x assunto específico:** o assunto geral costuma ser amplo demais para um sermão de 20 a 30 minutos. É preciso escolher o aspecto específico sob o qual esse assunto será tratado. Esse é o assunto específico (tema, ou título, do sermão)."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Texto: Hebreus 11:6 → Assunto geral: Fé → Assunto específico: “Um requisito indispensável para agradar a Deus”",
+        "Texto: Salmo 1 → Assunto geral: Felicidade → Assunto específico: “O caminho da felicidade”",
+        "Texto: II Coríntios 12:7-10 → Assunto geral: Graça → Assunto específico: “A minha graça te basta”",
+        "Tema: “O Tríplice Convite de Jesus” — Para vir a Ele / Para aprender dEle / Para comprometer-se com Ele"
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Características do assunto específico:** deve ser claro, oportuno, interessante sem ser sensacionalista; ter ligação estreita com o texto; ser anunciado em frase curta; tratar do presente, não do passado."
+    },
+    {
+      "type": "text",
+      "content": "**Regras para formular o assunto específico:**"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Use uma palavra enfática (ex.: “A fé que agrada a Deus”, palavra enfática: Fé);",
+        "Use uma sentença interrogativa (ex.: “Como vai a tua alma?”);",
+        "Use uma sentença imperativa (ex.: “Retorne para Deus!”)."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "O pregador pode anunciar o assunto antes ou depois da leitura do texto bíblico. O importante é anunciá-lo de forma clara e direta, despertando a atenção dos ouvintes."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "title": "Vocação e requisitos",
+          "text": "o pregador precisa de piedade, dons naturais e cultura, e sua função é a de um advogado de uma causa."
+        },
+        {
+          "title": "Texto",
+          "text": "todo sermão parte de um texto bíblico claro, bem estudado e sem forçar interpretação."
+        },
+        {
+          "title": "Objetivo",
+          "text": "todo sermão tem um objetivo geral (entre eles evangelístico, doutrinário, ético, devocional, consagração ou pastoral) e um objetivo específico, preciso e ligado a uma atitude do ouvinte."
+        },
+        {
+          "title": "Tema",
+          "text": "cada sermão trata de um único assunto específico, claro e anunciado de forma direta."
+        }
+      ]
+    }
+  ]
+}

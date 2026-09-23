@@ -10,7 +10,6 @@
       "type": "text",
       "content": "As crianças e juniores de hoje passam por mudanças e dificuldades, e têm inabilidade para lidar com regras. Isso exige do conselheiro mais conhecimento sobre essa fase, a capacidade de transmitir noções de vida social e emocional, e o exercício constante de habilidades humanas no tempo de convivência com os Embaixadores do Rei."
     },
-
     {
       "type": "heading",
       "text": "Perfil da criança e do junior de hoje"
@@ -19,7 +18,6 @@
       "type": "text",
       "content": "A criança nasce explorando o universo ao seu redor. Ela busca vencer nas atividades propostas, gosta de repetição e organização padrão, é altamente curiosa e observadora do ambiente em que vive, e tem dificuldade para obedecer."
     },
-
     {
       "type": "heading",
       "text": "O perfil esperado do líder de Embaixador do Rei"
@@ -35,13 +33,24 @@
     {
       "type": "table",
       "caption": "Referências de faixa etária para atividades",
-      "columns": ["Faixa etária", "Perfil", "O que gostam"],
+      "columns": [
+        "Faixa etária",
+        "Perfil",
+        "O que gostam"
+      ],
       "rows": [
-        ["7 a 8 anos", "“Idade fantástica”", "Histórias com poder, aventura e alegria."],
-        ["9 a 11 anos", "“Idade heroica”", "Narrativas de viagem, exploração, mistério e imaginação."]
+        [
+          "7 a 8 anos",
+          "“Idade fantástica”",
+          "Histórias com poder, aventura e alegria."
+        ],
+        [
+          "9 a 11 anos",
+          "“Idade heroica”",
+          "Narrativas de viagem, exploração, mistério e imaginação."
+        ]
       ]
     },
-
     {
       "type": "heading",
       "text": "Características dos juniores"
@@ -50,7 +59,6 @@
       "type": "text",
       "content": "O material organiza as características dos juniores em cinco áreas: mental, emocional, física, social e espiritual."
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -70,7 +78,6 @@
         "Começam a desenvolver o pensamento abstrato e a relacionar causa e efeito."
       ]
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -87,7 +94,6 @@
         "Estão adquirindo valores; levam a si mesmos a sério."
       ]
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -102,7 +108,6 @@
         "Mudanças hormonais; crescimento corporal desproporcional."
       ]
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -120,7 +125,6 @@
         "Começam a desenvolver papéis conforme o sexo."
       ]
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -137,7 +141,6 @@
         "Sentem responsabilidade pelos próprios pecados."
       ]
     },
-
     {
       "type": "heading",
       "text": "A importância dos amigos para os juniores"
@@ -155,7 +158,6 @@
       "variant": "attention",
       "content": "Em casos de rejeição pelo grupo, essa preocupação pode desencadear problemas psicológicos, como depressão ou transtornos alimentares."
     },
-
     {
       "type": "heading",
       "text": "Última etapa da infância"
@@ -168,7 +170,6 @@
         "É uma etapa marcada por segredos entre colegas."
       ]
     },
-
     {
       "type": "heading",
       "text": "Fundamentação teórica do desenvolvimento infantil"
@@ -188,7 +189,6 @@
       "variant": "counselor",
       "content": "Um ambiente com segurança, proteção física, regras claras e relacionamentos saudáveis é a base para o desenvolvimento sadio dessa fase."
     },
-
     {
       "type": "heading",
       "text": "O que é psicologia infantil"
@@ -201,7 +201,6 @@
       "type": "text",
       "content": "Também é descrita como área da psicoterapia voltada a cuidar da saúde mental infantil e ajudar a criança a compreender e lidar melhor com o mundo. A infância é uma fase de descobertas constantes, em que a falta de experiência pode gerar ansiedade, medo e insegurança diante de novos desafios. Daí a importância de estratégias lúdicas, como jogos e brincadeiras, para que a criança expresse o que sente."
     },
-
     {
       "type": "heading",
       "text": "Sinais de que a criança pode estar sofrendo"
@@ -220,7 +219,6 @@
         "Falecimento de alguém próximo."
       ]
     },
-
     {
       "type": "heading",
       "text": "Inteligência emocional na infância"
@@ -233,7 +231,6 @@
       "type": "text",
       "content": "Por isso, integrar desde cedo orientações e habilidades emocionais favorece um desenvolvimento mais completo, inclusive no manejo de traumas, para os quais existiria uma “reserva biopsíquica” que, quando acessada, ajuda a pessoa a seguir em frente."
     },
-
     {
       "type": "heading",
       "text": "Necessidades das crianças de 8 a 11 anos"
@@ -252,7 +249,6 @@
       "variant": "attention",
       "content": "Segundo o material, a ausência desses cuidados pode levar a um adulto com carências afetivas e emocionais, com problemas de autoestima, dificuldade de convivência e autoconfiança, e questões mais sérias, como ansiedade, raiva e depressão."
     },
-
     {
       "type": "heading",
       "text": "Bullying"
@@ -277,16 +273,62 @@
       "title": "Papel do conselheiro diante do bullying",
       "content": "Criar um ambiente de confiança para que a criança conte o que está sofrendo; ouvir com atenção e interesse genuíno; acolher o relato sem minimizar; fortalecer o vínculo de confiança; ajudar tanto o agressor, desenvolvendo empatia, quanto a vítima, reconstruindo autoestima e segurança."
     },
-
     {
       "type": "heading",
       "text": "Ferramenta prática: “Conhecendo meus Embaixadores do Rei”"
     },
     {
       "type": "text",
-      "content": "O material sugere uma ficha de acompanhamento individual por ER, com campos como: nome do ER, o que está acontecendo, o que o conselheiro pode fazer diante da situação, e qual foi a resposta ao cuidado oferecido."
+      "content": "O material sugere uma ficha de acompanhamento individual por ER, com quatro colunas: nome do ER, o que está acontecendo, o que o conselheiro pode fazer diante da situação, e qual foi a resposta ao cuidado oferecido."
     },
-
+    {
+      "type": "table",
+      "caption": "Modelo de ficha para preencher com sua turma",
+      "columns": [
+        "Nome do ER",
+        "O que está acontecendo?",
+        "O que posso fazer diante do que está acontecendo",
+        "Qual a resposta ao meu cuidado"
+      ],
+      "rows": [
+        [
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
     {
       "type": "heading",
       "text": "O trabalho do conselheiro de Embaixador do Rei"
@@ -309,7 +351,6 @@
         "Representar o caráter do Rei."
       ]
     },
-
     {
       "type": "summary",
       "title": "O que levar desta aula",

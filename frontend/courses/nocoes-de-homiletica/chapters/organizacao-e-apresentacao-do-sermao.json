@@ -1,0 +1,348 @@
+{
+  "title": "Organização e apresentação do sermão",
+  "summary": "Como organizar, introduzir, dividir e ilustrar o sermão, como concluir e fazer o apelo, e os diferentes métodos de apresentar a mensagem.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Depois de definir o texto, o objetivo e o tema, é hora de organizar o sermão: dar a ele uma estrutura clara, do início ao apelo final."
+    },
+
+    {
+      "type": "heading",
+      "text": "Organização do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender por que organizar bem as ideias é essencial para que o sermão seja compreendido e lembrado."
+    },
+    {
+      "type": "text",
+      "content": "Um sermão bem organizado ajuda o pregador a desenvolver seu pensamento, prende a atenção dos ouvintes e ajuda-os a se lembrar da mensagem depois. Um sermão organizado tem quatro características:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Unidade** — um único assunto específico, com um objetivo definido, visando alcançá-lo;",
+        "**Ordem lógica** — depende do objetivo que o pregador quer alcançar;",
+        "**Proposição** — síntese do que o pregador vai apresentar; informa ao ouvinte o que será explicado ou provado. Pode vir logo após a leitura do texto, ao final da introdução, ou após a declaração do tema. Exemplos de abertura: “A verdade que proponho apresentar aos irmãos é...”; “Vamos considerar a seguinte verdade...”; “Convido vocês a pensarem comigo sobre...”;",
+        "**Progresso** — o sermão deve caminhar em direção ao objetivo específico, em ordem crescente de interesse: do mais simples ao mais complexo, do negativo ao positivo, do falso ao verdadeiro, do abstrato ao concreto."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "O tempo de cada parte do sermão deve ser proporcional à sua importância: a introdução deve ser breve (desperta atenção), o corpo mais extenso (apresenta a ideia em si), e a conclusão breve (indica como atingir o objetivo)."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Exemplo de esboço com proposição",
+      "content": "Texto: Mateus 26:1-2 · Assunto específico: “O Caminho da Negação” · Objetivo geral: Consagração · Proposição: “A experiência do apóstolo Pedro ilustra a seguinte verdade: um servo de Deus não chega a negar seu Senhor senão através de um trágico processo de descida espiritual.”"
+    },
+
+    {
+      "type": "heading",
+      "text": "A introdução do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** saber como começar bem um sermão, despertando a atenção sem cometer os erros mais comuns."
+    },
+    {
+      "type": "text",
+      "content": "**Qualidades de uma boa introdução:** apropriada, interessante, curta e modesta. Deve trazer as necessidades dos ouvintes à superfície, já que as pessoas prestam atenção naquilo que lhes diz respeito."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "O que evitar ao começar"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Nunca peça desculpas ao começar o sermão: isso não conquista a simpatia dos ouvintes;",
+        "Se estiver rouco ou mal preparado, deixe que a congregação perceba por si mesma, sem anunciar."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Fontes de material para a introdução"
+    },
+    {
+      "type": "list",
+      "items": [
+        "O próprio texto bíblico (origem e propósito do autor);",
+        "O contexto (fatos, história, costumes);",
+        "Uma ilustração;",
+        "A ocasião;",
+        "A declaração do objetivo do sermão."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "A divisão do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** aprender a dividir o tema do sermão de forma lógica, clara e fácil de acompanhar."
+    },
+    {
+      "type": "text",
+      "content": "A divisão do sermão garante sua unidade, clareza, movimento progressivo, e ajuda o ouvinte a reter a mensagem. Depois de escolher um princípio de divisão, todas as partes do sermão devem seguir esse mesmo princípio. Há quatro princípios possíveis:"
+    },
+    {
+      "type": "table",
+      "caption": "Os quatro princípios de divisão",
+      "columns": ["Princípio", "Como funciona", "Exemplo"],
+      "rows": [
+        [
+          "Das causas",
+          "Cada divisão apresenta um passo ou causa em direção a algo.",
+          "Marcos 14:66-72 · “O Caminho para a Negação” · I) confiar demais em si mesmo; II) descuidar da oração; III) usar armas da carne; IV) seguir a Jesus de longe; V) abandonar o companheirismo dos irmãos."
+        ],
+        [
+          "Dos efeitos",
+          "Cada divisão apresenta um efeito ou consequência.",
+          "Números 14:1-11 · “O que faz a incredulidade?” · I) denigre o caráter de Deus; II) avilta o caráter do homem; III) dificulta a obra de Deus; IV) provoca a ira de Deus."
+        ],
+        [
+          "Das razões que apoiam a proposição",
+          "Cada divisão dá um motivo.",
+          "Atos 21:14 · “Faça-se a vontade do Senhor” · I) esta atitude honra o Senhor; II) esta atitude nos traz bênçãos."
+        ],
+        [
+          "Das sugestões naturais de uma metáfora",
+          "Cada divisão explora um aspecto da imagem usada.",
+          "João 10:9 (metáfora: “Eu sou a porta”) · I) Jesus é o único acesso ao céu; II) Jesus dá segurança; III) Jesus impede a entrada de estranhos."
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Regras para formular as divisões"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Formule como frases completas (ex.: Josué 24:14-15 — “Você tem que escolher com urgência a quem servir”);",
+        "Use a máxima uniformidade possível entre as divisões (ex.: Jó 1:1-8 — “O verdadeiro cristão é íntegro / é reto / é temente a Deus / desvia-se do mal”);",
+        "Nenhuma divisão deve repetir o assunto específico;",
+        "O conjunto das divisões deve cobrir todo o terreno da proposição;",
+        "Cada divisão deve ser distinta das outras, mas baseada na mesma relação com o assunto específico."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Subdivisões:** seguem as mesmas regras das divisões, mas são numeradas com algarismos arábicos (as divisões principais usam algarismos romanos)."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Exemplo de subdivisão",
+      "content": "Mateus 11:28 · Assunto: “Convidados a aprender” · I) Quais são as qualificações de Jesus para ensinar? 1. É o Filho de Deus; 2. É o criador de todas as coisas; 3. É humilde; 4. Recebe a todos que queiram aprender dEle."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "O sermão deve ter no mínimo duas divisões e no máximo cinco. O pregador não precisa necessariamente anunciar as divisões, mas precisa garantir que o ouvinte consiga acompanhar cada etapa do desenvolvimento."
+    },
+
+    {
+      "type": "heading",
+      "text": "Ilustração no sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** usar ilustrações para dar vida e clareza às verdades apresentadas."
+    },
+    {
+      "type": "text",
+      "content": "Ilustração é qualquer coisa que dê luz, ilumine ou elucide uma verdade apresentada pelo pregador. Ela ajuda a criar uma imagem na mente dos ouvintes. A Bíblia é a maior fonte de ilustrações: 75% dos ensinos de Jesus são em parábolas."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Objetivos das ilustrações"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Despertar interesse e prender a atenção;",
+        "Ajudar a explicar as verdades apresentadas;",
+        "Fortalecer e confirmar os argumentos;",
+        "Embelezar o sermão;",
+        "Auxiliar na retenção das ideias;",
+        "Tocar o sentimento dos ouvintes;",
+        "Proporcionar descanso mental;",
+        "Ajudar na repetição do ensino."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Qualidades de uma ilustração eficiente:** simples e bem preparada; interessante; breve (só o suficiente para elucidar a questão); convincente (sem nem cheirar a mentira); original, tanto quanto possível."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Fontes de material ilustrativo"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A Bíblia — narrativas conhecidas pelo povo, com qualidade, autoridade e sempre atuais;",
+        "Experiências pessoais — cuidado para não ser sempre o herói da história, e cuidado ao falar de outras pessoas;",
+        "Contexto da igreja — história e fatos marcantes;",
+        "Livros, jornais, revistas, história em geral, ciência e arte (vida e obra de cientistas e artistas), literatura (biografias, ficção, mitologia, folclore)."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Conclusão do sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** saber fechar o sermão de forma eficaz, aplicando a verdade e persuadindo à ação."
+    },
+    {
+      "type": "text",
+      "content": "A conclusão é o momento decisivo do sermão: coloca os ouvintes frente a frente com Deus."
+    },
+    {
+      "type": "text",
+      "content": "**Qualidades indispensáveis:** habitual (fecha com naturalidade, seguindo o que foi dito), objetiva (retoma o objetivo específico), completa, pessoal e direta, breve (10% a 15% do sermão), solene (evitar piadas), positiva (evitar ênfases negativas), calorosa (vigor e energia), variada (não usar sempre a mesma forma de concluir)."
+    },
+    {
+      "type": "text",
+      "content": "**Maneiras de concluir:** recapitulação dos argumentos, ilustração, aplicação final aos ouvintes, estabelecendo contraste, ou usando um texto ou o contexto."
+    },
+    {
+      "type": "callout",
+      "variant": "attention",
+      "title": "Erros a evitar",
+      "content": "Introduzir ideias novas; dar a impressão de que vai terminar sem terminar de fato; pedir desculpas; desviar a atenção manipulando objetos; ficar preso às anotações; emoções superficiais."
+    },
+
+    {
+      "type": "heading",
+      "text": "O apelo no sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** entender a importância de oferecer, ao final da pregação, um momento claro de decisão."
+    },
+    {
+      "type": "text",
+      "content": "É necessário dar uma oportunidade sempre que houver pregação: confrontar a pessoa com um momento de decisão, com pedido de manifestação pública."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Por que fazer o apelo"
+    },
+    {
+      "type": "list",
+      "items": [
+        "É **bíblico** (Js 24:14; Mt 10:32; At 2:40; Rm 10:10);",
+        "É **histórico** — os grandes pregadores do cristianismo sempre o usaram;",
+        "É **natural e psicológico** — a emoção é um bom momento para tomar uma posição;",
+        "É **prático** — permite identificar novos crentes ou pessoas interessadas que precisam de ajuda;",
+        "É **inspirador** — incentiva a igreja e os tímidos a tomarem uma decisão."
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Características de um bom apelo:** claro e específico, feito com cortesia (sem coação), com honestidade, otimista, com compaixão, feito em oração e na dependência de Deus. Deve apelar aos motivos naturais da personalidade humana: desejo de ser feliz, anseio por uma vida melhor, necessidade de paz e segurança, possibilidade de libertação dos pecados."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Recursos práticos para o apelo"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Preparar o ambiente (pré-apelo): convidar crentes felizes por terem aceitado Jesus a se manifestarem; pedir que um crente (de preferência novo na fé) dê um testemunho;",
+        "Incentivar a decisão, convidando os decididos recentes a virem à frente;",
+        "Identificar os decididos: pedir que levantem o braço ou fiquem de pé; fazer uma oração com o pregador; falar com o pregador na saída."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Não comece o apelo de forma difícil e depois facilite: mantenha a mesma clareza do início ao fim, e sempre trate a congregação com orientação sobre o que fazer nesse momento."
+    },
+
+    {
+      "type": "heading",
+      "text": "Métodos de proferir o sermão"
+    },
+    {
+      "type": "text",
+      "content": "**Objetivo:** conhecer as diferentes formas de apresentar um sermão e seus prós e contras."
+    },
+    {
+      "type": "table",
+      "columns": ["Método", "Descrição", "Avaliação"],
+      "rows": [
+        ["Sermão extemporâneo", "Mensagem que é fruto do momento, sem preparo prévio.", "Considerado o pior método."],
+        ["Sermão decorado", "O pregador escreve todo o sermão e decora em seguida.", "Risco de esquecimento no púlpito."],
+        ["Sermão lido", "O pregador leva o manuscrito completo para o púlpito.", "Traz tranquilidade e boa unidade de pensamento, mas quebra o contato com os ouvintes, tira naturalidade, dificulta a gesticulação e historicamente não é bem aceito."],
+        ["Sermão com esboço", "O pregador sabe o que vai dizer, embora não saiba exatamente como vai dizer.", "É o método mais usado."],
+        ["Sermão com pregação livre", "O sermão é escrito, mas na apresentação nenhuma anotação é usada.", "Considerado o melhor método pelo material: obriga a uma preparação mais completa, facilita a orientação do Espírito Santo, dá mais convicção e força, melhor uso da personalidade do pregador."]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "**Requisitos para usar o método de pregação livre:** tempo para o preparo; estilo claro e simples; treinamento da memória; decorar o esboço e como começar e concluir; boas condições físicas e espirituais; confiança em Deus (mesmo com o risco de esquecer parte do sermão); exige muito trabalho."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "content": "Esta hierarquia de métodos reflete a linha homilética do material de referência (“José da Silva — Um Pregador Leigo”, de Jerry Stanley Key) e do Pastor Antônio Marcos, que o adaptou para o curso. Não é uma regra universal de toda tradição homilética."
+    },
+
+    {
+      "type": "heading",
+      "text": "Encerramento"
+    },
+    {
+      "type": "text",
+      "content": "Pregar bem não é um dom que dispensa preparo: é um chamado que exige disciplina, estudo e cuidado com cada etapa, do texto ao objetivo, do tema à organização, da introdução ao apelo final."
+    },
+    {
+      "type": "summary",
+      "title": "Boas práticas do curso",
+      "items": [
+        {
+          "text": "Nunca prepare um sermão sem um texto bíblico claro e bem estudado como base."
+        },
+        {
+          "text": "Defina sempre um objetivo específico: o que espera que o ouvinte faça ao final."
+        },
+        {
+          "text": "Trate de um único assunto por sermão, bem organizado e dividido."
+        },
+        {
+          "text": "Use ilustrações com cuidado e critério, sempre a serviço da verdade apresentada."
+        },
+        {
+          "text": "Encerre com uma conclusão breve e um apelo claro, oferecendo à congregação um momento real de decisão."
+        }
+      ]
+    },
+    {
+      "type": "references",
+      "title": "Referência",
+      "items": [
+        {
+          "label": "KEY, Jerry Stanley",
+          "detail": "José da Silva — Um Pregador Leigo. Rio de Janeiro: Convicção, 2012. Usado como referência pelo Pastor Antônio Marcos na produção deste curso."
+        }
+      ]
+    }
+  ]
+}

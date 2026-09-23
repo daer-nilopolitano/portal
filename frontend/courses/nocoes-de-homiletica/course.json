@@ -1,0 +1,18 @@
+{
+  "title": "Noções de Homilética",
+  "eyebrow": "Material de estudo",
+  "subtitle": "Os fundamentos para preparar e apresentar um sermão com clareza, organização e propósito, do texto bíblico ao apelo final.",
+  "about": "Material de apoio do DAER Nilopolitano para conselheiros de Embaixadores do Rei, baseado no curso de Homilética do DCER Fluminense (Pastor Antônio Marcos, 2019), com referência no livro “José da Silva — Um Pregador Leigo”, de Jerry Stanley Key (Rio de Janeiro: Convicção, 2012).",
+  "author": {
+    "name": "DAER Nilopolitano",
+    "role": "Material de estudo para conselheiros"
+  },
+  "status": "published",
+  "order": 5,
+  "updatedAt": "2026-09",
+  "chapters": [
+    "fundamentos-texto-objetivo-e-tema",
+    "organizacao-e-apresentacao-do-sermao",
+    "quiz"
+  ]
+}

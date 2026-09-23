@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: revise o que você aprendeu",
+  "summary": "Treze perguntas, sete sobre fundamentos/texto/objetivo/tema e seis sobre organização e apresentação do sermão.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Responda às perguntas abaixo para revisar o conteúdo dos dois capítulos. Depois de cada resposta, você vê a explicação. Cada bloco tem sua própria pontuação e pode ser refeito quantas vezes quiser."
+    },
+
+    {
+      "type": "heading",
+      "text": "Capítulo 1 — Fundamentos, texto, objetivo e tema"
+    },
+    {
+      "type": "quiz",
+      "title": "Fundamentos, texto, objetivo e tema",
+      "questions": [
+        {
+          "question": "Segundo o material, o que é pregação?",
+          "options": [
+            "A leitura pública de um texto bíblico, sem outro propósito",
+            "A comunicação ou transmissão oral da verdade divina com o fim de persuadir",
+            "Uma palestra sobre temas religiosos, de conteúdo livre",
+            "Um discurso motivacional baseado em princípios bíblicos"
+          ],
+          "answer": 1,
+          "explanation": "Pregação é o processo pelo qual Deus, por meio do Seu mensageiro escolhido, se introduz na família humana, comunicando a verdade divina com o fim de persuadir."
+        },
+        {
+          "question": "Quais são os três requisitos pessoais do pregador, segundo o material?",
+          "options": [
+            "Piedade, dons naturais e cultura",
+            "Carisma, popularidade e boa voz",
+            "Formação teológica, idade e experiência",
+            "Eloquência, memória e disciplina"
+          ],
+          "answer": 0,
+          "explanation": "Piedade (comunhão com Deus), dons naturais (raciocínio, imaginação, voz, dom da palavra) e cultura (boa base geral em teologia, história, psicologia, filosofia e sociologia)."
+        },
+        {
+          "question": "O que fazer quando há dúvida sobre a interpretação correta de um texto bíblico?",
+          "options": [
+            "Usar o texto do mesmo jeito, explicando a dúvida aos ouvintes",
+            "Consultar apenas uma versão da Bíblia para não gerar mais dúvida",
+            "Não usar esse texto como base do sermão",
+            "Escolher a interpretação mais popular entre os pregadores"
+          ],
+          "answer": 2,
+          "explanation": "Se houver dúvida quanto à interpretação correta, o texto não deve ser usado como base do sermão. É melhor trocar de texto do que arriscar uma interpretação equivocada."
+        },
+        {
+          "question": "Qual destes é um dos objetivos gerais do sermão, segundo a tabela do curso?",
+          "options": ["Informativo", "Cronológico", "Pastoral", "Literário"],
+          "answer": 2,
+          "explanation": "Os objetivos gerais listados são: evangelístico, doutrinário, ético, devocional, consagração e pastoral."
+        },
+        {
+          "question": "O que é o objetivo específico de um sermão?",
+          "options": [
+            "O tema geral do livro bíblico usado",
+            "O alvo imediato do sermão: o que o pregador espera que o ouvinte faça como resultado da mensagem",
+            "A duração ideal da pregação",
+            "A ordem em que as divisões aparecem"
+          ],
+          "answer": 1,
+          "explanation": "O objetivo específico deve ser preciso, claro e relacionado a uma atitude esperada do ouvinte."
+        },
+        {
+          "question": "Qual é a diferença entre assunto geral e assunto específico?",
+          "options": [
+            "Não há diferença, são a mesma coisa",
+            "O assunto geral é amplo demais para um sermão; o específico é o aspecto escolhido para tratá-lo",
+            "O assunto geral é sempre do Antigo Testamento",
+            "O assunto específico é definido pela congregação, não pelo pregador"
+          ],
+          "answer": 1,
+          "explanation": "Por exemplo, o assunto geral “Fé” (Hebreus 11:6) pode ganhar o assunto específico “Um requisito indispensável para agradar a Deus”."
+        },
+        {
+          "question": "Quantos assuntos um sermão deve tratar?",
+          "options": ["Um único assunto", "No mínimo dois", "Três, para cobrir mais aspectos", "Não há regra definida"],
+          "answer": 0,
+          "explanation": "Cada sermão deve tratar de um único assunto, nunca dois ou mais, para não confundir os ouvintes."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Capítulo 2 — Organização e apresentação do sermão"
+    },
+    {
+      "type": "quiz",
+      "title": "Organização e apresentação do sermão",
+      "questions": [
+        {
+          "question": "Qual destas é uma das quatro características de um sermão organizado?",
+          "options": ["Improviso", "Proposição", "Repetição do assunto", "Duração fixa"],
+          "answer": 1,
+          "explanation": "As quatro características são unidade, ordem lógica, proposição e progresso."
+        },
+        {
+          "question": "Como deve ser o tempo de cada parte do sermão?",
+          "options": [
+            "Introdução, corpo e conclusão devem durar o mesmo tempo",
+            "A introdução deve ser a parte mais longa",
+            "Introdução e conclusão breves, e o corpo mais extenso",
+            "Não há relação entre a duração e a importância de cada parte"
+          ],
+          "answer": 2,
+          "explanation": "A introdução deve ser breve (desperta atenção), o corpo mais extenso (apresenta a ideia em si), e a conclusão breve (indica como atingir o objetivo)."
+        },
+        {
+          "question": "O que caracteriza o princípio de divisão “das causas”?",
+          "options": [
+            "Cada divisão apresenta um passo ou causa em direção a algo",
+            "Cada divisão dá um motivo que apoia a proposição",
+            "Cada divisão explora um aspecto de uma metáfora",
+            "Cada divisão repete o assunto específico com outras palavras"
+          ],
+          "answer": 0,
+          "explanation": "É o exemplo de Marcos 14:66-72, sobre a negação de Pedro: cada divisão apresenta um passo do processo."
+        },
+        {
+          "question": "Qual é o mínimo e o máximo de divisões recomendado para um sermão?",
+          "options": ["Uma a três", "Duas a cinco", "Três a sete", "Não há limite sugerido"],
+          "answer": 1,
+          "explanation": "A sugestão prática do material é que o sermão tenha no mínimo duas divisões e no máximo cinco."
+        },
+        {
+          "question": "Segundo o material, qual é o método de apresentar o sermão considerado o melhor?",
+          "options": ["Sermão extemporâneo", "Sermão lido", "Sermão com pregação livre", "Sermão decorado"],
+          "answer": 2,
+          "explanation": "O sermão com pregação livre é escrito, mas apresentado sem anotações. O material o considera o melhor método, mas o de maior exigência de preparo."
+        },
+        {
+          "question": "Qual destas é uma característica de um bom apelo, segundo o curso?",
+          "options": [
+            "Ser vago, para não constranger ninguém",
+            "Ser feito com coação, para garantir decisões",
+            "Ser claro e específico, feito com cortesia, honestidade e compaixão",
+            "Ser sempre igual em todo sermão, sem variação"
+          ],
+          "answer": 2,
+          "explanation": "O bom apelo é claro e específico, feito com cortesia (sem coação), com honestidade, otimismo, compaixão e em oração."
+        }
+      ]
+    }
+  ]
+}
