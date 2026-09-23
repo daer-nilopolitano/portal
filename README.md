@@ -1,15 +1,28 @@
-# DAER Nilopolitano — site institucional + sistema de gestão
+# DAER Nilopolitano — site institucional + sistema de gestão + módulo de cursos
 
-Repositório inicial, gerado a partir do plano de desenvolvimento. Estrutura:
+## Visão geral
 
-```
+Portal e sistema de gestão do Departamento Associacional Embaixadores do Rei Nilopolitano. As entidades centrais do domínio:
+
+- **Igreja**: cada igreja participante do DAER Nilopolitano.
+- **Embaixada**: o núcleo local da organização numa igreja.
+- **Membro**: qualquer cadastrado no sistema — pode ser um Conselheiro, Embaixador do Rei ou Auxiliar.
+- **Carteirinha**: identificação do Embaixador do Rei, verificável por QR code.
+
+## Estrutura do repositório
+
+```text
 daer-nilopolitano/
-├── backend/          # Django + Django Ninja (API) + Wagtail (CMS headless)
-│   ├── config/       # settings, urls, wsgi/asgi
-│   ├── core/         # models de negócio: Igreja, Embaixada, Pessoa, Papel, Carteirinha
-│   └── cms/          # páginas Wagtail: Home, Notícias, Eventos, Sobre/Contato
-├── frontend/         # Next.js + TypeScript + Tailwind
-└── docker-compose.yml
+├── backend/ # Django + Django Ninja (API) + Wagtail (CMS headless)
+│ ├── config/ # settings, urls, wsgi
+│ ├── core/ # models de negócio + API (core/api/)
+│ └── cms/ # páginas Wagtail (Home, Notícias, Eventos, Sobre)
+│
+├── frontend/ # Next.js 14 (App Router) + TypeScript + Tailwind
+│ ├── app/(public)/ # site institucional
+│ ├── app/(app)/ # área logada (/painel/*), protegida por AppShell
+│ ├── app/login/ # fora dos dois grupos acima
+│ └── app/cursos/ # módulo de cursos (ver seção própria abaixo)
 ```
 
 ## Rodando em desenvolvimento
@@ -45,7 +58,7 @@ No Wagtail Admin, a primeira página a criar é a **Home Page** (sob "Root"), de
 
 ## Rodando sem Docker (ex.: Windows + PyCharm)
 
-Dá pra rodar tudo direto, sem alterar a lógica do projeto — só a forma de configurar o ambiente muda. O `.env` já é carregado automaticamente pelo `settings.py` via `python-dotenv`.
+Para rodar sem Docker não precisa de alterar a lógica do projeto — só a forma de configurar o ambiente muda. O `.env` já é carregado automaticamente pelo `settings.py` via `python-dotenv`.
 
 ### Backend (Django)
 
@@ -77,58 +90,58 @@ npm run dev
 ```
 Frontend disponível em http://localhost:3000.
 
-## Autenticação (JWT)
+## Serviços externos usados em produção
 
-A API usa JWT simples (`core/auth.py`): login por e-mail/senha devolve um `access_token`, que vai no header `Authorization: Bearer <token>` nos endpoints protegidos. Não tem refresh token por enquanto (o token dura 7 dias, configurável via `JWT_EXPIRATION_MINUTES`).
+| Componente       | Serviço          |
+|------------------|------------------|
+| Frontend         | Vercel           |
+| Backend          | Northflank (Docker, a partir de `backend/Dockerfile`) |
+| Banco            | Neon PostgreSQL  |
+| Mídia (imagens/documentos) | Cloudflare R2 (S3-compatível) |
+| CMS              | Wagtail (dentro do backend Django) |
 
-Cada Django `User` precisa estar vinculado a uma `Pessoa` (campo `Pessoa.user`) para o login funcionar — é a Pessoa (e o Papel atual dela) que define o que a conta pode fazer:
-- **Diretoria**: acesso total a Embaixada/Pessoa/Papel/Carteirinha.
-- **Conselheiro**: só enxerga e edita pessoas/papéis/carteirinhas da própria embaixada; só pode atribuir o papel `embaixador_do_rei` (não pode promover ninguém a conselheiro/diretoria).
-- **Embaixador do Rei**: sem acesso aos endpoints de gestão — usa `/api/auth/me/` e `/api/carteirinhas/me/`.
+Detalhes de cada etapa de deploy e das variáveis de ambiente estão em
+[`DEPLOY.md`](DEPLOY.md).
 
-### Bootstrap: criando o primeiro login
+## Autenticação
 
-O endpoint `POST /api/pessoas/{id}/criar-acesso/` **exige estar autenticado** (é assim de propósito, pra só Diretoria/conselheiro darem acesso a outras pessoas). Isso significa que ele não serve pra criar o primeiro login do sistema — ninguém ainda tem token pra chamá-lo. Para o primeiro acesso (tipicamente um membro da Diretoria), faça manualmente pelo Django Admin:
+JWT simples (`core/auth.py`) — login por e-mail/senha devolve um `access_token` (7 dias de validade, sem refresh token), 
+usado no header `Authorization: Bearer <token>`. Cada `User` do Django precisa estar vinculado a um `Membro` para logar.
 
-1. Em `/django-admin/auth/user/add/`, crie um usuário com usuário e senha (o *username* pode ser qualquer coisa aqui, mas o mais simples é usar o mesmo e-mail da Pessoa).
-2. Em `/django-admin/core/pessoa/`, edite a Pessoa da Diretoria e selecione esse usuário recém-criado no campo **user**. Salve.
-3. Teste o login em `/api/docs` ou via `POST /api/auth/login/` com `{"email": "<username escolhido>", "senha": "<senha escolhida>"}` — repare que o login usa o *username* do Django User como "email" (por isso o passo 1 recomenda usar o e-mail real da pessoa como username, pra não confundir depois).
+Tipos de membros e o que cada um pode fazer:
+- **Diretoria**: acesso total a Embaixada/Membros/Carteirinha.
+- **Conselheiro**: só enxerga/edita membros da própria embaixada;
+- **Auxiliar**: só enxerga membros da própria embaixada, mas não pode criar nem remover.
+- **Embaixador do Rei**: sem acesso aos endpoints de gestão — só `/api/auth/me/` e `/api/carteirinhas/me/`.
 
-Depois desse primeiro acesso, essa pessoa da Diretoria já pode usar `POST /api/pessoas/{id}/criar-acesso/` para dar login a todo mundo (incluindo os conselheiros, que por sua vez criam acesso para os próprios embaixadores).
+O primeiro acesso (bootstrap) não pode ser criado pelo próprio sistema — é manual, pelo `/django-admin/`. 
+Passo a passo em [`DEPLOY.md`](DEPLOY.md).
 
-## Identidade visual (logo e favicons)
+## Módulo de cursos (`app/cursos/`)
 
-A logo original (`logo_daer_nilopolitano.png`) tinha só 307×364px — pouca resolução pra qualquer uso além de bem pequeno. Usei a versão em `WA0022.jpg` (640×640), removi o fundo quase-branco (deixando transparente) e recortei a sobra transparente, gerando:
+Escrito originalmente como um projeto separado (Next.js 15/React 19) e integrado depois ao frontend principal 
+(Next.js 14.2.5/React 18) sem mudanças de versão — o único recurso "Next 15" usado é `params` tipado como `Promise`, 
+que funciona em Next 14 porque `await` num valor que não é Promise simplesmente resolve para ele mesmo.
 
-- `frontend/public/logo-daer.png` e `backend/static/img/logo.png` — a logo completa (crista + "DAER NILOPOLITANO"), usada no header do site e na sidebar do Jazzmin.
-- Favicons: como o brasão completo fica ilegível em 16×16, o favicon usa só o emblema interno "E.R." (a parte mais reconhecível e simples da logo) — é o padrão comum pra esse problema, nenhuma ferramenta de upscaling resolveria o brasão inteiro em 16px. Gerados em `frontend/app/` (favicon.ico, icon.png, apple-icon.png — convenção nativa do Next.js, sem precisar de código) e em `backend/static/img/favicon-32x32.png` (Jazzmin).
-- `frontend/public/android-chrome-192x192.png` e `-512x512.png` + `frontend/app/manifest.ts` — não usados ainda, mas deixam o terreno pronto pra quando a carteirinha virar PWA instalável.
+### Decisões relevantes:
 
-**Se quiser refazer esses recortes no futuro** (ex.: logo em melhor resolução), ferramentas gratuitas úteis: [Photopea](https://www.photopea.com/) (edição tipo Photoshop, no navegador) pra retoque manual, [Inkscape](https://inkscape.org/) (grátis, desktop) se algum dia quiser vetorizar a logo pra escalar sem perda, e [realfavicongenerator.net](https://realfavicongenerator.net/) pra gerar o conjunto completo de favicons automaticamente a partir de uma imagem.
+- Fica **fora** dos grupos de rota `(public)`/`(app)`, por isso não herda o header/footer do site nem a sidebar do painel.
+- Tem layout próprio (`app/cursos/layout.tsx`), pensado como experiência de leitura isolada.
+- Acesso restrito a Conselheiro/Auxiliar, logados — guard próprio em `app/cursos/_auth-guard.tsx` (client component), 
+  já que a rota não passa pelo redirecionamento de login do `AppShell`.
+- Link de acesso fica direto na sidebar do painel (`app-shell.tsx`), apontando pra `/cursos` — não existe uma página 
+  intermediária dentro de `/painel`.
+- Conteúdo dos cursos vem de `frontend/courses/` (JSON + assets), lido em build/runtime via `fs` (não pelo banco de dados).
+  Sincronizado por `frontend/scripts/sync-course-assets.mjs`, chamado automaticamente antes de `dev`/`build` 
+  (hooks `predev`/`prebuild` no `package.json`).
 
-**Sobre o CSS do Jazzmin**: recriei o `jazzmin-fixes.css` que já tinha sido descrito numa conversa anterior (os arquivos nunca tinham sido criados de fato, só sugeridos) e corrigi o `STATICFILES_DIRS`, que estava faltando no `settings.py` — sem ele, o Django não achava a pasta `static/` em desenvolvimento, então o CSS/logo davam 404 mesmo existindo. Não tenho como testar esse CSS contra o Jazzmin 3.0.5 de verdade aqui (sem acesso à instalação rodando), então alguns seletores (principalmente o `.brand-image`/`.login-logo img` que ajustei agora) são uma aposta razoável, não certeza — se a logo aparecer esticada ou cortada na sidebar, me manda um print que eu ajusto.
+## Decisões técnicas (ADRs) 
 
-## O que já está pronto
-
-- Models de negócio (`core/models.py`) para as entidades fechadas no planejamento: Igreja, Embaixada, Pessoa, Papel e Carteirinha, com faixa etária calculada a partir da data de nascimento.
-- Django Admin configurado para essas entidades (uso interno da diretoria/conselheiros enquanto as telas React não existem), com tema do **django-jazzmin** já aplicado.
-- Páginas Wagtail para Home, páginas institucionais simples (Sobre/Contato), Notícias e Eventos — Evento fica como página por enquanto; o modelo Django equivalente está comentado em `core/models.py`, pronto para ativar se precisar de inscrição/confirmação de presença no futuro.
-- API completa do Django Ninja (`core/api/`, um módulo por entidade) cobrindo Igreja (leitura pública), Embaixada, Pessoa, Papel e Carteirinha (CRUD completo, com autenticação JWT e permissão por papel), além do endpoint público de verificação por QR code em `/api/carteirinhas/verificar/{identificador}/`.
-- Site institucional como **página única**: `app/(public)/page.tsx` compõe as seções Sobre (`components/sobre-secao.tsx`, com o texto institucional real), Eventos/Cronograma (`components/eventos-secao.tsx`, timeline vertical reaproveitada da seção Sobre) e Embaixadas (`components/embaixadas-secao.tsx`, lista + mapa Leaflet buscando `/api/igrejas/`). Notícias e Contato ficaram de fora por decisão do usuário — a pasta `app/(public)/noticias/` continua existindo como placeholder, só não está mais no menu.
-- Mapa via **Leaflet + OpenStreetMap** (sem chave de API). Como o Leaflet manipula o DOM diretamente, o componente real (`embaixadas-mapa-interno.tsx`) só carrega no client via `next/dynamic` com `ssr:false` (`embaixadas-mapa.tsx`) — necessário porque a lib quebra em SSR.
-  - **Atenção**: `Igreja.latitude`/`longitude` não são preenchidos automaticamente a partir do endereço — precisa cadastrar as coordenadas manualmente pelo Django Admin (pegar no Google Maps) pra cada igreja aparecer no mapa.
-- `app/(app)/` — área logada, protegida por `AuthProvider` + `AppShell` (sidebar cujos itens mudam conforme o papel: Diretoria vê tudo, Conselheiro só Embaixadores/Carteirinha/Materiais). Rotas de gestão ficam sob `/painel/*` (`/painel/embaixadas`, `/painel/conselheiros`, `/painel/embaixadores`, `/painel/materiais`).
-- `app/login/` — formulário de login, fora dos dois grupos acima (sem header/sidebar).
-- `lib/auth-context.tsx` — contexto de autenticação (token JWT + dados da Pessoa logada via `/api/auth/me/`); token guardado em `localStorage` por simplicidade no MVP (ver TODO de segurança no próprio arquivo sobre migrar para cookie httpOnly no futuro).
-- `docker-compose.yml` já orquestrando os três serviços.
-
-## O que falta (próximos passos de código)
-
-1. Rodar `makemigrations`/`migrate` para gerar a migração do novo campo `Pessoa.user`, caso ainda não tenha feito.
-2. Testar a navegação: `/`, `/login` (com o usuário criado no bootstrap) e as rotas de `/painel/*` — confirmar que a sidebar muda conforme o papel de quem loga.
-3. Preencher as páginas públicas (sobre, notícias, eventos, embaixadas/mapa, contato) e as de gestão (`/painel/embaixadas`, `/painel/conselheiros`, `/painel/embaixadores`, `/painel/materiais`, `/minha-carteirinha`) com os dados reais da API — hoje são todas placeholders "Em construção".
-4. Configurar o deploy real: Vercel (frontend), Northflank (backend), Neon ou Supabase (banco) — os arquivos de ambiente já preveem isso via `DATABASE_URL`.
-
-## Variáveis de ambiente
-
-Ver `backend/.env.example` e `frontend/.env.local.example`. Em produção, troque `DATABASE_URL` pela connection string do Neon/Supabase e `NEXT_PUBLIC_API_URL`/`CORS_ALLOWED_ORIGINS` pelos domínios reais do backend/frontend.
+- **Estáticos em produção**: servidos via `whitenoise`, não pelo `runserver` (que só serve estáticos com `DEBUG=True`). 
+  Usa `CompressedStaticFilesStorage`, **sem** manifesto — o `CompressedManifestStaticFilesStorage` quebra com um bug 
+  conhecido do django-jazzmin (`Missing staticfiles manifest entry for 'vendor/bootswatch'`), que referencia um "arquivo"
+  que não existe de verdade.
+- **Mídia**: `django-storages` + `boto3`, apontando pro R2, só ativado quando as variáveis `R2_*` estão presentes no 
+  ambiente (dev local continua a usar disco). Ver `STORAGES["default"]` em `backend/config/settings.py`.
+- **Proxy do Northflank**: termina o TLS antes do container, então o Django precisa de `SECURE_PROXY_SSL_HEADER` pra 
+  saber que a conexão original era HTTPS — sem isso, a checagem de CSRF falha em produção mesmo com tudo configurado certo.
