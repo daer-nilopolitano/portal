@@ -25,7 +25,7 @@ daer-nilopolitano/
 │ └── app/cursos/ # módulo de cursos (ver seção própria abaixo)
 ```
 
-## Rodando em desenvolvimento
+## Rodando em desenvolvimento Com Docker
 
 Pré-requisito: Docker e Docker Compose instalados.
 
@@ -56,7 +56,7 @@ Depois disso:
 
 No Wagtail Admin, a primeira página a criar é a **Home Page** (sob "Root"), depois `NoticiaIndexPage` e `EventoIndexPage` como filhas dela — o sitemap do plano de desenvolvimento mostra a árvore completa.
 
-## Rodando sem Docker (ex.: Windows + PyCharm)
+## Rodando em desenvolvimento sem Docker (ex.: Windows + PyCharm)
 
 Para rodar sem Docker não precisa de alterar a lógica do projeto — só a forma de configurar o ambiente muda. O `.env` já é carregado automaticamente pelo `settings.py` via `python-dotenv`.
 
@@ -103,6 +103,50 @@ Frontend disponível em http://localhost:3000.
 Detalhes de cada etapa de deploy e das variáveis de ambiente estão em
 [`DEPLOY.md`](DEPLOY.md).
 
+## Banco de dados
+
+PostgreSQL, hospedado no Neon. O esquema é gerado pelas migrações do Django/Wagtail, não há scripts SQL separados.
+
+### Entidades (`backend/core/models.py`)
+
+- **Igreja** — cada igreja participante do DAER. Endereço + lat/long (preenchidas manualmente, não há geocodificação 
+  automática) pro mapa do site institucional.
+- **Embaixada** — núcleo local do movimento dentro de uma Igreja (`OneToOne`, uma igreja tem no máximo uma embaixada).
+- **HorarioReuniao** — dias/horários de reunião de uma Embaixada (pode ter mais de um por semana).
+- **Membro** — toda pessoa cadastrada. Campo `tipo` (choices: `conselheiro`, `auxiliar`, `embaixador_do_rei`) define o 
+  papel — **não existe um model `Papel` separado**, é um campo na própria `Membro`. Vínculo opcional com `User` (login) 
+  via `OneToOne` em `membro.user`, `idade` e `faixa_etaria` são properties calculadas a partir de `data_nascimento`.
+- **Diretoria** — mandatos na diretoria da associação (só quem tem `tipo=conselheiro`, validado na API). Mantém histórico 
+  (`data_fim`); constraint garante no máximo um mandato ativo por Membro.
+- **GrupoTrabalho** / **GrupoMembro** — grupos (Música, Evangelismo etc.) e participação de Membros neles. Constraints: 
+  um Membro entra uma vez por grupo, e lidera no máximo um grupo no sistema inteiro.
+- **DiretoriaEmbaixada** — quadro de oficiais de uma Embaixada, ocupado pelos próprios Embaixadores do Rei. Sem histórico 
+  (atribuir um cargo já ocupado troca o titular).
+- **Carteirinha** — exclusiva de `Membro` com `tipo=embaixador_do_rei`. `identificador` é um UUID usado na verificação 
+  pública por QR code (`/api/carteirinhas/verificar/{identificador}/`).
+
+Regras de tipo/posto (ex. `posto_embaixador` só preenchido quando `tipo=embaixador_do_rei`) são validadas na camada de 
+API, não por constraint de banco.
+
+## Integrações externas
+
+### Cloudflare R2 (armazenamento de mídia)
+
+S3-compatível, usado via `django-storages` + `boto3` para fotos de `Membro`, documentos e imagens do Wagtail. Só ativa 
+quando as variáveis `R2_*` estão presentes no ambiente — sem elas, o backend cai para disco local automaticamente.
+
+Bucket: `daer-media`. Acesso público via subdomínio `r2.dev`. Credenciais S3 (Access Key ID/Secret) geradas em: 
+R2 Object Storage → Manage API tokens, com escopo restrito ao bucket.
+
+### Mapa (site institucional)
+
+Leaflet + OpenStreetMap — sem chave de API, gratuito. Coordenadas de cada `Igreja` são cadastradas manualmente (sem 
+geocodificação automática a partir do endereço).
+
+### Sem integrações configuradas ainda
+
+E-mail transacional (ex. reset de senha, notificações), e outros serviços — nenhum desses está integrado.
+
 ## Autenticação
 
 JWT simples (`core/auth.py`) — login por e-mail/senha devolve um `access_token` (7 dias de validade, sem refresh token), 
@@ -145,3 +189,38 @@ que funciona em Next 14 porque `await` num valor que não é Promise simplesment
   ambiente (dev local continua a usar disco). Ver `STORAGES["default"]` em `backend/config/settings.py`.
 - **Proxy do Northflank**: termina o TLS antes do container, então o Django precisa de `SECURE_PROXY_SSL_HEADER` pra 
   saber que a conexão original era HTTPS — sem isso, a checagem de CSRF falha em produção mesmo com tudo configurado certo.
+
+## Como adicionar uma nova funcionalidade
+
+Checklist geral pra uma funcionalidade que envolve banco + API + tela. Nem todo item se aplica sempre (ex. uma 
+funcionalidade só de frontend não mexe em model nenhum).
+
+### 1. Backend — modelo de dados
+
+- Alterar/criar model em `backend/core/models.py` (regras de negócio como "só preenche X se Y" ficam em comentário + 
+  validação na API, não em constraint de banco, seguindo o padrão já usado em `Membro`).
+- `python manage.py makemigrations` e revisar o arquivo gerado antes de aplicar.
+- Se o model precisa de aparecer no Django Admin: registrar em `backend/core/admin.py`.
+
+### 2. Backend — API
+
+- Endpoint novo em `backend/core/api/` (um módulo por entidade, seguindo o padrão existente — ver `carteirinhas.py` como 
+  referência de como `.url` de `ImageField` já funciona automaticamente com o storage configurado, sem precisar de lógica extra).
+- Autenticação/permissão por papel: seguir o padrão de checar `request.auth.membro.tipo` (ver módulos existentes pra convenção exata).
+- Testar em `/api/docs` (Swagger gerado automaticamente pelo Django Ninja — nenhuma documentação manual necessária aqui, 
+  é por isso que o Stoplight Elements vai poder consumir isso direto).
+
+### 3. Frontend
+
+- Tela de gestão: entra sob `frontend/app/(app)/painel/`, dentro do `AppShell` (sidebar já filtra itens por papel — ver
+  `components/layout/app-shell.tsx`).
+- Chamada à API: seguir o padrão de `lib/api.ts` (usa `NEXT_PUBLIC_API_URL` + token do `AuthProvider`).
+- Se a tela precisa de acesso restrito por papel, além do filtro da sidebar (que só esconde o link, não bloqueia a URL 
+  direta) — replicar o padrão de guard usado em `app/cursos/_auth-guard.tsx` se a rota ficar fora do grupo `(app)`, ou 
+  confiar no redirecionamento do `AppShell` se a rota ficar dentro dele.
+
+### 4. Deploy
+
+- Nenhum passo manual de deploy é necessário pra funcionalidade nova em si — Northflank e Vercel buildam automaticamente 
+  a cada push. Só é preciso intervenção manual quando a mudança envolve migração de banco (rodar `migrate` pelo shell do
+  Northflank, como em qualquer deploy) ou uma variável de ambiente nova.

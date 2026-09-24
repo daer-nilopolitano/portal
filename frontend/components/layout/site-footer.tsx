@@ -65,7 +65,7 @@ export function SiteFooter() {
             Seus dados são usados apenas para fins de identificação e gestão
             interna, em conformidade com a LGPD.{" "}
             <a
-              href="https://github.com/daer-nilopolitano/site/blob/main/PRIVACIDADE.md"
+              href="https://github.com/daer-nilopolitano/portal/blob/main/PRIVACY-POLICIES.md"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-primary"
