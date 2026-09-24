@@ -1,0 +1,211 @@
+{
+  "title": "Quiz: revise o que você aprendeu",
+  "summary": "Duas perguntas para cada um dos sete capítulos de conteúdo, cada bloco com sua própria pontuação.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Responda às perguntas abaixo para revisar o conteúdo dos sete capítulos. Depois de cada resposta, você vê a explicação. Cada bloco tem sua própria pontuação e pode ser refeito quantas vezes quiser."
+    },
+
+    {
+      "type": "heading",
+      "text": "Conhecendo a organização"
+    },
+    {
+      "type": "quiz",
+      "title": "Conhecendo a organização",
+      "questions": [
+        {
+          "question": "Em que ano o movimento que deu origem aos Embaixadores do Rei começou nos Estados Unidos?",
+          "options": ["1883", "1908", "1948", "1970"],
+          "answer": 0,
+          "explanation": "Em 1883, um grupo de meninos entre 12 e 14 anos passou a se reunir para estudar e orar por missões. Em 1908, o trabalho foi institucionalizado na denominação batista."
+        },
+        {
+          "question": "Quem organizou a primeira embaixada em solo brasileiro, e onde?",
+          "options": [
+            "William Buck Bagby, em Salvador (BA)",
+            "William Alvin Hatton, na Igreja Batista da Tijuca (RJ)",
+            "Edson José Machado, em Recife (PE)",
+            "Antônio Coutinho, no Rio de Janeiro (RJ)"
+          ],
+          "answer": 1,
+          "explanation": "William Alvin Hatton organizou a Embaixada William Buck Bagby, em 25 de agosto de 1948, na Igreja Batista da Tijuca, hoje Primeira Igreja Batista do Andaraí."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Estrutura e histórico da embaixada"
+    },
+    {
+      "type": "quiz",
+      "title": "Estrutura e histórico da embaixada",
+      "questions": [
+        {
+          "question": "Qual cargo da diretoria é responsável por escrever e arquivar as atas e enviar relatórios ao DAER, DCER e DENAER?",
+          "options": ["Intendente", "Porta-voz", "Secretário", "Cônsul"],
+          "answer": 2,
+          "explanation": "O Secretário faz a chamada, mantém o cadastro atualizado, escreve e arquiva as atas, e envia os relatórios."
+        },
+        {
+          "question": "Qual é o critério para definir o número ideal de consulados em uma embaixada?",
+          "options": [
+            "Sempre três, sem exceção",
+            "Garantir a participação ativa de cada membro nas reuniões e atividades",
+            "Um consulado para cada cargo da diretoria",
+            "O número de manuais disponíveis na embaixada"
+          ],
+          "answer": 1,
+          "explanation": "Não há regra fixa. A sugestão do material é 2 consulados para cerca de 10 meninos, e 3 para 20 ou mais, mas o critério real é sempre garantir a participação ativa de cada membro."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Os postos da organização"
+    },
+    {
+      "type": "quiz",
+      "title": "Os postos da organização",
+      "questions": [
+        {
+          "question": "Qual é a ordem correta dos quatro postos da organização?",
+          "options": [
+            "Arauto, Escudeiro, Emérito, Sênior",
+            "Escudeiro, Arauto, Sênior, Emérito",
+            "Sênior, Emérito, Escudeiro, Arauto",
+            "Emérito, Sênior, Arauto, Escudeiro"
+          ],
+          "answer": 1,
+          "explanation": "A ordem é Escudeiro, Arauto, Sênior e Emérito, com um manual de estudo para cada posto."
+        },
+        {
+          "question": "O sistema de postos representa uma hierarquia entre os ERs?",
+          "options": [
+            "Sim, quem está no posto máximo é superior aos demais",
+            "Não, é apenas reconhecimento de conhecimento acumulado",
+            "Sim, mas só dentro dos acampamentos",
+            "Não existe sistema de postos na organização"
+          ],
+          "answer": 1,
+          "explanation": "O material é explícito: não é hierarquia, graduação, cargo ou patente. É reconhecimento de conhecimento acumulado."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Como organizar uma embaixada"
+    },
+    {
+      "type": "quiz",
+      "title": "Como organizar uma embaixada",
+      "questions": [
+        {
+          "question": "Qual é o treinamento disponível hoje para conselheiros de ER, citado no primeiro passo?",
+          "options": ["ANVER-SS", "CICER", "DENAER", "UHBB"],
+          "answer": 1,
+          "explanation": "O CICER é ministrado por um DCER (Departamento Convencional de Embaixadores do Rei) ou pelo DENAER (Departamento Nacional)."
+        },
+        {
+          "question": "O que o material recomenda ao escolher um líder para a embaixada?",
+          "options": [
+            "Designar às pressas quem estiver disponível, por pressão da igreja",
+            "Esperar treinar bem o líder antes de designá-lo às pressas",
+            "Sempre escolher o pastor da igreja como líder",
+            "Não é necessário nenhum treinamento prévio"
+          ],
+          "answer": 1,
+          "explanation": "Designar às pressas um irmão pouco engajado tende a resultar em abandono do trabalho pouco depois. O primeiro passo é treinar os líderes."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Atividades da organização"
+    },
+    {
+      "type": "quiz",
+      "title": "Atividades da organização",
+      "questions": [
+        {
+          "question": "Em que mês acontece o ANVER-SS, e com quantas semanas de duração?",
+          "options": ["Janeiro, em 4 semanas", "Julho, em 2 semanas", "Dezembro, em 3 semanas", "Março, em 1 semana"],
+          "answer": 0,
+          "explanation": "O ANVER-SS acontece anualmente em janeiro, dividido em 4 semanas, com cerca de 400 embaixadores por semana."
+        },
+        {
+          "question": "Segundo o guia “A Arte de Acampar”, com quanto tempo de antecedência se deve planejar um acampamento?",
+          "options": ["Uma semana", "Um mês", "No mínimo cinco meses", "Não há prazo recomendado"],
+          "answer": 2,
+          "explanation": "O planejamento deve começar com no mínimo cinco meses de antecedência, para dar tempo de avaliar as condições de realização do evento."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Noções básicas de educação física"
+    },
+    {
+      "type": "quiz",
+      "title": "Noções básicas de educação física",
+      "questions": [
+        {
+          "question": "Qual é o verdadeiro objetivo do trabalho de educação física na embaixada, segundo o material?",
+          "options": [
+            "Formar craques e grandes promessas do esporte",
+            "Formar meninos à imagem de referências militares",
+            "Formar meninos conectados com a missão da igreja",
+            "Preparar os ERs para competições oficiais"
+          ],
+          "answer": 2,
+          "explanation": "A atividade física não existe para revelar talentos esportivos ou moldar disciplina militar, e sim para servir à missão da organização."
+        },
+        {
+          "question": "Quais são as quatro regras dos ERs nos esportes?",
+          "options": [
+            "Vencer sempre, treinar muito, seguir o técnico, respeitar o juiz",
+            "Ser honesto, guardar os lábios, perder sem zangar-se, trabalhar em equipe",
+            "Usar uniforme, chegar cedo, avisar faltas, pagar taxas",
+            "Competir, comemorar, motivar, liderar"
+          ],
+          "answer": 1,
+          "explanation": "As quatro regras são: ser honesto, guardar os lábios, perder sem zangar-se e trabalhar em equipe."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Músicas da organização"
+    },
+    {
+      "type": "quiz",
+      "title": "Músicas da organização",
+      "questions": [
+        {
+          "question": "Qual foi o primeiro Hino Oficial dos ER, antes de “Firmando Propósitos”?",
+          "options": ["Sê Fiel", "Mensagem Real", "Alegria do Embaixador", "Convite"],
+          "answer": 1,
+          "explanation": "“Mensagem Real” (207 CC) foi o primeiro Hino Oficial, mas tinha notas muito altas e muito baixas para vozes de adolescentes."
+        },
+        {
+          "question": "Quem compôs a letra e a música do Hino Oficial “Firmando Propósitos”?",
+          "options": [
+            "William Alvin Hatton (letra) e David de Oliveira (música)",
+            "Edson José Machado (letra) e Antônio Coutinho (música)",
+            "Pr. Moisés Carvalho (letra) e Hamilton Marques (música)",
+            "Tony Zamba (letra) e Felipe Duarte (música)"
+          ],
+          "answer": 1,
+          "explanation": "A letra é de Edson José Machado e a música de Antônio Coutinho, compostas em 1967 e oficializadas como hino nacional dos ER em 1970."
+        }
+      ]
+    }
+  ]
+}

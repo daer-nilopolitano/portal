@@ -1,0 +1,419 @@
+{
+  "title": "Atividades da organização",
+  "summary": "Por que ter atividades, os tipos por objetivo, a descrição de cada uma delas — do Serviço Real ao ANVER-SS — e um guia completo para planejar um acampamento.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "Por que ter atividades"
+    },
+    {
+      "type": "text",
+      "content": "O objetivo da organização ER é desenvolver um crescimento moral, físico e espiritual na vida dos rapazes. As atividades são os meios para alcançar esses objetivos. Toda atividade precisa ter um **objetivo claro**."
+    },
+
+    {
+      "type": "heading",
+      "text": "Tipos de atividades por objetivo"
+    },
+    {
+      "type": "table",
+      "columns": ["Objetivo", "Exemplos de atividades"],
+      "rows": [
+        ["Crescimento moral", "Serviço Real; Estudos Dirigidos; Ação Social."],
+        ["Crescimento espiritual", "Conclaves; Corte Real; Estudo nos Postos; Estudo da Bíblia; Congressos; Gincanas Bíblicas; Cultos."],
+        ["Crescimento físico", "Congressos; Acampamentos; Torneios Esportivos."]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Descrição de cada atividade"
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Serviço Real"
+    },
+    {
+      "type": "text",
+      "content": "Pode ser individual (no lar, na comunidade, no colégio), coletivo (na igreja, em hospitais, em orfanatos, etc.) ou colaborativo (participação em uma iniciativa ou ação que já está sendo realizada fora do ambiente da embaixada)."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Estudos Dirigidos"
+    },
+    {
+      "type": "text",
+      "content": "Estudos que enfatizam a vida de personagens bíblicos, servindo de exemplo para os embaixadores. Podem também abordar temas específicos e polêmicos, de acordo com a faixa etária."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Cultos"
+    },
+    {
+      "type": "text",
+      "content": "Atividade da qual embaixadores, familiares e amigos podem participar: um momento de evangelização tanto dos embaixadores quanto de seus convidados. Podem ser temáticos ou não."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Estudo nos Postos"
+    },
+    {
+      "type": "text",
+      "content": "Considerado a “espinha dorsal” da organização: instrui o ER para o futuro, oferecendo conhecimentos importantes desde o primeiro contato com a embaixada."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "content": "O capítulo “Os Postos da organização” traz mais detalhes do sistema de postos."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Conclave"
+    },
+    {
+      "type": "text",
+      "content": "Congrega embaixadas de um núcleo, associação, região, cidade, estado, ou mesmo em âmbito nacional. A promoção e direção cabe a um coordenador. Pode ter caráter recreativo, espiritual, ou os dois."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Corte Real"
+    },
+    {
+      "type": "text",
+      "content": "Atividade de criação dos próprios conselheiros, com o objetivo principal de estreitar os laços entre as organizações missionárias, embaixadores e mensageiras (Mensageiras do Rei). Geralmente ocorre entre duas ou mais igrejas, representadas por seus grupos de embaixadores e mensageiras."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Congressos"
+    },
+    {
+      "type": "text",
+      "content": "Promovidos por associações, convenções e departamentos, geralmente com duração de dois a três dias. O programa é dividido em seções, intercaladas com momentos recreativos, competições bíblicas e esportivas."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Gincanas"
+    },
+    {
+      "type": "text",
+      "content": "Atividade indispensável nas reuniões da embaixada, usada para preparar o embaixador para atividades externas. Podem ser bíblicas e/ou esportivas, realizadas individualmente ou em consulados (grupos)."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Intercâmbios"
+    },
+    {
+      "type": "text",
+      "content": "Encontro entre duas ou mais embaixadas, sempre promovido por uma única embaixada anfitriã, na sede da embaixada patrocinadora ou em outro local conveniente. Pode ter finalidade de estudo, recreação, ou ser apenas um encontro social."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "ANVER-SS (Acampamento Nacional de Verão)"
+    },
+    {
+      "type": "text",
+      "content": "Realizado anualmente em **janeiro**, recebendo embaixadas de todo o Brasil. Dividido em **4 semanas**, com cerca de **400 embaixadores** recebidos por semana."
+    },
+    {
+      "type": "timeline",
+      "title": "Histórico do ANVER-SS",
+      "items": [
+        {
+          "date": "01/03/1951",
+          "title": "Primeiro acampamento",
+          "text": "18 acampantes de 3 igrejas cariocas."
+        },
+        {
+          "date": "Julho de 1951",
+          "title": "Segundo acampamento",
+          "text": "35 acampantes de 8 igrejas de 3 estados. A partir dessa data, o Acampamento Nacional dos Embaixadores do Rei passou a acontecer todo verão."
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "caption": "Núcleos por faixa etária no ANVER-SS",
+      "columns": ["Núcleo", "Faixa etária"],
+      "rows": [
+        ["Aquário", "9 e 10 anos"],
+        ["Arco-íris", "11 e 12 anos"],
+        ["Alvorada", "13 anos"],
+        ["Abilene", "14 e 15 anos"],
+        ["Boa Vista", "16 anos"],
+        ["Valentes", "A partir de 17 anos"]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Acampamentos na embaixada"
+    },
+    {
+      "type": "text",
+      "content": "Atividade muitas vezes deixada de lado pelos conselheiros por dificuldade de organização, preparo físico, disponibilidade e custo. Mas essas atividades costumam se tornar uma das mais importantes, trazendo resultados que não seriam alcançados dentro das igrejas."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "content": "A seção “A Arte de Acampar”, mais adiante neste capítulo, traz um guia completo para planejar um acampamento."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Torneios esportivos"
+    },
+    {
+      "type": "text",
+      "content": "Objetivo: desenvolver o físico do embaixador e a união entre eles. Podem ser organizados por embaixadas ou DAERs."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Passeios ciclísticos"
+    },
+    {
+      "type": "text",
+      "content": "Também voltados ao desenvolvimento físico, além de proporcionar contato direto com a natureza. Podem servir como meio de divulgação da organização e da embaixada local."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Passeios turísticos"
+    },
+    {
+      "type": "text",
+      "content": "Aproveitam a grande quantidade de pontos turísticos pouco conhecidos no estado ou no país. Muitas vezes a embaixada é a única oportunidade que o menino tem de conhecer esses lugares."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Ação Social"
+    },
+    {
+      "type": "text",
+      "content": "Objetivo: desenvolvimento moral do embaixador, promovendo consciência do convívio em sociedade e moldando o caráter para representar Cristo em todas as ações."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Outras atividades"
+    },
+    {
+      "type": "quote",
+      "content": "Sede firmes e constantes, sempre abundantes na obra do Senhor, sabendo que o vosso trabalho não é vão no Senhor.",
+      "source": "1 Coríntios 15:58"
+    },
+    {
+      "type": "text",
+      "content": "As atividades acima são apenas algumas sugestões. Os conselheiros podem promover outras atividades dependendo das condições da embaixada e dos interesses dos meninos."
+    },
+
+    {
+      "type": "heading",
+      "text": "Importância do treinamento espiritual"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Acaba com o constrangimento de falar em público;",
+        "Desenvolve e descobre talentos;",
+        "Treina para dirigir cultos;",
+        "Desenvolve a liderança sobre grupos de trabalho e grandes auditórios;",
+        "Reduz a timidez;",
+        "Treina e desenvolve a capacidade de palestrar;",
+        "Treinamento para pregar;",
+        "Promove a realização pessoal de cada ER;",
+        "Valoriza o Embaixador."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Importância do treinamento físico"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Cativa os meninos;",
+        "É necessário para o crescimento físico;",
+        "Desenvolve o controle motor;",
+        "Ajuda a extravasar energias;",
+        "Atrai os não crentes;",
+        "Aumenta a amizade e o espírito de grupo;",
+        "Promove a realização pessoal de cada ER."
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "content": "As atividades físicas não são o fim: são os meios para ensinar os meninos."
+    },
+
+    {
+      "type": "heading",
+      "text": "A Arte de Acampar"
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "O que é e para que serve o acampamento"
+    },
+    {
+      "type": "text",
+      "content": "O acampamento é uma forma de dinamizar e agregar valores relacionados ao companheirismo e ao amor ao próximo. É também uma forma de isolar os meninos das tecnologias e compromissos do cotidiano: mantê-los um pouco afastados dessa “globalização” ajuda a que se descubram."
+    },
+    {
+      "type": "text",
+      "content": "O acampamento proporciona um ambiente espiritual: há alegria, brincadeira e atividades recreativas, mas tudo na hora apropriada e em espírito cristão. O acampante que ainda não é crente encontra ali um ambiente favorável à aceitação."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Alvos do acampamento"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Ganhar para Cristo o acampante que ainda não seja crente, levando-o a uma decisão pública;",
+        "Levar o acampante já crente a buscar a vontade de Deus para sua vida, dando-lhe a oportunidade de expressar essa decisão publicamente;",
+        "Oferecer o companheirismo dos líderes, ajudando o acampante a compreender o padrão de vida esperado de um crente;",
+        "Dar ao acampante a oportunidade de se desenvolver na arte de viver em comunidade, através da experiência como membro de um grupo, acatando ordens, aceitando responsabilidades e compartilhando-as com os colegas."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Planejamento do acampamento"
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "title": "Prazo",
+      "content": "Planejar com no mínimo cinco meses de antecedência, para dar tempo de avaliar as condições de realização do evento."
+    },
+    {
+      "type": "text",
+      "content": "**Escolha do local, critérios:**"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Isolamento** — evitar locais dentro ou muito próximos da cidade; mesmo em local afastado, a área não deve estar cercada de vizinhos que possam atrapalhar a programação;",
+        "**Acessibilidade** — apesar do isolamento, o local deve ter fácil acesso, idealmente próximo a um centro de rodagem (mas não muito próximo);",
+        "**Recursos naturais** — o local deve ter ao menos uma característica natural especial (montanhas, lagoa, ribeirões, rochas, bosques, cachoeiras, etc.);",
+        "**Segurança** — o local deve ser visitado previamente para avaliar riscos, como a presença de animais e plantas perigosas;",
+        "**Salubridade** — condições favoráveis à saúde: boa exposição ao sol, terra limpa, água limpa, entre outros fatores;",
+        "**Terreno** — espaço suficiente para todas as construções, recreações, excursões, distância adequada dos vizinhos e acesso à água."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Alimentação"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Quantidade** — deve ser calculada de acordo com o número de ERs e conselheiros presentes;",
+        "**Preparo** — o ideal é fazer “a famosa cozinha” na lenha, para dar a cara de acampamento, mas para quem for organizar um acampamento pela primeira vez, é recomendável levar um fogão de duas ou quatro bocas e um botijão de gás pequeno."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Limpeza e questões sanitárias"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Fazer a limpeza do local logo na chegada, para manter o ambiente saudável;",
+        "Evacuação (necessidades fisiológicas): deve ser feita em buracos cavados para essa finalidade e depois cobertos com a própria terra retirada."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Medicamentos e primeiros socorros"
+    },
+    {
+      "type": "text",
+      "content": "Recomenda-se levar um enfermeiro para diagnóstico apropriado em caso de qualquer situação. É esse enfermeiro quem deve montar a caixa de medicamentos e material de primeiros socorros."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Vestimenta e equipamentos"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A vestimenta adequada deve ser definida pelo conselheiro e comunicada previamente aos pais por carta, através dos ERs;",
+        "Todos os equipamentos levados devem estar em condições próprias de uso e ser vistoriados, ou confiscados temporariamente pelos conselheiros quando necessário, principalmente objetos cortantes."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Barracas"
+    },
+    {
+      "type": "text",
+      "content": "Consideradas “o mais necessário, porém o menos importante”: podem ser montadas com lona. Podem ser substituídas por sacos de dormir; nesse caso, é necessária vigilância noturna, com revezamento entre ERs e conselheiros."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "text": "Toda atividade precisa de um objetivo claro, dentro de um dos três eixos: crescimento moral, espiritual ou físico."
+        },
+        {
+          "text": "O ANVER-SS acontece em janeiro, dividido em quatro semanas, com seis núcleos por faixa etária, do Aquário aos Valentes."
+        },
+        {
+          "text": "Um bom acampamento se planeja com pelo menos cinco meses de antecedência, e o local se escolhe por seis critérios: isolamento, acessibilidade, recursos naturais, segurança, salubridade e terreno."
+        },
+        {
+          "text": "As atividades físicas e espirituais não são um fim em si mesmas: são meios para o crescimento e o caráter cristão do ER."
+        }
+      ]
+    }
+  ]
+}

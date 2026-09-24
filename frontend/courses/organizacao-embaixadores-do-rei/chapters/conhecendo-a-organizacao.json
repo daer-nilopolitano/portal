@@ -1,0 +1,175 @@
+{
+  "title": "Conhecendo a Organização",
+  "summary": "O que são os Embaixadores do Rei, sua origem nos Estados Unidos e no Brasil, os requisitos mínimos de membro, o compromisso, o hino, a insígnia e os cinco ideais.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "Os Embaixadores do Rei são uma organização missionária das igrejas batistas, com público-alvo de meninos de **9 a 17 anos**. O objetivo do trabalho é o desenvolvimento físico, moral e espiritual dos meninos, em torno de cinco ideais: **Oração, Missões, Mordomia, Serviço Real e Estudo Bíblico**."
+    },
+
+    {
+      "type": "heading",
+      "text": "Origem — Estados Unidos"
+    },
+    {
+      "type": "timeline",
+      "items": [
+        {
+          "date": "1883",
+          "title": "Origem do movimento",
+          "text": "Um grupo de meninos entre 12 e 14 anos passou a se reunir para estudar e orar por missões."
+        },
+        {
+          "date": "1908",
+          "title": "Institucionalização",
+          "text": "A ideia, pensada pela União Feminina Missionária da Convenção Batista do Sul dos Estados Unidos, se concretizou e o trabalho foi institucionalizado na denominação batista."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Origem — Brasil"
+    },
+    {
+      "type": "timeline",
+      "items": [
+        {
+          "date": "25/08/1948",
+          "title": "Primeira embaixada em solo brasileiro",
+          "text": "O missionário estadunidense William Alvin Hatton organiza a Embaixada William Buck Bagby, na Igreja Batista da Tijuca (RJ). Hoje essa igreja tem outro endereço e nome: Primeira Igreja Batista do Andaraí. A organização contou inicialmente com o apoio da UFMBB (União Feminina Missionária Batista do Brasil)."
+        },
+        {
+          "date": "1950",
+          "title": "JUERP passa a promover os ERs"
+        },
+        {
+          "date": "1978",
+          "title": "Criação da UMMBB (hoje UHBB)",
+          "text": "O Departamento de ER é transferido da JUERP para a UMMBB, que passa a promover os ERs."
+        }
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Requisitos mínimos para ser membro"
+    },
+    {
+      "type": "text",
+      "content": "São cinco:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Saber o tema",
+        "Saber a divisa",
+        "Cantar o hino oficial",
+        "Saber o significado do nome “embaixador” e “embaixador do Rei”",
+        "Recitar o compromisso"
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Tema, divisa e significado do nome"
+    },
+    {
+      "type": "table",
+      "columns": ["Item", "Conteúdo"],
+      "rows": [
+        ["Tema", "Somos Embaixadores por Cristo"],
+        ["Divisa", "II Coríntios 5:20"],
+        ["Embaixador", "Representa seu governo em outro país."],
+        ["Embaixador do Rei", "Representa Jesus Cristo aqui na terra."]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Compromisso dos Embaixadores do Rei"
+    },
+    {
+      "type": "quote",
+      "content": "Prometo, esforçar-me por uma vida digna de um Embaixador do Rei; guardar meus lábios da mentira, da impureza e de tomar o nome de Deus em vão; conservar meu corpo limpo e pronto para o serviço; estudar a vida de grandes Embaixadores do Rei, na palavra de Deus e nos livros missionários; dar tudo que puder para o sustento de missões e pelo meu trabalho; ajudar a estabelecer o reino de Deus na terra."
+    },
+    {
+      "type": "text",
+      "content": "**Somente ER batizados** acrescentam:"
+    },
+    {
+      "type": "quote",
+      "content": "Prometo, ser leal a Jesus Cristo, viver para Ele e servi-lo sempre; terei uma vida pura, direi sempre a verdade, corrigirei meus erros; seguirei a Cristo o Rei. Se assim não for, para que nasci!?"
+    },
+
+    {
+      "type": "heading",
+      "text": "Hino oficial"
+    },
+    {
+      "type": "table",
+      "columns": ["Item", "Conteúdo"],
+      "rows": [
+        ["Nome", "Firmando Propósitos"],
+        ["Autor da letra", "Edson José Machado"],
+        ["Autor da música", "Antônio Coutinho"]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "content": "A letra completa do hino, sua história e as demais músicas da organização estão no capítulo “Músicas da Organização”."
+    },
+
+    {
+      "type": "heading",
+      "text": "A insígnia dos Embaixadores do Rei"
+    },
+    {
+      "type": "table",
+      "columns": ["Elemento", "Significado"],
+      "rows": [
+        ["O Escudo", "Simboliza a fé; lembra ao portador que ele é um Embaixador por Cristo."],
+        ["A faixa com as letras ER", "Prova que o Embaixador do Rei é trabalhador, falando de Cristo aos perdidos."],
+        ["A Coroa (5 pontas)", "Representa os cinco ideais: Estudo da Bíblia, Missões, Oração, Mordomia e Serviço Real."],
+        ["O Ramo de Louro (9 folhas)", "Simboliza a vitória a ser ganha por Cristo e para Cristo; as 9 folhas representam a idade em que o menino deve ingressar na Embaixada."]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "As cores da organização"
+    },
+    {
+      "type": "table",
+      "columns": ["Cor", "Significado"],
+      "rows": [
+        ["Azul", "Lealdade"],
+        ["Branco", "Pureza"],
+        ["Amarelo", "Preciosidade"]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Os 5 ideais dos ERs"
+    },
+    {
+      "type": "list",
+      "items": ["Mordomia", "Serviço Real", "Estudo da Bíblia", "Missões", "Oração"]
+    },
+
+    {
+      "type": "summary",
+      "title": "Fatos-chave deste capítulo",
+      "items": [
+        { "text": "Início do movimento: 1883 (EUA); organização formal: 1908 (EUA); chegada ao Brasil: 1948." },
+        { "text": "Faixa etária dos ERs: 9 a 17 anos, em uma organização das Igrejas Batistas." },
+        { "text": "Cores da organização: azul, branco e amarelo. Missionário que trouxe os ERs ao Brasil: William Alvin Hatton." },
+        { "text": "Tema: “Somos Embaixadores por Cristo”. Divisa: II Coríntios 5:20. Hino oficial: “Firmando Propósitos”." },
+        { "text": "Primeira embaixada fundada no Brasil: William Buck Bagby, na Igreja Batista da Tijuca (RJ), hoje Primeira Igreja Batista do Andaraí." }
+      ]
+    }
+  ]
+}

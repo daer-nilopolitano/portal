@@ -1,0 +1,23 @@
+{
+  "title": "Organização Embaixadores do Rei",
+  "eyebrow": "Material de estudo",
+  "subtitle": "A história, a estrutura, os postos, as atividades e a música da organização, para conhecer e organizar bem uma embaixada.",
+  "about": "Material de apoio do DAER Nilopolitano para conselheiros de Embaixadores do Rei. Consolida a apostila “Conhecendo a Organização Embaixadores do Rei” (DAER Gonçalense, RJ, 2019) e as apresentações “Atividades da Organização ER” (2020), “A Arte de Acampar” (DAER Belforroxense, CICER, 2022, instrutor Pr. Moisés Carvalho), “Noções Básicas de Educação Física” (2021, Cer Pr. Hamilton Marques) e “A Música na Embaixada” (conselheiro David de Oliveira, Embaixada Missionário Guilherme Carey, PIB Austin, Nova Iguaçu, RJ).",
+  "author": {
+    "name": "DAER Nilopolitano",
+    "role": "Material de estudo para conselheiros"
+  },
+  "status": "published",
+  "order": 6,
+  "updatedAt": "2026-09",
+  "chapters": [
+    "conhecendo-a-organizacao",
+    "estrutura-e-historico-da-embaixada",
+    "postos-da-organizacao",
+    "como-organizar-uma-embaixada",
+    "atividades-da-organizacao",
+    "nocoes-basicas-de-educacao-fisica",
+    "musicas-da-organizacao",
+    "quiz"
+  ]
+}

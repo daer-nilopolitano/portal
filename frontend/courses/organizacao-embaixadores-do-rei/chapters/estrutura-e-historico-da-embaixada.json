@@ -1,0 +1,210 @@
+{
+  "title": "Estrutura e histórico da embaixada",
+  "summary": "A diretoria da embaixada e suas atribuições, os consulados, como registrar o histórico da embaixada e a importância das atas e sessões.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "A Embaixada"
+    },
+    {
+      "type": "text",
+      "content": "A embaixada é formada por **Conselheiros de Embaixadores do Rei** e **Embaixadores do Rei**. Para ser ER (membro de uma embaixada), o menino precisa ter entre 9 e 17 anos e saber os requisitos mínimos."
+    },
+    {
+      "type": "text",
+      "content": "**Diretoria básica** da Embaixada: Embaixador-Chefe, Embaixador-Assistente, Secretário, Porta-voz, Intendente, Cônsul e Tesoureiro."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Atribuições da diretoria"
+    },
+    {
+      "type": "table",
+      "columns": ["Cargo", "Atribuições"],
+      "rows": [
+        ["Embaixador-Chefe", "Planeja e dirige reuniões, cultos e demais programações; acompanha o crescimento da embaixada; supervisiona o trabalho da diretoria; avalia as programações e administra a embaixada."],
+        ["Embaixador-Assistente", "É o vice do Embaixador-Chefe e o substitui quando necessário; trabalha em conjunto com ele nas programações e acontecimentos da embaixada; é responsável por trazer novos membros e cuidar especialmente dos visitantes."],
+        ["Secretário", "Faz a chamada nas reuniões; mantém atualizado o cadastro de membros e de visitantes; escreve e arquiva as atas; envia relatórios ao DAER, DCER e DENAER; mantém contato com outras embaixadas e com missionários em campo."],
+        ["Intendente", "Arruma a sala antes e depois das reuniões; mantém estoque de manuais e folhetos (solicitando compra ao conselheiro quando necessário); mantém bíblias disponíveis para emprestar a visitantes; mantém organizado e limpo o material esportivo; cuida de todo o patrimônio usado pela embaixada."],
+        ["Porta-voz", "Mantém cartazes sobre as próximas reuniões; avisa os meninos sobre as reuniões (telefone, cartas, e-mail, etc.); informa a igreja sobre as atividades dos ER; fala publicamente pela embaixada quando solicitado pelo Embaixador-Chefe."],
+        ["Cônsul", "Mantém contato com os ERs de seu consulado, avisando o Embaixador-Chefe e o conselheiro sobre ausências prolongadas; distribui tarefas de concursos entre os ERs do consulado; ajuda o Embaixador-Chefe na preparação dos programas da embaixada."],
+        ["Tesoureiro", "Auxilia o conselheiro na coleta de ofertas dos ERs em campanhas de missões ou para objetivos específicos (como compra de material para a embaixada)."]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Outros cargos"
+    },
+    {
+      "type": "text",
+      "content": "A diretoria acima é a básica, ou padrão. Conforme a necessidade, pode-se criar cargos complementares, como **diretor de música** ou **diretor de esportes**. Não é recomendado criar cargos sem objetivo ou sem produção real."
+    },
+
+    {
+      "type": "heading",
+      "text": "Os consulados da embaixada"
+    },
+    {
+      "type": "text",
+      "content": "**O que são:** pequenos grupos formados entre os Embaixadores do Rei dentro da embaixada, uma estratégia de trabalho em pequenos grupos para garantir a participação plena e efetiva de cada membro, sem deixar ninguém “esquecido”."
+    },
+    {
+      "type": "text",
+      "content": "Usos possíveis: dividir tarefas e missões da embaixada por consulado, realizar gincanas bíblicas, cultos nos lares, e revezar a responsabilidade por programações semanais entre os consulados."
+    },
+    {
+      "type": "text",
+      "content": "**O cônsul** é o líder de cada consulado, membro da diretoria. Auxilia o Embaixador-Chefe e o conselheiro no acompanhamento dos ERs, notifica ausências prolongadas e gerencia as atividades e tarefas do seu consulado."
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "content": "Cônsules atentos costumam se tornar excelentes líderes, e alguns chegam a se tornar Embaixador-Chefe."
+    },
+    {
+      "type": "text",
+      "content": "**Quantidade ideal de consulados:** não há regra fixa. Sugestão: embaixada com cerca de 10 meninos, 2 consulados; com 20 ou mais, 3 consulados. O critério é sempre garantir participação ativa de cada membro nas reuniões e atividades."
+    },
+    {
+      "type": "text",
+      "content": "**Nomes de consulados** devem ser simples e curtos. Exemplos:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Embaixada W. Zarro (PIB São Gonçalo, RJ): consulados Azul, Branco e Amarelo;",
+        "Embaixada Waldemiro de Souza (PIB Santa Luzia, RJ): consulados Abilene, El-Shadai e Leão de Judá — “Abilene” é o nome da cidade onde João Batista iniciou seu ministério, não referência ao núcleo do ANVER-SS;",
+        "Embaixada Pr. Valdir Oliveira Peixoto (PIB Albano Franco, SE): consulados Filipenses e Colossenses."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "O histórico da embaixada"
+    },
+    {
+      "type": "text",
+      "content": "O conselheiro deve registrar e preservar a memória da embaixada. O procedimento varia conforme a situação:"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "1. Embaixada sendo fundada agora"
+    },
+    {
+      "type": "text",
+      "content": "Depois de confirmar que realmente nunca houve trabalho de ER na igreja, registrar:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Data, hora e local do culto ou reunião de fundação;",
+        "Nome da embaixada e o motivo da escolha (se for nome de pessoa, breve biografia);",
+        "Membros fundadores (embaixadores e conselheiros);",
+        "Relato do culto ou reunião de fundação (quem dirigiu, quem pregou, presentes, etc.);",
+        "Nome do pastor (ou presidente da igreja, ou pastor interino) à época;",
+        "Foto de todos os presentes na fundação, se possível com o pastor."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "2. Embaixada sendo reorganizada"
+    },
+    {
+      "type": "text",
+      "content": "Quando já houve trabalho, mas a embaixada ficou um tempo inativa:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Registrar a data da reorganização como novo marco inicial;",
+        "Buscar informações do trabalho anterior com o pastor da igreja, o secretário ou arquivista (atas antigas) e membros antigos da embaixada ou da igreja;",
+        "O que buscar: data, hora e local da fundação original; nome da embaixada (registre o nome anterior, se houve troca); fotos e vídeos; período em atividade e período inativo (ex.: ativa de 1970 a 1994, inativa de 1995 a 2009, reorganizada em 2010);",
+        "Se não for possível recuperar muita informação, seguir em frente registrando ao menos os dados da reorganização;",
+        "Guardar atas, históricos, fotos e vídeos."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "3. Embaixada em funcionamento, mas sem histórico registrado"
+    },
+    {
+      "type": "text",
+      "content": "Independentemente de quantos anos está em funcionamento, resgatar a história com o mesmo procedimento do caso de reorganização: pesquisando e registrando o máximo de dados possível sobre o início do trabalho, e arrecadando fotos, ou cópias digitais delas."
+    },
+
+    {
+      "type": "heading",
+      "text": "A importância das atas"
+    },
+    {
+      "type": "text",
+      "content": "Além de documento administrativo, a ata tem valor histórico para a embaixada. Casos em que vale a pena registrar ata:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Eleição de diretoria** — registrar a diretoria anual, para recuperar no futuro quem já passou pela diretoria;",
+        "**Promoção de postos e aclamação** — registrar para uso futuro em relatórios e estatísticas;",
+        "**Cultos e celebrações** — registrar data, horário, dia da semana, local, quem dirigiu ou pregou, participações musicais, ERs e conselheiros presentes (quantidade exata ou estimada), etc.;",
+        "**Movimento de membros** — registrar entradas (data de admissão, dado exigido para a carteira nacional do ER) e saídas, por qualquer motivo;",
+        "**Fundação e reorganização da embaixada** — registrar o nome escolhido e o motivo (breve biografia, se nome de pessoa)."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Sobre as sessões"
+    },
+    {
+      "type": "text",
+      "content": "Sessões são as reuniões de negócios da embaixada, nas quais o conselheiro compartilha decisões com os ERs, ensinando valores democráticos, responsabilidade e participação consciente em processos decisórios, preparando o ER para participar de assembleias da igreja no futuro. O ideal é que o conselheiro oriente e o Embaixador-Chefe presida."
+    },
+    {
+      "type": "text",
+      "content": "**Periodicidade sugerida:** ao menos duas sessões por ano, sendo que uma delas deve incluir a eleição da diretoria."
+    },
+    {
+      "type": "table",
+      "caption": "Modelo anual de exemplo",
+      "columns": ["Mês", "Sessão ou evento"],
+      "rows": [
+        ["Junho", "Sessão regular: relatórios do semestre, sugestões de tema e divisa, planejamento de atividades, delegação de funções, aclamação de novos membros."],
+        ["Agosto", "Reunião de reconhecimento de postos: registrar avanços no estudo dos postos; algumas embaixadas aproveitam para aclamar novos membros."],
+        ["Novembro", "Culto de aniversário da embaixada (varia conforme cada embaixada)."],
+        ["Dezembro", "Sessão regular para eleição de diretoria e apresentação do relatório anual."]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "Reconhecimento de postos e aclamação de novos membros podem ocorrer em qualquer sessão extraordinária, não só nos momentos do calendário-modelo acima."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "text": "A diretoria básica tem sete cargos: Embaixador-Chefe, Embaixador-Assistente, Secretário, Porta-voz, Intendente, Cônsul e Tesoureiro."
+        },
+        {
+          "text": "Os consulados garantem que nenhum ER fique “esquecido”; o critério para o número de consulados é sempre a participação ativa de cada membro."
+        },
+        {
+          "text": "Toda embaixada deve ter seu histórico registrado, seja na fundação, na reorganização, ou resgatado tardiamente quando nunca foi registrado."
+        },
+        {
+          "text": "As atas têm valor administrativo e histórico. O ideal é ao menos duas sessões por ano, sendo uma delas para eleição de diretoria."
+        }
+      ]
+    }
+  ]
+}

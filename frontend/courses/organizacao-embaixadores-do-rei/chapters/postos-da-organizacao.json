@@ -1,0 +1,141 @@
+{
+  "title": "Os postos da organização",
+  "summary": "O sistema de postos crescentes (Escudeiro, Arauto, Sênior, Emérito), os materiais de estudo, como aplicar e avaliar, e a formatura dos ERs.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "Postos da organização ER"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Embaixador **Escudeiro**",
+        "Embaixador **Arauto**",
+        "Embaixador **Sênior**",
+        "Embaixador **Emérito**"
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Orientação para os estudos nos postos"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "O que é o trabalho nos postos"
+    },
+    {
+      "type": "text",
+      "content": "É a estratégia pedagógica da organização para transmitir conhecimentos (estudos bíblicos, missionários, sobre a denominação batista, temas especiais, etc.) através de um sistema de postos crescentes."
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "content": "Não é hierarquia, graduação, cargo ou patente. Estar no posto máximo não torna o ER superior a quem está no primeiro posto; é apenas reconhecimento de conhecimento acumulado."
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Estrutura pedagógica"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Primeiro contato: folheto “Para Ser Embaixador”, com os requisitos mínimos (tema, divisa, hino oficial, significado dos nomes “Embaixador” e “Embaixador do Rei”).",
+        "Após admitido, o ER recebe o Manual do Embaixador Escudeiro; após estudá-lo, ser avaliado e aprovado, participa de formatura e avança para Embaixador Arauto, recebendo o manual seguinte, e assim sucessivamente até o último posto."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Materiais de estudo"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Folheto “Para Ser Embaixador”",
+        "Manual do Embaixador Escudeiro",
+        "Manual do Embaixador Arauto",
+        "Manual do Embaixador Sênior",
+        "Manual do Embaixador Emérito"
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Dicas de aplicação"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Periodicidade:** ao menos uma vez ao ano, idealmente duas;",
+        "**Aplicação:** transformar o conteúdo em estudos, atividades práticas e tarefas (“missões” para o ER);",
+        "**Sentido:** o conteúdo precisa ter aplicabilidade prática na vida do ER;",
+        "**Evitar:** decoreba, estudos mecânicos, conteúdo apenas lido em voz alta na reunião."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Formas de avaliação"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Por tarefa** — nova dinâmica dos manuais mais recentes;",
+        "**Prova escrita** — privilegiar reflexão sobre decoreba; evitar provas longas e exaustivas, já que o objetivo não é escolarizar o trabalho nos postos;",
+        "**Prova oral** — alternativa para ERs com dificuldade de expressão escrita;",
+        "**Redação ou dissertação** — pedir que o ER resuma o que aprendeu no assunto estudado;",
+        "**Subjetividade** — entender os limites de cada ER e adaptar a avaliação individualmente;",
+        "**Criatividade** — aliar o conteúdo a atividades práticas (mapas, dinâmicas de grupo, brincadeiras, jogos);",
+        "**Avaliar métodos e qualidade** — revisar se a aplicação foi elucidativa e atrativa; autoavaliar a execução do trabalho nos postos para corrigir erros e implementar melhorias."
+      ]
+    },
+
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Formatura"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Culto + formatura:** combinar com o pastor um culto (ou parte de um culto) dedicado à entrega dos certificados ou diplomas de posto;",
+        "**Formatura à parte:** caso não seja possível fazer no culto, organizar uma reunião especial destinada à formatura dos Embaixadores do Rei;",
+        "**Aclamação:** recepção de um novo membro na embaixada, comumente aproveitada no mesmo culto ou formatura de postos."
+      ]
+    },
+
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "content": "O sistema de postos é considerado a “espinha dorsal” da organização: instrui o ER desde o primeiro contato com a embaixada. Trate cada avanço de posto como uma conquista real, com formatura marcante, não como um trâmite burocrático."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "text": "Os quatro postos, em ordem, são: Escudeiro, Arauto, Sênior e Emérito."
+        },
+        {
+          "text": "O sistema de postos não é hierarquia: é reconhecimento de conhecimento acumulado, não uma patente que torna um ER superior a outro."
+        },
+        {
+          "text": "O estudo deve ser aplicado ao menos uma vez ao ano, com conteúdo prático, evitando decoreba e estudos mecânicos."
+        },
+        {
+          "text": "Cada avanço de posto deve ser marcado por uma formatura, de preferência em culto, com a igreja presente."
+        }
+      ]
+    }
+  ]
+}
