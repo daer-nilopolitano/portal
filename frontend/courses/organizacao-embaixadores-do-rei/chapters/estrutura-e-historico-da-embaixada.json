@@ -61,11 +61,6 @@
       "content": "**O cônsul** é o líder de cada consulado, membro da diretoria. Auxilia o Embaixador-Chefe e o conselheiro no acompanhamento dos ERs, notifica ausências prolongadas e gerencia as atividades e tarefas do seu consulado."
     },
     {
-      "type": "callout",
-      "variant": "note",
-      "content": "Cônsules atentos costumam se tornar excelentes líderes, e alguns chegam a se tornar Embaixador-Chefe."
-    },
-    {
       "type": "text",
       "content": "**Quantidade ideal de consulados:** não há regra fixa. Sugestão: embaixada com cerca de 10 meninos, 2 consulados; com 20 ou mais, 3 consulados. O critério é sempre garantir participação ativa de cada membro nas reuniões e atividades."
     },
@@ -77,7 +72,7 @@
       "type": "list",
       "items": [
         "Embaixada W. Zarro (PIB São Gonçalo, RJ): consulados Azul, Branco e Amarelo;",
-        "Embaixada Waldemiro de Souza (PIB Santa Luzia, RJ): consulados Abilene, El-Shadai e Leão de Judá — “Abilene” é o nome da cidade onde João Batista iniciou seu ministério, não referência ao núcleo do ANVER-SS;",
+        "Embaixada Waldemiro de Souza (PIB Santa Luzia, RJ): consulados Abilene, El-Shadai e Leão de Judá — “Abilene” foi escolhido em referência ao nome da cidade onde João Batista iniciou seu ministério, e não ao núcleo do Sítio do Sossego;",
         "Embaixada Pr. Valdir Oliveira Peixoto (PIB Albano Franco, SE): consulados Filipenses e Colossenses."
       ]
     },
