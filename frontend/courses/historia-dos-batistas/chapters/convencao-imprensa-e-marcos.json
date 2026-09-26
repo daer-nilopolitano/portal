@@ -1,0 +1,244 @@
+{
+  "title": "Batistas no Brasil: a Convenção, a imprensa e os marcos",
+  "summary": "A organização da Convenção Batista Brasileira em 1907, o Jornal Batista e os seminários, e as organizações que vieram depois, até os Embaixadores do Rei.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "A ideia de uma convenção nacional"
+    },
+    {
+      "type": "text",
+      "content": "Segundo José dos Reis Pereira, **Salomão Luiz Ginsburg** foi o primeiro a pensar na ideia de uma Convenção Nacional. Judeu polonês, ele viveu 37 anos no Brasil, organizou dezenas de igrejas (entre elas a Primeira Igreja Batista de São João de Meriti) e compôs ou traduziu mais de 100 hinos do Cantor Cristão."
+    },
+    {
+      "type": "text",
+      "content": "Em **1º de janeiro de 1905**, no templo da PIB Rio de Janeiro, foi organizada a **Sociedade Missionária Batista do Rio**, uma precursora regional. Ela reunia igrejas como PIB Rio, PIB Niterói, IB Engenho de Dentro, IB Santa Cruz, IB Paraíba do Sul, IB Sapucaia, IB Peão e IB Barão de Aquino."
+    },
+    {
+      "type": "text",
+      "content": "A ideia de uma convenção nacional só se concretizou em **1907**. A. B. Deter, Zacharias Taylor e Salomão Ginsburg deram prosseguimento ao plano, com a adesão de outros líderes, inclusive Francisco Fulgêncio Soren, que tinha reservas no início."
+    },
+
+    {
+      "type": "heading",
+      "text": "22 de junho de 1907, em Salvador"
+    },
+    {
+      "type": "text",
+      "content": "A data escolhida foi **22 de junho de 1907**, em Salvador, exatamente 25 anos depois do início do trabalho batista na cidade. A assembleia aconteceu no prédio do **Aljube**, sede da PIB Salvador, com **43 mensageiros** de igrejas e organizações."
+    },
+    {
+      "type": "timeline",
+      "title": "Do primeiro passo às primeiras juntas",
+      "items": [
+        {
+          "date": "01/01/1905",
+          "title": "Sociedade Missionária Batista do Rio",
+          "text": "Organizada no templo da PIB Rio de Janeiro."
+        },
+        {
+          "date": "22/06/1907",
+          "title": "Organização da Convenção",
+          "text": "No Aljube, em Salvador, com 43 mensageiros."
+        },
+        {
+          "date": "25/06/1907",
+          "title": "Junta de Missões Nacionais",
+          "text": "Originalmente chamada Junta de Evangelização Nacional."
+        },
+        {
+          "date": "27/06/1907",
+          "title": "Junta de Missões Mundiais",
+          "text": "Originalmente chamada Junta de Missões Estrangeiras."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "A primeira diretoria"
+    },
+    {
+      "type": "table",
+      "caption": "Diretoria eleita em 1907",
+      "columns": ["Cargo", "Nome"],
+      "rows": [
+        ["Presidente", "Francisco Fulgêncio Soren"],
+        ["1º Vice-presidente", "Joaquim Fernandes Lessa"],
+        ["2º Vice-presidente", "João Borges da Rocha"],
+        ["1º Secretário", "Teodoro Rodrigues Teixeira"],
+        ["2º Secretário", "Manuel I. Sampaio"],
+        ["Tesoureiro", "Zacharias Taylor"]
+      ]
+    },
+
+    {
+      "type": "heading",
+      "text": "Missões no centro"
+    },
+    {
+      "type": "text",
+      "content": "A motivação central da Convenção foi **missões**. Chegou-se a falar em evangelizar Portugal, o Chile e a África. Para isso, foram criadas sete juntas e entidades:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Junta de Missões Nacionais**, organizada em 25/06/1907",
+        "**Junta de Missões Mundiais**, organizada em 27/06/1907 e proposta pelo próprio Bagby na sexta sessão da Convenção",
+        "Casa Publicadora Batista",
+        "Escola Bíblica Dominical",
+        "União de Mocidade Batista",
+        "Educação",
+        "Seminário"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "A Convenção hoje",
+      "content": "Hoje a CBB reúne cerca de 14 mil igrejas e congregações filiadas."
+    },
+
+    {
+      "type": "heading",
+      "text": "Imprensa e formação teológica"
+    },
+    {
+      "type": "text",
+      "content": "Antes mesmo da Convenção, os batistas já investiam em comunicação e em formação. O **Jornal Batista** é de 1901 e o primeiro seminário, de 1902, ou seja, anteriores à organização da CBB em 1907."
+    },
+    {
+      "type": "table",
+      "caption": "Imprensa e seminários",
+      "columns": ["Instituição", "Data", "O que marcou"],
+      "rows": [
+        [
+          "Jornal Batista",
+          "10/01/1901",
+          "Fundado no Rio de Janeiro, unificou os periódicos “As Boas Novas” e “Echos da Verdade”."
+        ],
+        [
+          "Seminário Teológico Batista do Norte do Brasil",
+          "01/04/1902",
+          "Instalado em Recife, sob direção de Salomão Ginsburg."
+        ],
+        [
+          "Seminário Teológico Batista do Sul do Brasil",
+          "15/03/1908",
+          "Aberto no Rio de Janeiro, com 36 alunos."
+        ],
+        [
+          "Seminário Teológico Batista Equatorial",
+          "02/08/1955",
+          "Primeira aula, voltada ao preparo de obreiros para a Missão Equatorial."
+        ]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "O Jornal Batista unificou os periódicos “As Boas Novas” e “Echos da Verdade”. O missionário **William Edwin Entzminger**, que já tinha experiência em jornalismo, foi selecionado como diretor."
+    },
+    {
+      "type": "text",
+      "content": "O **Seminário Teológico Batista do Norte do Brasil** foi instalado em Recife, sob a direção de Salomão Ginsburg. A ideia do **Seminário Teológico Batista do Sul do Brasil** surgiu já na primeira assembleia da CBB, em 1907, com um grupo de trabalho formado por J. W. Shepard, Deter, Bagby, Hamilton, Maddox, Taylor e Cannada; o seminário abriu as portas em 1908, no Rio de Janeiro, com 36 alunos. Já o **Seminário Teológico Batista Equatorial** foi dedicado ao preparo de obreiros para a Missão Equatorial, que abrangia Ceará, Piauí, Maranhão, Pará, Amapá, Amazonas e Guaporé."
+    },
+
+    {
+      "type": "heading",
+      "text": "Organizações e marcos depois da Convenção"
+    },
+    {
+      "type": "text",
+      "content": "Depois da Convenção, surgiram organizações voltadas a diferentes públicos. Esta linha do tempo mostra as principais, até chegar aos Embaixadores do Rei."
+    },
+    {
+      "type": "timeline",
+      "items": [
+        {
+          "date": "23/06/1908",
+          "title": "União Feminina Missionária Batista no Brasil",
+          "text": "Fundada na 2ª Assembleia da CBB, com sede na Rua Uruguai, 514, na Tijuca (RJ)."
+        },
+        {
+          "date": "07/08/1948",
+          "title": "Embaixadores do Rei",
+          "text": "Início no Brasil, na Igreja Batista da Tijuca, por iniciativa do casal missionário Katie e William Alvin Hatton, com apoio da UFMBB."
+        },
+        {
+          "date": "1949",
+          "title": "Mensageiras do Rei",
+          "text": "Iniciativa de Mini Lou Lanier, para atender meninas com um trabalho voltado a missões."
+        },
+        {
+          "date": "1978",
+          "title": "União Masculina Missionária Batista do Brasil (UMMBB)",
+          "text": "Fundada em Recife (PE). Hoje é a Secretaria Executiva de Homens Batistas da CBB."
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "content": "Os Embaixadores do Rei começaram em **7 de agosto de 1948**, na Igreja Batista da Tijuca, por iniciativa do missionário **William Alvin Hatton**, com o apoio da União Feminina Missionária Batista do Brasil."
+    },
+    {
+      "type": "callout",
+      "variant": "counselor",
+      "title": "Para conversar com os embaixadores",
+      "content": "Ao contar essa história, conecte o começo dos Embaixadores do Rei (1948) com o que você estudou: a Convenção nasceu em 1907 com foco em missões, e a UFMBB, que apoiou o início dos Embaixadores, foi fundada logo depois, em 1908.\n\nUma boa pergunta para a reunião: por que missões esteve no centro desse trabalho desde o começo?"
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "title": "Convenção",
+          "text": "organizada em 22 de junho de 1907, em Salvador, com missões como motivação central e sete juntas criadas para levá-la adiante."
+        },
+        {
+          "title": "Imprensa e formação",
+          "text": "o Jornal Batista (1901) e os primeiros seminários já existiam antes da Convenção, e seguiram se multiplicando depois dela."
+        },
+        {
+          "title": "Embaixadores do Rei",
+          "text": "começaram em 7 de agosto de 1948, na Igreja Batista da Tijuca, poucas décadas depois da fundação da UFMBB, que apoiou o início do trabalho."
+        }
+      ]
+    },
+
+    {
+      "type": "references",
+      "title": "Fontes deste curso",
+      "items": [
+        {
+          "label": "Quem Somos, Batista no Brasil",
+          "detail": "Material institucional em PDF."
+        },
+        {
+          "label": "Artigo “Casal Bagby”",
+          "detail": "Sobre a chegada dos missionários e a fundação em Salvador."
+        },
+        {
+          "label": "Linha do tempo, 26/12/2022",
+          "detail": "Marcos da história batista brasileira."
+        },
+        {
+          "label": "Texto de apoio sobre Santa Bárbara d'Oeste e Salvador",
+          "detail": "As duas vias de origem: imigração e missão."
+        },
+        {
+          "label": "José dos Reis Pereira",
+          "detail": "Citado no material sobre a origem da ideia de uma Convenção Nacional."
+        },
+        {
+          "label": "Site da Convenção Batista Brasileira",
+          "detail": "Introdução, “Quem somos como Batistas” e “A expansão dos Batistas no mundo”, usados no capítulo “Batistas no mundo”."
+        },
+        {
+          "label": "Site Memória dos Batistas",
+          "detail": "Mesmo conteúdo do site da CBB, usado como segunda referência no capítulo “Batistas no mundo”."
+        }
+      ]
+    }
+  ]
+}

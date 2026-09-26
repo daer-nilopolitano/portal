@@ -1,22 +1,19 @@
 {
-  "title": "História dos Batistas no Brasil",
+  "title": "História dos Batistas",
   "eyebrow": "Material de estudo",
-  "subtitle": "Da primeira igreja em Santa Bárbara d'Oeste à Convenção Batista Brasileira: como o trabalho batista chegou, se organizou e cresceu no país.",
-  "about": "Material de estudo do DAER Nilopolitano para conselheiros de Embaixadores do Rei, elaborado a partir de fontes institucionais batistas. Os números de igrejas e de membros são estimativas de pesquisas da época em que as fontes foram publicadas.",
+  "subtitle": "Da dissidência inglesa do século XVII à Convenção Batista Brasileira: como o trabalho batista nasceu no mundo, chegou, se organizou e cresceu no Brasil.",
+  "about": "Material de estudo do DAER Nilopolitano para conselheiros de Embaixadores do Rei, elaborado a partir de fontes institucionais batistas (Convenção Batista Brasileira e Memória dos Batistas, para a história mundial; materiais institucionais e artigos sobre o casal Bagby, para a história no Brasil). Os números de igrejas e de membros são estimativas de pesquisas da época em que as fontes foram publicadas.",
   "author": {
     "name": "DAER Nilopolitano",
     "role": "Material de estudo para conselheiros"
   },
   "status": "published",
-  "order": 1,
+  "order": 2,
   "updatedAt": "2026-09",
   "chapters": [
-    "duas-raizes",
-    "imigracao-1871",
-    "missao-1882",
-    "primeiras-igrejas",
-    "convencao-batista-brasileira",
-    "imprensa-e-formacao",
-    "organizacoes-e-marcos"
+    "batistas-no-mundo",
+    "duas-vias-e-primeiras-igrejas",
+    "convencao-imprensa-e-marcos",
+    "quiz"
   ]
 }

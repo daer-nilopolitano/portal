@@ -1,0 +1,127 @@
+{
+  "title": "Batistas no Brasil: as duas vias e as primeiras igrejas",
+  "summary": "A imigração (1871) e a missão (1882) que deram origem ao trabalho batista no país, e como as primeiras igrejas se espalharam pelas capitais.",
+  "blocks": [
+    {
+      "type": "text",
+      "content": "A história dos batistas no Brasil não começou de uma só vez, nem de um só jeito. A Convenção Batista Brasileira (CBB) resume essa origem em uma resolução oficial que aponta **duas vias**: a **via da imigração** e a **via da missão**."
+    },
+    {
+      "type": "quote",
+      "content": "A inserção batista no Brasil se deu por duas vias: a via da imigração (1871) e a via da missão (1882).",
+      "source": "Resolução oficial da CBB"
+    },
+
+    {
+      "type": "heading",
+      "text": "1871 — A via da imigração"
+    },
+    {
+      "type": "text",
+      "content": "Depois da derrota na Guerra de Secessão (1861–1865), colonos norte-americanos sulistas, chamados de **“confederados”**, migraram para o Brasil. Muitos eram de origem protestante e se estabeleceram na região de Santa Bárbara d'Oeste e Americana, no interior de São Paulo."
+    },
+    {
+      "type": "text",
+      "content": "Em **10 de setembro de 1871**, esse grupo organizou a primeira igreja batista do Brasil, sob a coordenação do **pastor Richard Ratcliff**. Ela reunia 12 famílias imigrantes, cerca de 29 pessoas. Os cultos eram realizados em inglês, o que afastava a população local: a igreja atendia principalmente a própria comunidade de imigrantes e, no começo, não era voltada à evangelização de brasileiros."
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "title": "Primeira, mas não missionária",
+      "content": "A igreja de 1871 é a primeira igreja batista em solo brasileiro, mas não a primeira voltada à evangelização de brasileiros. Esse marco pertence à igreja de Salvador, em 1882."
+    },
+    {
+      "type": "text",
+      "content": "Em **2 de novembro de 1879** surgiu a segunda igreja batista em solo brasileiro, a **Igreja Batista da Estação**. Ela foi organizada, também por colonos norte-americanos, na região onde hoje fica a cidade de Americana (SP)."
+    },
+
+    {
+      "type": "heading",
+      "text": "1882 — A via da missão"
+    },
+    {
+      "type": "text",
+      "content": "O casal **William Buck Bagby** e **Anne Luther Bagby** desembarcou no Rio de Janeiro e seguiu para o interior de São Paulo. Depois de aprender português no Seminário Presbiteriano de Campinas, uniram-se ao casal **Zacharias Clay Taylor** e **Kate Stevens Crawford Taylor**, também missionários americanos, e ao ex-padre **Antônio Teixeira de Albuquerque**, batizado em Santa Bárbara d'Oeste."
+    },
+    {
+      "type": "text",
+      "content": "O grupo decidiu iniciar a missão em **Salvador (BA)**, então uma cidade de 250.000 habitantes. Inicialmente, alugaram uma casa na parte alta da cidade, que servia ao mesmo tempo de residência e de espaço de pregação. Chegaram a Salvador em **agosto de 1882**."
+    },
+    {
+      "type": "text",
+      "content": "Em **15 de outubro de 1882**, os missionários fundaram a **Primeira Igreja Batista da Bahia**, no bairro do Canela: a primeira igreja batista voltada à evangelização de brasileiros."
+    },
+    {
+      "type": "table",
+      "caption": "Os cinco membros fundadores",
+      "columns": ["Membro", "Papel"],
+      "rows": [
+        ["William Buck Bagby", "Missionário"],
+        ["Anne Luther Bagby", "Missionária"],
+        ["Zacharias Clay Taylor", "Missionário"],
+        ["Kate Stevens Crawford Taylor", "Missionária"],
+        [
+          "Antônio Teixeira de Albuquerque",
+          "Ex-padre e único brasileiro entre os cinco"
+        ]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "note",
+      "title": "Cinco membros, um brasileiro",
+      "content": "A igreja nasceu pequena: dois casais missionários e um ex-padre. A partir dela, o trabalho passou a contar com um número crescente de brasileiros convertidos, como você vê a seguir."
+    },
+
+    {
+      "type": "heading",
+      "text": "As primeiras igrejas batistas"
+    },
+    {
+      "type": "text",
+      "content": "Depois de Salvador, o trabalho seguiu para outras capitais. Em pouco mais de quatro anos, surgiram igrejas batistas no Rio de Janeiro, em Maceió e em Recife."
+    },
+    {
+      "type": "table",
+      "caption": "Primeiras igrejas batistas no Brasil",
+      "columns": ["Igreja", "Local", "Data"],
+      "rows": [
+        ["Primeira Igreja Batista da Bahia", "Salvador (BA)", "15/10/1882"],
+        [
+          "Primeira Igreja Batista do Rio de Janeiro",
+          "Rio de Janeiro (RJ)",
+          "24/08/1884"
+        ],
+        ["Primeira Igreja Batista de Maceió", "Maceió (AL)", "17/05/1885"],
+        ["Primeira Igreja Batista do Recife", "Recife (PE)", "04/04/1886"]
+      ]
+    },
+    {
+      "type": "text",
+      "content": "Nos primeiros 25 anos de trabalho, Bagby, Taylor e outros missionários, auxiliados por um número crescente de brasileiros convertidos, já haviam organizado **83 igrejas**, com aproximadamente **4.200 membros**."
+    },
+
+    {
+      "type": "summary",
+      "title": "O que levar deste capítulo",
+      "items": [
+        {
+          "title": "Duas vias",
+          "text": "a CBB descreve a origem batista no país pela imigração (1871) e pela missão (1882)."
+        },
+        {
+          "title": "Imigração",
+          "text": "colonos norte-americanos organizaram, em Santa Bárbara d'Oeste (SP), a primeira igreja batista em solo brasileiro."
+        },
+        {
+          "title": "Missão",
+          "text": "em Salvador (BA), missionários fundaram a primeira igreja batista voltada à evangelização de brasileiros, com cinco membros."
+        },
+        {
+          "title": "Expansão",
+          "text": "em 25 anos, o trabalho já somava 83 igrejas e cerca de 4.200 membros, espalhadas de Salvador ao Rio, Maceió e Recife."
+        }
+      ]
+    }
+  ]
+}
