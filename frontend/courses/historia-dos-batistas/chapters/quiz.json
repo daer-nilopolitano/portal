@@ -16,17 +16,6 @@
       "title": "Batistas no mundo",
       "questions": [
         {
-          "question": "O que diferenciava os “separatistas” dos “puritanos”, dentro da dissidência inglesa do século XVI?",
-          "options": [
-            "Os separatistas buscavam reformar a Igreja Anglicana por dentro",
-            "Os separatistas optaram por se afastar completamente da Igreja Anglicana",
-            "Os puritanos foram os fundadores da denominação batista",
-            "Não havia diferença real entre os dois grupos"
-          ],
-          "answer": 1,
-          "explanation": "Os puritanos buscavam reformar a Igreja Anglicana por dentro; os separatistas optaram por se afastar dela por completo. John Smyth e Thomas Helwys eram simpatizantes dos separatistas."
-        },
-        {
           "question": "Em que ano Thomas Helwys organizou, em Spitalfields, a igreja que inicia a linhagem de igrejas batistas na Inglaterra?",
           "options": ["1609", "1612", "1642", "1792"],
           "answer": 1,
@@ -97,7 +86,7 @@
         },
         {
           "question": "Em qual cidade os missionários decidiram iniciar a via da missão?",
-          "options": ["Rio de Janeiro", "Salvador (BA)", "Recife (PE)", "Campinas (SP)"],
+          "options": ["Rio de Janeiro (RJ)", "Salvador (BA)", "Recife (PE)", "Campinas (SP)"],
           "answer": 1,
           "explanation": "A escolha foi Salvador, então uma cidade de 250.000 habitantes."
         },
@@ -180,11 +169,11 @@
           "options": [
             "Mini Lou Lanier",
             "Salomão Ginsburg",
-            "O casal missionário Katie e William Alvin Hatton",
+            "William Alvin Hatton",
             "Francisco Fulgêncio Soren"
           ],
           "answer": 2,
-          "explanation": "Katie e William Alvin Hatton, com apoio da União Feminina Missionária Batista do Brasil."
+          "explanation": "William Alvin Hatton, com apoio da União Feminina Missionária Batista do Brasil."
         },
         {
           "question": "Em que ano foi fundada a União Masculina Missionária Batista do Brasil (UMMBB), e onde?",
