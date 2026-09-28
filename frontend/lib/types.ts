@@ -170,7 +170,9 @@ export interface ImagemRendition {
   alt: string;
 }
 
-export interface NoticiaFoto {
+// Item de galeria de fotos — formato compartilhado por Notícias (campo
+// "galeria") e Álbuns da galeria de fotos (campo "fotos").
+export interface Foto {
   imagem: ImagemRendition | null;
   legenda: string;
 }
@@ -189,5 +191,26 @@ export interface NoticiaResumo {
 // Notícia completa, usada na página de detalhe (/noticias/[slug]).
 export interface Noticia extends NoticiaResumo {
   corpo: string;
-  galeria: NoticiaFoto[];
+  galeria: Foto[];
+}
+
+// Categorias de álbum da Galeria — mesmas 4 opções cadastradas no Wagtail.
+export type CategoriaAlbum = "intercambio" | "conclave" | "torneio" | "culto" | "";
+
+// Campos usados na listagem de /galeria (com contagem de fotos, sem a galeria inteira).
+export interface AlbumResumo {
+  id: number;
+  slug: string;
+  title: string;
+  data: string | null;
+  categoria: CategoriaAlbum;
+  local: string;
+  capa: ImagemRendition | null;
+  totalFotos: number;
+}
+
+// Álbum completo, usado na página de detalhe (/galeria/[slug]).
+export interface Album extends AlbumResumo {
+  descricao: string;
+  fotos: Foto[];
 }

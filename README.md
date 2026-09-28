@@ -111,7 +111,7 @@ PostgreSQL, hospedado no Neon. O esquema é gerado pelas migrações do Django/W
 
 - **Igreja** — cada igreja participante do DAER. Endereço + lat/long (preenchidas manualmente, não há geocodificação 
   automática) pro mapa do site institucional.
-- **Embaixada** — núcleo local do movimento dentro de uma Igreja (`OneToOne`, uma igreja tem no máximo uma embaixada).
+- **Embaixada** — núcleo local do movimento numa Igreja (`OneToOne`, uma igreja tem no máximo uma embaixada).
 - **HorarioReuniao** — dias/horários de reunião de uma Embaixada (pode ter mais de um por semana).
 - **Membro** — toda pessoa cadastrada. Campo `tipo` (choices: `conselheiro`, `auxiliar`, `embaixador_do_rei`) define o 
   papel — **não existe um model `Papel` separado**, é um campo na própria `Membro`. Vínculo opcional com `User` (login) 
@@ -185,7 +185,7 @@ que funciona em Next 14 porque `await` num valor que não é Promise simplesment
   Usa `CompressedStaticFilesStorage`, **sem** manifesto — o `CompressedManifestStaticFilesStorage` quebra com um bug 
   conhecido do django-jazzmin (`Missing staticfiles manifest entry for 'vendor/bootswatch'`), que referencia um "arquivo"
   que não existe de verdade.
-- **Mídia**: `django-storages` + `boto3`, apontando pro R2, só ativado quando as variáveis `R2_*` estão presentes no 
+- **Mídia**: `django-storages` + `boto3`, apontando para o R2, só ativado quando as variáveis `R2_*` estão presentes no 
   ambiente (dev local continua a usar disco). Ver `STORAGES["default"]` em `backend/config/settings.py`.
 - **Proxy do Northflank**: termina o TLS antes do container, então o Django precisa de `SECURE_PROXY_SSL_HEADER` pra 
   saber que a conexão original era HTTPS — sem isso, a checagem de CSRF falha em produção mesmo com tudo configurado certo.
@@ -206,7 +206,7 @@ funcionalidade só de frontend não mexe em model nenhum).
 
 - Endpoint novo em `backend/core/api/` (um módulo por entidade, seguindo o padrão existente — ver `carteirinhas.py` como 
   referência de como `.url` de `ImageField` já funciona automaticamente com o storage configurado, sem precisar de lógica extra).
-- Autenticação/permissão por papel: seguir o padrão de checar `request.auth.membro.tipo` (ver módulos existentes pra convenção exata).
+- Autenticação/permissão por papel: seguir o padrão de checar `request.auth.membro.tipo` (ver módulos existentes para convenção exata).
 - Testar em `/api/docs` (Swagger gerado automaticamente pelo Django Ninja — nenhuma documentação manual necessária aqui, 
   é por isso que o Stoplight Elements vai poder consumir isso direto).
 
@@ -221,6 +221,6 @@ funcionalidade só de frontend não mexe em model nenhum).
 
 ### 4. Deploy
 
-- Nenhum passo manual de deploy é necessário pra funcionalidade nova em si — Northflank e Vercel buildam automaticamente 
+- Nenhum passo manual de deploy é necessário para funcionalidade nova em si — Northflank e Vercel buildam automaticamente 
   a cada push. Só é preciso intervenção manual quando a mudança envolve migração de banco (rodar `migrate` pelo shell do
   Northflank, como em qualquer deploy) ou uma variável de ambiente nova.

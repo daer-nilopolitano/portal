@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NoticiaGaleria } from "@/components/public/noticias/galeria";
+import { GaleriaFotos } from "@/components/public/galeria-fotos";
 import { formatarDataBR } from "@/lib/format";
 import { getNoticiaPorSlug } from "@/lib/noticias";
 
@@ -53,7 +53,7 @@ export default async function NoticiaDetalhePage({ params }: Props) {
 
       <div className="noticia-corpo text-measure mt-8" dangerouslySetInnerHTML={{ __html: noticia.corpo }} />
 
-      <NoticiaGaleria fotos={noticia.galeria} />
+      <GaleriaFotos fotos={noticia.galeria} />
     </main>
   );
 }

@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import type { NoticiaFoto } from "@/lib/types";
-import { NoticiaLightbox } from "./lightbox";
+import type { Foto } from "@/lib/types";
+import { Lightbox } from "./lightbox";
 
 interface Props {
-  fotos: NoticiaFoto[];
+  fotos: Foto[];
 }
 
-export function NoticiaGaleria({ fotos }: Props) {
+export function GaleriaFotos({ fotos }: Props) {
   const [indiceAberto, setIndiceAberto] = useState<number | null>(null);
 
   if (fotos.length === 0) return null;
@@ -41,7 +41,7 @@ export function NoticiaGaleria({ fotos }: Props) {
       </div>
 
       {indiceAberto !== null ? (
-        <NoticiaLightbox fotos={fotos} indiceInicial={indiceAberto} onFechar={() => setIndiceAberto(null)} />
+        <Lightbox fotos={fotos} indiceInicial={indiceAberto} onFechar={() => setIndiceAberto(null)} />
       ) : null}
     </div>
   );

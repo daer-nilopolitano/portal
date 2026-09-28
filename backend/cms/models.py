@@ -43,6 +43,7 @@ class HomePage(Page):
         "cms.PaginaInstitucionalPage",
         "cms.NoticiaIndexPage",
         "cms.EventoIndexPage",
+        "cms.GaleriaIndexPage",
     ]
 
 
@@ -196,3 +197,103 @@ class EventoPage(Page):
     ]
 
     parent_page_types = ["cms.EventoIndexPage"]
+
+
+class GaleriaIndexPage(Page):
+    """Página de listagem dos álbuns de fotos (/galeria)."""
+
+    subpage_types = ["cms.AlbumPage"]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context["albuns"] = (
+            AlbumPage.objects.child_of(self).live().order_by("-data")
+        )
+        return context
+
+
+class AlbumPage(Page):
+    """Um álbum de fotos de um evento/atividade do DAER (intercâmbio, conclave,
+    torneio, culto etc.)."""
+
+    class Categoria(models.TextChoices):
+        INTERCAMBIO = "intercambio", "Intercâmbio"
+        CONCLAVE = "conclave", "Conclave"
+        TORNEIO = "torneio", "Torneio"
+        CULTO = "culto", "Culto"
+
+    data = models.DateField("Data", null=True, blank=True)
+    categoria = models.CharField(
+        max_length=30, choices=Categoria.choices, blank=True
+    )
+    local = models.CharField(
+        "Local",
+        max_length=200,
+        blank=True,
+        help_text="Ex.: 'Igreja Batista Videira de Nilópolis' ou 'Quadra Municipal'. Sem necessidade de endereço completo.",
+    )
+    descricao = models.CharField("Descrição curta", max_length=300, blank=True)
+    imagem_capa = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Opcional — se vazio, usa a primeira foto do álbum (abaixo) como capa.",
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("data"),
+        FieldPanel("categoria"),
+        FieldPanel("local"),
+        FieldPanel("descricao"),
+        FieldPanel("imagem_capa"),
+        InlinePanel("fotos", label="Foto", heading="Fotos do álbum"),
+    ]
+
+    @property
+    def capa(self):
+        """Capa efetiva do álbum: a escolhida manualmente, ou a primeira foto
+        cadastrada — assim quem administra não precisa escolher capa toda vez."""
+        if self.imagem_capa:
+            return self.imagem_capa
+        primeira_foto = self.fotos.first()
+        return primeira_foto.imagem if primeira_foto else None
+
+    @property
+    def total_fotos(self):
+        """Só a contagem — usado na listagem (/galeria) pra mostrar 'X fotos'
+        sem precisar baixar a galeria inteira (com renditions) de cada álbum."""
+        return self.fotos.count()
+
+    api_fields = [
+        APIField("data"),
+        APIField("categoria"),
+        APIField("local"),
+        APIField("descricao"),
+        APIField("capa", serializer=ImageRenditionField("fill-800x600")),
+        APIField("total_fotos"),
+        APIField("fotos"),
+    ]
+
+    parent_page_types = ["cms.GaleriaIndexPage"]
+
+
+class AlbumFoto(Orderable):
+    """Uma foto de um álbum da galeria."""
+
+    page = ParentalKey(AlbumPage, on_delete=models.CASCADE, related_name="fotos")
+    imagem = models.ForeignKey(
+        "wagtailimages.Image", on_delete=models.CASCADE, related_name="+"
+    )
+    legenda = models.CharField(max_length=200, blank=True)
+
+    panels = [
+        FieldPanel("imagem"),
+        FieldPanel("legenda"),
+    ]
+
+    api_fields = [
+        APIField("imagem", serializer=ImageRenditionField("fill-1600x1067")),
+        APIField("legenda"),
+    ]

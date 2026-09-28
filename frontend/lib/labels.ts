@@ -39,6 +39,14 @@ export const ROTULO_FAIXA_ETARIA: Record<string, string> = {
   juvenil: "Juvenil (15-17 anos)",
 };
 
+// Precisa bater com AlbumPage.Categoria em backend/cms/models.py.
+export const ROTULO_CATEGORIA_ALBUM: Record<string, string> = {
+  intercambio: "Intercâmbio",
+  conclave: "Conclave",
+  torneio: "Torneio",
+  culto: "Culto",
+};
+
 // Precisa bater com DiaSemana em backend/core/models.py.
 export const DIAS_SEMANA: { value: string; label: string }[] = [
   { value: "domingo", label: "Domingo" },

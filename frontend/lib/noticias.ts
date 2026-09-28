@@ -1,4 +1,4 @@
-import type { ImagemRendition, Noticia, NoticiaFoto, NoticiaResumo } from "@/lib/types";
+import type { Foto, ImagemRendition, Noticia, NoticiaResumo } from "@/lib/types";
 
 type NoticiaAPI = {
   id: number;
@@ -9,7 +9,7 @@ type NoticiaAPI = {
   resumo: string;
   corpo?: string;
   imagem_capa: ImagemRendition | null;
-  galeria?: NoticiaFoto[];
+  galeria?: Foto[];
 };
 
 function mapResumo(n: NoticiaAPI): NoticiaResumo {

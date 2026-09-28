@@ -13,6 +13,7 @@ const ITENS_NAV = [
   { href: "/#eventos", rotulo: "Eventos" },
   { href: "/#embaixadas", rotulo: "Embaixadas" },
   { href: "/noticias", rotulo: "Notícias" },
+  { href: "/galeria", rotulo: "Galeria" },
 ];
 
 export function SiteHeader() {

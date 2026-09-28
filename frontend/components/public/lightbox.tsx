@@ -5,15 +5,15 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { NoticiaFoto } from "@/lib/types";
+import type { Foto } from "@/lib/types";
 
 interface Props {
-  fotos: NoticiaFoto[];
+  fotos: Foto[];
   indiceInicial: number;
   onFechar: () => void;
 }
 
-export function NoticiaLightbox({ fotos, indiceInicial, onFechar }: Props) {
+export function Lightbox({ fotos, indiceInicial, onFechar }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, startIndex: indiceInicial }, [Fade()]);
   const [slideAtual, setSlideAtual] = useState(indiceInicial);
 
