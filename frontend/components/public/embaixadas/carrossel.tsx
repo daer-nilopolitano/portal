@@ -29,9 +29,9 @@ function horariosReuniao(destaque: EmbaixadaDestaque) {
 
 function conselheirosResponsaveis(destaque: EmbaixadaDestaque) {
   if (destaque.conselheiros_nomes.length === 0) {
-    return "Conselheiro responsável: a definir";
+    return "Conselheiro: a definir";
   }
-  const rotulo = destaque.conselheiros_nomes.length > 1 ? "Conselheiros" : "Conselheiro responsável";
+  const rotulo = destaque.conselheiros_nomes.length > 1 ? "Conselheiros" : "Conselheiro";
   return `${rotulo}: ${destaque.conselheiros_nomes.join(", ")}`;
 }
 
@@ -89,11 +89,10 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
         <div className="flex">
           {igrejas.map((igreja) => (
             <div key={igreja.id} className="min-w-0 flex-[0_0_100%]">
-              <p className="font-heading text-lg font-semibold text-primary">{igreja.nome}</p>
-              <p className="text-xs text-text-muted">{igreja.embaixada_nome}</p>
-
+              <p className="font-heading text-xl font-semibold text-primary">{igreja.nome}</p>
+              <p className="text-lg text-text-muted mt-3">Embaixada: {igreja.embaixada_nome}</p>
               <div className="mt-4 space-y-3 text-sm text-text-muted">
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2 mt-5">
                   <MapPin size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
                   <span className="line-clamp-2 leading-relaxed">{enderecoCompleto(igreja)}</span>
                 </div>
