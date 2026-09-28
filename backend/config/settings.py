@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "taggit",
 
     # Terceiros
-    "jazzmin",
     "corsheaders",
 
     # Django padrão
@@ -161,6 +160,7 @@ CSRF_TRUSTED_ORIGINS = os.environ.get(
 # Constante de identificação do site
 SITE_NAME = "DAER Nilopolitano"
 
+# Configurações do Wagtail (CMS)
 WAGTAIL_SITE_NAME = SITE_NAME
 WAGTAILADMIN_BASE_URL = os.environ.get(
     "WAGTAILADMIN_BASE_URL", "http://localhost:8000"
@@ -174,19 +174,6 @@ WAGTAILAPI_BASE_URL = os.environ.get("WAGTAILAPI_BASE_URL", WAGTAILADMIN_BASE_UR
 # Por padrão reaproveita a SECRET_KEY do Django; em produção, defina um valor próprio em JWT_SECRET_KEY no .env.
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)
 JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080"))  # 7 dias
-
-# Configuração do django-jazzmin (tema do Django Admin).
-JAZZMIN_SETTINGS = {
-    "site_title": SITE_NAME,
-    "site_header": SITE_NAME,
-    "site_brand": SITE_NAME,
-    "welcome_sign": f"Administração do {SITE_NAME}",
-    "copyright": SITE_NAME,
-    "site_logo": "img/logo.png",
-    "login_logo": "img/logo.png",
-    "site_logo_classes": "img-fluid",
-    "site_icon": "img/favicon.png",
-}
 
 # Configuração de logging — envia logs para stdout.
 LOGGING = {

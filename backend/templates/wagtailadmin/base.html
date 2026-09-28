@@ -1,0 +1,8 @@
+{% extends "wagtailadmin/base.html" %}
+{% load static %}
+
+{% block branding_favicon %}
+<link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+{% endblock %}
+
+{% block branding_title %}{{ WAGTAIL_SITE_NAME }} CMS{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <ul>
+        {% for album in albuns %}
+            <li>
+                <a href="{% pageurl album %}">{{ album.title }}</a>
+                — {{ album.data }} ({{ album.total_fotos }} fotos)
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

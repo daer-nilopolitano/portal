@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf import settings
 
 from .models import (
     Carteirinha,
@@ -12,6 +13,9 @@ from .models import (
     Membro,
 )
 
+admin.site.site_header = settings.SITE_NAME
+admin.site.site_title = f"Administração — {settings.SITE_NAME}"
+admin.site.index_title = "Painel de Administração"
 
 class CarteirinhaInline(admin.StackedInline):
     model = Carteirinha

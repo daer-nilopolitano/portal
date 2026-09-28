@@ -224,3 +224,12 @@ funcionalidade só de frontend não mexe em model nenhum).
 - Nenhum passo manual de deploy é necessário para funcionalidade nova em si — Northflank e Vercel buildam automaticamente 
   a cada push. Só é preciso intervenção manual quando a mudança envolve migração de banco (rodar `migrate` pelo shell do
   Northflank, como em qualquer deploy) ou uma variável de ambiente nova.
+
+---
+
+### Autor
+
+Desenvolvido por **Alan de O. Gonçalves** para uso do DAER Nilopolitano.
+  
+[![Github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Alan-oliveir)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alan-ogoncalves)
