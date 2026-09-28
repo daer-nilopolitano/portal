@@ -15,9 +15,11 @@
   --muted: #7b736b;
   --line: #e7e1d8;
   --line-strong: #d5cdc2;
-  --accent: #9e2a2b;
-  --accent-ink: #7e2021;
-  --accent-soft: #f6eae8;
+  --accent: #2563eb;
+  --accent-ink: #1d4ed8;
+  --accent-soft: #eaf1fe;
+  --wrong: #9e2a2b;
+  --wrong-soft: #f6eae8;
   --ok: #2f6b4f;
   --ok-soft: #e8f1ec;
   --attention: #a86a12;
@@ -954,12 +956,12 @@ ol.c-list {
   color: var(--ok);
 }
 .c-quiz__opt--wrong {
-  background: var(--accent-soft);
-  border-color: var(--accent);
+  background: var(--wrong-soft);
+  border-color: var(--wrong);
   color: var(--ink);
 }
 .c-quiz__opt--wrong .c-quiz__key {
-  color: var(--accent);
+  color: var(--wrong);
 }
 .c-quiz__opt--idle:disabled {
   opacity: 0.6;
@@ -974,7 +976,7 @@ ol.c-list {
   color: var(--ok);
 }
 .c-quiz__feedback.is-wrong strong {
-  color: var(--accent);
+  color: var(--wrong);
 }
 .c-quiz__result {
   display: flex;
@@ -1028,7 +1030,7 @@ ol.c-list {
 }
 .c-chapnav__link--next {
   background: var(--accent-soft);
-  border-color: #e4c4c1;
+  border-color: #c3d5fa;
   text-align: right;
 }
 .c-chapnav__label {
