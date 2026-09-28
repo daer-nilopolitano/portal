@@ -26,8 +26,13 @@ function mapResumo(a: AlbumAPI): AlbumResumo {
   };
 }
 
-/** Listagem de álbuns (/galeria) — mais recente primeiro. */
-export async function getAlbuns(limit = 40): Promise<AlbumResumo[]> {
+/**
+ * Listagem de álbuns (/galeria) — mais recente primeiro.
+ * O Wagtail rejeita `limit` acima de 20 (WAGTAILAPI_LIMIT_MAX) com erro 400.
+ * Se um dia passar de 20 álbuns, é preciso subir esse limite no settings.py
+ * do backend ou paginar aqui.
+ */
+export async function getAlbuns(limit = 20): Promise<AlbumResumo[]> {
   const params = new URLSearchParams({
     type: "cms.AlbumPage",
     fields: "data,categoria,local,capa,total_fotos",
