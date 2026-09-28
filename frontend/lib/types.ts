@@ -195,7 +195,7 @@ export interface Noticia extends NoticiaResumo {
 }
 
 // Categorias de álbum da Galeria — mesmas 4 opções cadastradas no Wagtail.
-export type CategoriaAlbum = "intercambio" | "conclave" | "torneio" | "culto" | "";
+export type CategoriaAlbum = "intercambio" | "conclave" | "evangelismo" | "culto" | "torneio" | "congresso" | "";
 
 // Campos usados na listagem de /galeria (com contagem de fotos, sem a galeria inteira).
 export interface AlbumResumo {

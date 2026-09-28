@@ -43,8 +43,10 @@ export const ROTULO_FAIXA_ETARIA: Record<string, string> = {
 export const ROTULO_CATEGORIA_ALBUM: Record<string, string> = {
   intercambio: "Intercâmbio",
   conclave: "Conclave",
-  torneio: "Torneio",
+  evangelismo: "Evangelismo",
   culto: "Culto",
+  torneio: "Torneio",
+  congresso: "Congresso",
 };
 
 // Precisa bater com DiaSemana em backend/core/models.py.

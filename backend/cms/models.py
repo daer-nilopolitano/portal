@@ -219,8 +219,10 @@ class AlbumPage(Page):
     class Categoria(models.TextChoices):
         INTERCAMBIO = "intercambio", "Intercâmbio"
         CONCLAVE = "conclave", "Conclave"
-        TORNEIO = "torneio", "Torneio"
+        EVANGELISMO = "evangelismo", "Evangelismo"
         CULTO = "culto", "Culto"
+        TORNEIO = "torneio", "Torneio"
+        CONGRESSO = "congresso", "Congresso"
 
     data = models.DateField("Data", null=True, blank=True)
     categoria = models.CharField(
