@@ -1,0 +1,9 @@
+/* Plataforma de cursos. A ordem importa (cascade): base primeiro. */
+@import "./base.css";
+@import "./layout.css";
+@import "./sidebar.css";
+@import "./course-head.css";
+@import "./cards.css";
+@import "./blocks.css";
+@import "./quiz.css";
+@import "./chapnav.css";

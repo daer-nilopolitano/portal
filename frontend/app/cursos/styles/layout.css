@@ -1,0 +1,28 @@
+/* Estrutura: barra lateral + coluna */
+
+
+.c-shell {
+  display: grid;
+  grid-template-columns: 296px minmax(0, 1fr);
+  align-items: start;
+}
+
+.c-main {
+  min-width: 0;
+  padding: 72px 48px 120px;
+}
+
+.c-column {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .c-shell {
+    display: block;
+  }
+
+  .c-main {
+    padding: 88px 22px 88px;
+  }
+}

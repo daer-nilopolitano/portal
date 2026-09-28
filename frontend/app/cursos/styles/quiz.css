@@ -1,0 +1,123 @@
+/* Quiz */
+
+.c-quiz {
+  padding: 32px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+}
+.c-quiz__q {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.c-quiz__q:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 22px;
+}
+.c-quiz__prompt {
+  font-weight: 600;
+  line-height: 1.5;
+}
+.c-quiz__n {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.c-quiz__options {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.c-quiz__opt {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.5;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+.c-quiz__opt:not(:disabled):hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.c-quiz__opt:disabled {
+  cursor: default;
+}
+.c-quiz__key {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.c-quiz__opt--correct {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+  color: var(--ink);
+}
+.c-quiz__opt--correct .c-quiz__key {
+  color: var(--ok);
+}
+.c-quiz__opt--wrong {
+  background: var(--wrong-soft);
+  border-color: var(--wrong);
+  color: var(--ink);
+}
+.c-quiz__opt--wrong .c-quiz__key {
+  color: var(--wrong);
+}
+.c-quiz__opt--idle:disabled {
+  opacity: 0.6;
+}
+.c-quiz__feedback {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.c-quiz__feedback.is-correct strong {
+  color: var(--ok);
+}
+.c-quiz__feedback.is-wrong strong {
+  color: var(--wrong);
+}
+.c-quiz__result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-family: var(--serif);
+  font-size: 1.3rem;
+}
+.c-quiz__reset {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+}
+.c-quiz__reset:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .c-quiz {
+    padding: 24px 20px;
+  }
+}

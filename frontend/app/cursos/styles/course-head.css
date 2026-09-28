@@ -1,0 +1,87 @@
+/* Cabeçalho, sumário e "sobre" do curso */
+
+
+.c-course-head {
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--line);
+}
+
+.c-toc {
+  padding-top: 56px;
+}
+
+.c-toc ol {
+  margin-top: 28px;
+}
+
+.c-toc li {
+  border-bottom: 1px solid var(--line);
+}
+.c-toc li:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.c-toc__row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 8px 16px;
+  align-items: baseline;
+  padding: 20px 4px;
+  transition: background-color 0.15s ease;
+}
+.c-toc__row:hover {
+  background: var(--bg-soft);
+}
+.c-toc__row:hover .c-toc__title {
+  color: var(--accent);
+}
+
+.c-toc__num {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.c-toc__body {
+  display: grid;
+  gap: 3px;
+}
+.c-toc__title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.c-toc__summary {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.c-toc__min {
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.c-about {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.c-about__title {
+  margin-bottom: 8px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .c-toc__row {
+    grid-template-columns: 32px 1fr;
+  }
+  .c-toc__min {
+    grid-column: 2;
+  }
+}

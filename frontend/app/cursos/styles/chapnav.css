@@ -1,0 +1,56 @@
+/* Navegação entre capítulos */
+
+.c-chapnav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.c-chapnav__link {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+.c-chapnav__link:hover {
+  border-color: var(--accent);
+}
+.c-chapnav__link--next {
+  background: var(--accent-soft);
+  border-color: #c3d5fa;
+  text-align: right;
+}
+.c-chapnav__label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.c-chapnav__link--next .c-chapnav__label {
+  color: var(--accent);
+}
+.c-chapnav__title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+.c-chapnav__link--prev .c-chapnav__title {
+  color: var(--ink-2);
+}
+
+@media (max-width: 640px) {
+  .c-chapnav {
+    grid-template-columns: 1fr;
+  }
+  .c-chapnav__link--next {
+    text-align: left;
+  }
+}

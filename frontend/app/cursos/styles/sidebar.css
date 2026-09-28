@@ -1,0 +1,239 @@
+/* Barra lateral e topo/menu no celular */
+
+
+.c-side {
+  position: sticky;
+  top: var(--c-offset);
+  height: calc(100vh - var(--c-offset));
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+  background: var(--bg-side);
+  border-right: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.c-side__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.c-side__title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.c-side__title:hover {
+  color: var(--accent);
+}
+
+.c-side__by {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.c-side__rule {
+  height: 1px;
+  margin: 24px 0;
+  border: 0;
+  background: var(--line-strong);
+  opacity: 0.7;
+}
+
+.c-side__label {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.c-side__current {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin-bottom: 26px;
+  padding: 10px 12px 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.c-progress {
+  grid-column: 1 / -1;
+  height: 2px;
+  margin-top: 6px;
+  background: var(--line-strong);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.c-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.c-side__num {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding-top: 1px;
+}
+
+.c-side__sections {
+  margin-bottom: 4px;
+}
+.c-side__sections a {
+  position: relative;
+  display: block;
+  padding: 5px 0 5px 14px;
+  color: var(--ink-2);
+}
+.c-side__sections a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.95em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.c-side__sections a:hover {
+  color: var(--ink);
+}
+.c-side__sections a[aria-current="location"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+.c-side__sections a[aria-current="location"]::before {
+  background: var(--accent);
+}
+
+.c-side__chapters a {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 6px;
+  padding: 7px 8px;
+  margin: 0 -8px;
+  color: var(--ink-2);
+  border-radius: 4px;
+}
+.c-side__chapters a:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink);
+}
+.c-side__chapters a[aria-current="page"] {
+  background: var(--paper);
+  color: var(--accent-ink);
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.c-side__more {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+.c-side__more:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* topo e menu no celular (escondidos no desktop) */
+.c-topbar {
+  display: none;
+}
+.c-scrim {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .c-topbar {
+    position: fixed;
+    top: var(--c-offset);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 56px;
+    padding: 0 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .c-topbar__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .c-topbar__title {
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .c-topbar__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    transform-origin: left;
+  }
+
+  .c-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: block;
+    border: 0;
+    background: rgba(31, 27, 24, 0.4);
+  }
+
+  .c-side {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 60;
+    width: min(320px, 86vw);
+    height: auto;
+    visibility: hidden;
+    transform: translateX(-102%);
+    transition:
+      transform 0.22s ease,
+      visibility 0s linear 0.22s;
+  }
+  .c-side[data-open="true"] {
+    visibility: visible;
+    transform: none;
+    transition: transform 0.22s ease;
+  }
+}
