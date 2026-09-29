@@ -15,7 +15,6 @@
   --accent: #2563eb;
   --accent-ink: #1d4ed8;
   --accent-soft: #eaf1fe;
-  /* resposta errada do quiz mantém o vermelho original */
   --wrong: #9e2a2b;
   --wrong-soft: #f6eae8;
   --ok: #2f6b4f;
@@ -23,7 +22,6 @@
   --attention: #a86a12;
   --attention-soft: #f8efdc;
 
-  /* Se o app principal tiver um cabeçalho fixo, informe a altura aqui. */
   --c-offset: 0px;
 
   --serif:

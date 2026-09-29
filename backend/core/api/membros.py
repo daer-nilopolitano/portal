@@ -15,6 +15,8 @@ from datetime import date
 from typing import Optional
 
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from ninja import Query, Router, Schema
 from ninja.errors import HttpError
@@ -22,7 +24,7 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, membro_do_usuario
 from ..models import DiretoriaEmbaixada, Embaixada, Membro, TipoMembro
 
-router = Router(tags=["membros"], auth=AuthBearer())
+router = Router(tags=["Membros"], auth=AuthBearer())
 
 
 class MembroOut(Schema):
@@ -49,8 +51,7 @@ class MembroOut(Schema):
 
     @staticmethod
     def resolve_cargo_embaixada(obj: Membro) -> Optional[str]:
-        # .all() aproveita o prefetch de _queryset_visivel; .first() sempre
-        # faria uma consulta nova por membro. Um membro tem no máximo 1 cargo.
+        # .all() aproveita o prefetch de _queryset_visivel; .first() sempre faria uma consulta nova por membro. Um membro tem no máximo 1 cargo.
         cargos = list(obj.cargos_embaixada.all())
         return cargos[0].cargo if cargos else None
 
@@ -134,9 +135,8 @@ def listar_membros(request, filtros: MembroFiltros = Query(...)):
     if filtros.tipo:
         qs = qs.filter(tipo=filtros.tipo)
 
-    # faixa_etaria é calculada em Python (property, não é campo de banco) —
-    # por isso filtra depois da query. Se a lista crescer muito, vale migrar
-    # pra uma annotation SQL no futuro.
+    # faixa_etaria é calculada em Python (property, não é campo de banco) —, filtrando depois da query.
+    # Se a lista crescer muito, vale migrar para uma annotation SQL no futuro.
     if filtros.faixa_etaria:
         qs = [m for m in qs if m.faixa_etaria == filtros.faixa_etaria]
 
@@ -199,10 +199,8 @@ def excluir_membro(request, membro_id: int):
 @router.post("/{membro_id}/criar-acesso/", response={201: dict})
 def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
     """
-    Cria o login (Django User) de um Membro que ainda não tem conta —
-    usado pela Diretoria ou por um conselheiro da própria embaixada para
-    dar acesso a um membro recém-cadastrado. Requer que o Membro já tenha
-    um e-mail cadastrado (vira o username).
+    Cria o login (Django User) de um Membro que ainda não tem conta — usado pela Diretoria ou por um conselheiro da própria
+    embaixada para dar acesso a um membro recém-cadastrado. Requer que o Membro já tenha um e-mail cadastrado (vira o username).
     """
     from django.contrib.auth import get_user_model
 
@@ -217,6 +215,16 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
         raise HttpError(400, "Esse membro já tem acesso criado.")
     if not membro.email:
         raise HttpError(400, "Cadastre um e-mail para esse membro antes de criar o acesso.")
+
+    # Roda os mesmos AUTH_PASSWORD_VALIDATORS do settings.py (tamanho mínimo, senha comum, etc.) — sem isso,
+    # make_password() aceita qualquer string. O User ainda não existe neste ponto, então passa um objeto não
+    # salvo só pra o UserAttributeSimilarityValidator comparar contra username/e-mail.
+    try:
+        validate_password(
+            payload.senha, user=User(username=membro.email, email=membro.email)
+        )
+    except ValidationError as erro:
+        raise HttpError(400, " ".join(erro.messages))
 
     user = User.objects.create(
         username=membro.email,
@@ -235,17 +243,16 @@ class CargoEmbaixadaIn(Schema):
 @router.put("/{membro_id}/cargo-embaixada/", response=MembroOut)
 def definir_cargo_embaixada(request, membro_id: int, payload: CargoEmbaixadaIn):
     """
-    Define (ou remove, se cargo=None) o cargo do membro no quadro de
-    oficiais da própria embaixada. Só para tipo=embaixador_do_rei. Atribuir
-    um cargo já ocupado por outro membro troca o titular automaticamente
+    Define (ou remove, se cargo=None) o cargo do membro na diretoria da própria embaixada.
+    Só para tipo=embaixador_do_rei. Atribuir um cargo já ocupado por outro membro troca o titular automaticamente
     (sem manter histórico — a rotação é informal, ~1 ano).
     """
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro, pk=membro_id)
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
-        raise HttpError(403, "Você só pode editar o quadro de oficiais da sua própria embaixada.")
+        raise HttpError(403, "Você só pode editar a diretoria da sua própria embaixada.")
     if membro.tipo != TipoMembro.EMBAIXADOR_DO_REI:
-        raise HttpError(400, "Só um Embaixador do Rei pode ocupar cargo no quadro de oficiais.")
+        raise HttpError(400, "Só um Embaixador do Rei pode ocupar cargo na diretoria da embaixada.")
 
     # Remove qualquer cargo que esse membro já ocupasse (só pode ter 1 por vez).
     DiretoriaEmbaixada.objects.filter(membro=membro).delete()

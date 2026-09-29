@@ -16,7 +16,7 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, membro_do_usuario
 from ..models import GrupoMembro, GrupoTrabalho, Membro, TipoMembro
 
-router = Router(tags=["grupos"], auth=AuthBearer())
+router = Router(tags=["Grupos de trabalho"], auth=AuthBearer())
 
 
 class ParticipanteOut(Schema):
@@ -60,9 +60,8 @@ def listar_grupos(request):
 @router.put("/{grupo_id}/membros/", response=GrupoOut)
 def definir_participante(request, grupo_id: int, payload: ParticipanteIn):
     """
-    Adiciona o membro ao grupo, ou atualiza o papel_no_grupo se ele já
-    participa (endpoint idempotente — mesma chamada serve pra "adicionar"
-    e pra "promover a líder"/"rebaixar a membro").
+    Adiciona o membro ao grupo, ou atualiza o papel_no_grupo se ele já participa (endpoint idempotente, ou seja, a
+    mesma chamada serve pra "adicionar" e pra "promover a líder"/"rebaixar a membro").
     """
     membro_logado = membro_do_usuario(request.auth)
     grupo = get_object_or_404(GrupoTrabalho, pk=grupo_id)

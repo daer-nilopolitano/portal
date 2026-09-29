@@ -24,7 +24,7 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, membro_do_usuario
 from ..models import Carteirinha, Membro, TipoMembro
 
-router = Router(tags=["carteirinhas"], auth=AuthBearer())
+router = Router(tags=["Carteirinhas"], auth=AuthBearer())
 
 
 class CarteirinhaOut(Schema):

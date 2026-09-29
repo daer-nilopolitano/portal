@@ -13,7 +13,7 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
 from ..models import Diretoria, Membro, TipoMembro
 
-router = Router(tags=["diretoria"], auth=AuthBearer())
+router = Router(tags=["Diretoria"], auth=AuthBearer())
 
 
 class DiretoriaOut(Schema):

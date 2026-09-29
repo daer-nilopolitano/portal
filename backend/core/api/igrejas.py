@@ -1,11 +1,12 @@
 """Endpoints públicos de Igreja — usados para alimentar o mapa do site institucional."""
 from typing import Optional
 
+from django.shortcuts import get_object_or_404
 from ninja import Router, Schema
 
 from ..models import Igreja
 
-router = Router(tags=["igrejas"])
+router = Router(tags=["Igrejas"])
 
 
 class IgrejaOut(Schema):
@@ -29,4 +30,4 @@ def listar_igrejas(request):
 
 @router.get("/{igreja_id}/", response=IgrejaOut)
 def detalhar_igreja(request, igreja_id: int):
-    return Igreja.objects.get(pk=igreja_id)
+    return get_object_or_404(Igreja, pk=igreja_id)

@@ -8,7 +8,7 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, gerar_token, membro_do_usuario
 from ..models import Membro
 
-router = Router(tags=["auth"])
+router = Router(tags=["Autenticação"])
 
 
 def _cargo_diretoria_ativo(membro: Membro) -> Optional[str]:

@@ -175,6 +175,11 @@ WAGTAILAPI_BASE_URL = os.environ.get("WAGTAILAPI_BASE_URL", WAGTAILADMIN_BASE_UR
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)
 JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080"))  # 7 dias
 
+# Documentação da API (Stoplight Elements — ver core/docs.py). O "Try it" (fazer requisições reais direto da página de
+# docs) fica ligado por padrão, em dev e em produção, já que as regras de permissão de cada endpoint (não a documentação)
+# são a barreira real de acesso aos dados. Defina API_DOCS_TRY_IT=False no ambiente para restringir sem alterar o código.
+API_DOCS_TRY_IT = os.environ.get("API_DOCS_TRY_IT", "True") == "True"
+
 # Configuração de logging — envia logs para stdout.
 LOGGING = {
     "version": 1,

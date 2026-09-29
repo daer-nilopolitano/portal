@@ -17,7 +17,7 @@ from ninja import Router, Schema
 from ..auth import AuthBearer, membro_do_usuario
 from ..models import Carteirinha, Embaixada, Membro, TipoMembro
 
-router = Router(tags=["estatisticas"], auth=AuthBearer())
+router = Router(tags=["Estatísticas"], auth=AuthBearer())
 
 
 class MembroResumoOut(Schema):
@@ -61,10 +61,9 @@ def estatisticas(request):
     escopo = Membro.objects.all() if membro.eh_diretoria else Membro.objects.filter(
         embaixada_id=membro.embaixada_id
     )
-    # Uma única consulta traz os membros do escopo (só as colunas usadas, já
-    # com a flag "tem carteirinha"); contadores, faixas e listas são calculados
-    # em Python. A associação tem centenas de membros no máximo, então isso é
-    # bem mais barato do que uma consulta por contador (~137 ms cada no Neon).
+    # Uma única consulta traz os membros do escopo (só as colunas usadas, já com a flag "tem carteirinha");
+    # contadores, faixas e listas são calculados em Python. A associação tem centenas de membros no máximo,
+    # então isso é bem mais barato do que uma consulta por contador (~137 ms cada no Neon).
     membros = list(
         escopo.annotate(tem_carteirinha=Exists(Carteirinha.objects.filter(membro=OuterRef("pk"))))
         .only("id", "nome", "tipo", "data_nascimento", "user_id")

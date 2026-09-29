@@ -17,13 +17,12 @@ from ninja.errors import HttpError
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
 from ..models import Embaixada, HorarioReuniao, Igreja, Membro, TipoMembro
 
-router = Router(tags=["embaixadas"], auth=AuthBearer())
+router = Router(tags=["Embaixadas"], auth=AuthBearer())
 
-# Router público, sem autenticação — consumido pelo card de destaques da
-# home. Schema próprio (EmbaixadaPublicaOut), separado do EmbaixadaOut de
-# gestão: garante que campos adicionados no futuro para uso interno não
-# vazem aqui sem decisão explícita — os dois nunca compartilham definição.
-router_publico = Router(tags=["embaixadas-publico"])
+# Router público, sem autenticação — consumido pelo card de destaques da home.
+# Schema próprio (EmbaixadaPublicaOut), separado do EmbaixadaOut de gestão: garante que campos adicionados no futuro
+# para uso interno não vazem aqui sem decisão explícita — os dois nunca compartilham definição.
+router_publico = Router(tags=["Embaixadas (público)"])
 
 
 def _com_relacionados():
@@ -104,9 +103,7 @@ class EmbaixadaOut(Schema):
 
 
 class EmbaixadaPublicaOut(Schema):
-    """Somente o que o site institucional precisa mostrar — sem qualquer
-    dado pessoal (telefone, e-mail, data de nascimento) que existe em
-    Membro."""
+    """Somente o que o site institucional precisa mostrar — sem qualquer dado pessoal (telefone, e-mail, data de nascimento) que existe em Membro."""
 
     id: int
     nome: str
@@ -146,9 +143,8 @@ class EmbaixadaUpdate(Schema):
 
 
 def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]) -> None:
-    """Substitui todos os horários da embaixada pela lista enviada — mais
-    simples e previsível do que tentar diferenciar quais mudaram, já que o
-    formulário do painel sempre manda a lista completa."""
+    """Substitui todos os horários da embaixada pela lista enviada — mais simples e previsível do que tentar
+    diferenciar quais mudaram, já que o formulário do painel sempre manda a lista completa."""
     embaixada.horarios_reuniao.all().delete()
     HorarioReuniao.objects.bulk_create(
         [
