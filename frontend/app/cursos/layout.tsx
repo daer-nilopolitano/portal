@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Newsreader } from "next/font/google";
 import { CursosAuthGuard } from "./_auth-guard";
-import "./cursos.css";
+import "./styles/index.css";
 
 const sans = Inter({
   subsets: ["latin"],
