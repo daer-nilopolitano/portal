@@ -36,7 +36,6 @@ class ScalarApiReference(DocsBase):
             "url": openapi_url,
 
             # Aparência
-            "theme": "alternate",
             "layout": "modern",
             "withDefaultFonts": True,
 
@@ -52,7 +51,7 @@ class ScalarApiReference(DocsBase):
 
             # Modelos e schemas
             "hideModels": False,
-            "documentDownloadType": "both",
+            "documentDownloadType": "json",
             "expandAllParameters": True,
             "orderSchemaPropertiesBy": "alpha",
             "orderRequiredPropertiesFirst": True,
@@ -67,6 +66,10 @@ class ScalarApiReference(DocsBase):
             # Privacidade
             "persistAuth": False,
             "telemetry": False,
+
+            # API Nome
+            "slug": "daer-nilopolitano-api",
+            "title": "DAER Nilopolitano API",
 
             # IA
             "agent": {
@@ -88,10 +91,10 @@ class ScalarApiReference(DocsBase):
     </style>
   </head>
   <body>
-    <div id="api-reference"></div>
+    <div id="app"></div>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@{SCALAR_VERSION}"></script>
     <script>
-      Scalar.createApiReference('#api-reference', {json.dumps(config)});
+      Scalar.createApiReference('#app', {json.dumps(config)});
     </script>
   </body>
 </html>"""

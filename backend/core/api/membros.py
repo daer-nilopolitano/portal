@@ -3,13 +3,10 @@ Endpoints de gestão de Membros (conselheiro, auxiliar, embaixador do rei).
 
 Regras de acesso (cadastro descentralizado):
 - Diretoria: lê e escreve membros de qualquer embaixada.
-- Conselheiro: lê e escreve membros da própria embaixada — qualquer tipo
-  (inclusive outro conselheiro), sem precisar de aprovação da Diretoria.
-  Quem aprova/escolhe conselheiros é a igreja dona da embaixada, não o DAER.
-- Auxiliar: só lê os membros da própria embaixada (qualquer tipo) — não
-  cria, edita nem exclui.
-- Embaixador do Rei: sem acesso a estes endpoints de gestão — usa
-  /api/auth/me/ e /api/carteirinhas/me/ para ver os próprios dados.
+- Conselheiro: lê e escreve membros da própria embaixada — qualquer tipo (inclusive outro conselheiro), sem precisar de
+  aprovação da Diretoria. Quem aprova/escolhe conselheiros é a igreja da embaixada, não o DAER.
+- Auxiliar: só lê os membros da própria embaixada (qualquer tipo) — não cria, edita nem exclui.
+- Embaixador do Rei: sem acesso a estes endpoints de gestão — usa /api/auth/me/ e /api/carteirinhas/me/ para ver os seus dados.
 """
 from datetime import date
 from typing import Optional
@@ -18,13 +15,33 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from ninja import Query, Router, Schema
+from ninja import Field, Query, Router, Schema
 from ninja.errors import HttpError
 
 from ..auth import AuthBearer, membro_do_usuario
 from ..models import DiretoriaEmbaixada, Embaixada, Membro, TipoMembro
+from .erros import R400, R401, R403, R404
 
 router = Router(tags=["Membros"], auth=AuthBearer())
+
+_DESC_TIPO = "Tipo do membro: `conselheiro`, `auxiliar` ou `embaixador_do_rei`."
+_DESC_POSTO = (
+    "Posto do Embaixador do Rei. Obrigatório quando `tipo` é `embaixador_do_rei`, e deve ficar vazio para os demais tipos. "
+    "Valores: `escudeiro`, `arauto`, `senior`, `emerito`."
+)
+_DESC_CARGO_EMBAIXADA = (
+    "Cargo do membro no quadro de oficiais da própria embaixada, se ele ocupar algum (só aplicável a `embaixador_do_rei`) " 
+    "caso contrário, `null` "
+    "Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, `consul`, `tesoureiro`, "
+    "`diretor_musica`, `diretor_esportes`. Definido via `PUT /membros/{id}/cargo-embaixada/`, não neste endpoint."
+)
+_DESC_NOME_RESPONSAVEL = "Nome do responsável — só relevante para tipo `embaixador_do_rei` (é menor de idade)."
+_DESC_TELEFONE_RESPONSAVEL = "Telefone do responsável — só relevante para tipo `embaixador_do_rei`."
+_DESC_FAIXA_ETARIA = (
+    "Faixa etária calculada a partir de `data_nascimento`, só quando `tipo` é `embaixador_do_rei`: `junior` (9-11 anos), "
+    "`adolescente` (12-14) ou `juvenil` (15-17). `null` fora dessa faixa ou para os demais tipos. "
+    "Não é um campo salvo no banco, não dá pra alterar."
+)
 
 
 class MembroOut(Schema):
@@ -33,17 +50,17 @@ class MembroOut(Schema):
     data_nascimento: date
     telefone_contato: str
     email: Optional[str] = None
-    tipo: str
-    posto_embaixador: Optional[str] = None
-    cargo_embaixada: Optional[str] = None
-    nome_responsavel: str
-    telefone_responsavel: str
+    tipo: str = Field(..., description=_DESC_TIPO)
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    cargo_embaixada: Optional[str] = Field(None, description=_DESC_CARGO_EMBAIXADA)
+    nome_responsavel: str = Field("", description=_DESC_NOME_RESPONSAVEL)
+    telefone_responsavel: str = Field("", description=_DESC_TELEFONE_RESPONSAVEL)
     embaixada_id: int
     embaixada_nome: str
     ativo: bool
     idade: int
-    faixa_etaria: Optional[str] = None
-    tem_acesso: bool
+    faixa_etaria: Optional[str] = Field(None, description=_DESC_FAIXA_ETARIA)
+    tem_acesso: bool = Field(..., description="Se o membro já tem login (Django User) criado — ver POST .../criar-acesso/.")
 
     @staticmethod
     def resolve_embaixada_nome(obj: Membro) -> str:
@@ -51,7 +68,8 @@ class MembroOut(Schema):
 
     @staticmethod
     def resolve_cargo_embaixada(obj: Membro) -> Optional[str]:
-        # .all() aproveita o prefetch de _queryset_visivel; .first() sempre faria uma consulta nova por membro. Um membro tem no máximo 1 cargo.
+        # .all() aproveita o prefetch de _queryset_visivel; .first() sempre faria uma consulta nova por membro.
+        # Um membro tem no máximo 1 cargo.
         cargos = list(obj.cargos_embaixada.all())
         return cargos[0].cargo if cargos else None
 
@@ -61,14 +79,14 @@ class MembroOut(Schema):
 
 
 class MembroIn(Schema):
-    nome: str
+    nome: str = Field(..., examples=["Alex Luis Alves"])
     data_nascimento: date
     telefone_contato: str = ""
     email: Optional[str] = None
-    tipo: str
-    posto_embaixador: Optional[str] = None
-    nome_responsavel: str = ""
-    telefone_responsavel: str = ""
+    tipo: str = Field(..., description=_DESC_TIPO)
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    nome_responsavel: str = Field("", description=_DESC_NOME_RESPONSAVEL)
+    telefone_responsavel: str = Field("", description=_DESC_TELEFONE_RESPONSAVEL)
     embaixada_id: int
     ativo: bool = True
 
@@ -78,10 +96,10 @@ class MembroUpdate(Schema):
     data_nascimento: Optional[date] = None
     telefone_contato: Optional[str] = None
     email: Optional[str] = None
-    tipo: Optional[str] = None
-    posto_embaixador: Optional[str] = None
-    nome_responsavel: Optional[str] = None
-    telefone_responsavel: Optional[str] = None
+    tipo: Optional[str] = Field(None, description=_DESC_TIPO)
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    nome_responsavel: Optional[str] = Field(None, description=_DESC_NOME_RESPONSAVEL)
+    telefone_responsavel: Optional[str] = Field(None, description=_DESC_TELEFONE_RESPONSAVEL)
     embaixada_id: Optional[int] = None
     ativo: Optional[bool] = None
 
@@ -89,12 +107,16 @@ class MembroUpdate(Schema):
 class MembroFiltros(Schema):
     embaixada_id: Optional[int] = None
     ativo: Optional[bool] = None
-    faixa_etaria: Optional[str] = None
-    tipo: Optional[str] = None
+    faixa_etaria: Optional[str] = Field(None, description=_DESC_FAIXA_ETARIA)
+    tipo: Optional[str] = Field(None, description=_DESC_TIPO)
 
 
 class CriarAcessoIn(Schema):
-    senha: str
+    senha: str = Field(..., description="Precisa passar pelos mesmos critérios de AUTH_PASSWORD_VALIDATORS do Django (tamanho mínimo, não ser uma senha comum, etc.).")
+
+
+class AcessoCriadoOut(Schema):
+    detail: str
 
 
 def _validar_posto(tipo: str, posto_embaixador: Optional[str]):
@@ -124,8 +146,14 @@ def _queryset_visivel(request):
     raise HttpError(403, "Sem permissão para listar membros. Use /api/auth/me/.")
 
 
-@router.get("/", response=list[MembroOut])
+@router.get(
+    "/",
+    response={200: list[MembroOut], **R401, **R403},
+    summary="Lista membros",
+    operation_id="listar_membros",
+)
 def listar_membros(request, filtros: MembroFiltros = Query(...)):
+    """Diretoria vê todos os membros; conselheiro e auxiliar só os da própria embaixada; embaixador do rei recebe 403 (use /api/auth/me/)."""
     qs = _queryset_visivel(request)
 
     if filtros.embaixada_id is not None:
@@ -135,22 +163,32 @@ def listar_membros(request, filtros: MembroFiltros = Query(...)):
     if filtros.tipo:
         qs = qs.filter(tipo=filtros.tipo)
 
-    # faixa_etaria é calculada em Python (property, não é campo de banco) —, filtrando depois da query.
-    # Se a lista crescer muito, vale migrar para uma annotation SQL no futuro.
+    # faixa_etaria é calculada em Python (property, não é campo de banco).
     if filtros.faixa_etaria:
         qs = [m for m in qs if m.faixa_etaria == filtros.faixa_etaria]
 
     return qs
 
 
-@router.get("/{membro_id}/", response=MembroOut)
+@router.get(
+    "/{membro_id}/",
+    response={200: MembroOut, **R401, **R403, **R404},
+    summary="Detalha um membro",
+    operation_id="detalhar_membro",
+)
 def detalhar_membro(request, membro_id: int):
     qs = _queryset_visivel(request)
     return get_object_or_404(qs, pk=membro_id)
 
 
-@router.post("/", response={201: MembroOut})
+@router.post(
+    "/",
+    response={201: MembroOut, **R400, **R401, **R403, **R404},
+    summary="Cadastra um membro",
+    operation_id="criar_membro",
+)
 def criar_membro(request, payload: MembroIn):
+    """Restrito à Diretoria ou ao conselheiro da embaixada informada em `embaixada_id`."""
     membro_logado = membro_do_usuario(request.auth)
     if not _pode_gerenciar_embaixada(membro_logado, payload.embaixada_id):
         raise HttpError(403, "Você só pode cadastrar membros na sua própria embaixada.")
@@ -162,8 +200,14 @@ def criar_membro(request, payload: MembroIn):
     return 201, membro
 
 
-@router.put("/{membro_id}/", response=MembroOut)
+@router.put(
+    "/{membro_id}/",
+    response={200: MembroOut, **R400, **R401, **R403, **R404},
+    summary="Atualiza um membro",
+    operation_id="atualizar_membro",
+)
 def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
+    """Restrito à Diretoria ou ao conselheiro da embaixada atual (ou de destino, se `embaixada_id` mudar) do membro."""
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro, pk=membro_id)
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
@@ -186,8 +230,14 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     return membro
 
 
-@router.delete("/{membro_id}/", response={204: None})
+@router.delete(
+    "/{membro_id}/",
+    response={204: None, **R401, **R403, **R404},
+    summary="Exclui um membro",
+    operation_id="excluir_membro",
+)
 def excluir_membro(request, membro_id: int):
+    """Restrito à Diretoria ou ao conselheiro da própria embaixada do membro."""
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro, pk=membro_id)
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
@@ -196,11 +246,16 @@ def excluir_membro(request, membro_id: int):
     return 204, None
 
 
-@router.post("/{membro_id}/criar-acesso/", response={201: dict})
+@router.post(
+    "/{membro_id}/criar-acesso/",
+    response={201: AcessoCriadoOut, **R400, **R401, **R403, **R404},
+    summary="Cria acesso (login) para um membro",
+    operation_id="criar_acesso",
+)
 def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
     """
-    Cria o login (Django User) de um Membro que ainda não tem conta — usado pela Diretoria ou por um conselheiro da própria
-    embaixada para dar acesso a um membro recém-cadastrado. Requer que o Membro já tenha um e-mail cadastrado (vira o username).
+    Cria o login (Django User) de um Membro que ainda não tem conta — usado pela Diretoria ou por um conselheiro da
+    própria embaixada para dar acesso a um membro recém-cadastrado. Requer que o Membro já tenha um e-mail (vira o username).
     """
     from django.contrib.auth import get_user_model
 
@@ -217,8 +272,8 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
         raise HttpError(400, "Cadastre um e-mail para esse membro antes de criar o acesso.")
 
     # Roda os mesmos AUTH_PASSWORD_VALIDATORS do settings.py (tamanho mínimo, senha comum, etc.) — sem isso,
-    # make_password() aceita qualquer string. O User ainda não existe neste ponto, então passa um objeto não
-    # salvo só pra o UserAttributeSimilarityValidator comparar contra username/e-mail.
+    # make_password() aceita qualquer string. O User ainda não existe neste ponto, então passa um objeto não salvo só
+    # para o UserAttributeSimilarityValidator comparar contra username/e-mail.
     try:
         validate_password(
             payload.senha, user=User(username=membro.email, email=membro.email)
@@ -237,15 +292,26 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
 
 
 class CargoEmbaixadaIn(Schema):
-    cargo: Optional[str] = None  # None = remover do quadro de oficiais
+    cargo: Optional[str] = Field(
+        None,
+        description=(
+            "Cargo na diretoria da embaixada, ou `null` para remover o membro do quadro. "
+            "Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, `consul`, "
+            "`tesoureiro`, `diretor_musica`, `diretor_esportes`."
+        ),
+    )
 
 
-@router.put("/{membro_id}/cargo-embaixada/", response=MembroOut)
+@router.put(
+    "/{membro_id}/cargo-embaixada/",
+    response={200: MembroOut, **R400, **R401, **R403, **R404},
+    summary="Define o cargo do membro na diretoria da própria embaixada (só para embaixador do rei)",
+    operation_id="definir_cargo_embaixada",
+)
 def definir_cargo_embaixada(request, membro_id: int, payload: CargoEmbaixadaIn):
     """
-    Define (ou remove, se cargo=None) o cargo do membro na diretoria da própria embaixada.
-    Só para tipo=embaixador_do_rei. Atribuir um cargo já ocupado por outro membro troca o titular automaticamente
-    (sem manter histórico — a rotação é informal, ~1 ano).
+    Define (ou remove, se cargo=None) o cargo do membro na diretoria da própria embaixada. Só para tipo=embaixador_do_rei.
+    Atribuir um cargo já ocupado por outro membro troca o titular automaticamente (sem manter histórico — a rotação é informal, ~1 ano).
     """
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro, pk=membro_id)
@@ -258,7 +324,7 @@ def definir_cargo_embaixada(request, membro_id: int, payload: CargoEmbaixadaIn):
     DiretoriaEmbaixada.objects.filter(membro=membro).delete()
 
     if payload.cargo:
-        # Troca automática: quem ocupava esse cargo nessa embaixada perde o posto.
+        # Troca automática: quem ocupava esse cargo nessa embaixada perde o cargo.
         DiretoriaEmbaixada.objects.filter(embaixada=membro.embaixada, cargo=payload.cargo).delete()
         DiretoriaEmbaixada.objects.create(
             embaixada=membro.embaixada,

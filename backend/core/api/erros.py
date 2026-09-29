@@ -1,20 +1,20 @@
 """
 Schema e atalhos de resposta de erro, compartilhados entre os routers.
 
-Todo HttpError levantado pelo Ninja (ver core/auth.py e core/api/*.py) já
-devolve {"detail": "..."} — o ErroOut só formaliza isso na documentação.
+Todo HttpError levantado pelo Ninja (ver core/auth.py e core/api/*.py) já devolve {"detail": "..."}, e o ErroOut só
+formaliza isso na documentação.
 
-Uso nos endpoints (próxima etapa, endpoint por endpoint):
+Uso nos endpoints:
 
-    from ..erros import ErroOut, RESPOSTAS_AUTH
+    from ..erros import ErroOut, R401, R403, R404
 
-    @router.put("/{membro_id}/", response={200: MembroOut, **RESPOSTAS_AUTH})
+    @router.put("/{membro_id}/", response={200: MembroOut, **R401, **R403, **R404})
     def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
         ...
 
-As chaves com "response=" no Ninja precisam do código de sucesso explícito
-(200, 201, 204...) quando combinadas com códigos de erro — ver os exemplos
-em cada router.
+O "response=" no Ninja precisa do código de sucesso explícito (200, 201, 204...) quando combinado com códigos de erro.
+
+R401 vale para todo endpoint com auth=AuthBearer() (token ausente, inválido ou expirado).
 """
 from ninja import Schema
 
@@ -25,11 +25,7 @@ class ErroOut(Schema):
     detail: str
 
 
-# Conjuntos prontos para espalhar num response={200: X, **RESPOSTAS_...}.
-# Cobrem só os códigos que hoje aparecem de fato nos routers (ver HttpError em core/auth.py e core/api/*.py).
-RESPOSTAS_403 = {403: ErroOut}
-RESPOSTAS_404 = {404: ErroOut}
-RESPOSTAS_400_403 = {400: ErroOut, 403: ErroOut}
-RESPOSTAS_403_404 = {403: ErroOut, 404: ErroOut}
-RESPOSTAS_400_403_404 = {400: ErroOut, 403: ErroOut, 404: ErroOut}
-RESPOSTAS_LOGIN = {401: ErroOut, 403: ErroOut}
+R400 = {400: ErroOut}
+R401 = {401: ErroOut}  # token ausente, inválido ou expirado — endpoints com AuthBearer()
+R403 = {403: ErroOut}
+R404 = {404: ErroOut}

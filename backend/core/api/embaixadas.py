@@ -1,37 +1,39 @@
 """
 Endpoints de gestão de Embaixadas.
 
-Leitura liberada para qualquer usuário autenticado. Criar/excluir uma
-embaixada, e editar nome/igreja de uma já existente, é restrito à
-Diretoria — são dados mais "estruturais". Editar os horários de reunião é
-liberado também para o conselheiro da própria embaixada (é quem lida com
-isso no dia a dia). Cadastro de Igreja continua só pelo Django Admin.
+Leitura liberada para qualquer usuário autenticado. Criar/excluir uma embaixada, e editar nome/igreja de uma já existente,
+é restrito à Diretoria — são dados mais "estruturais". Editar os horários de reunião é liberado também para o conselheiro
+da própria embaixada (é quem lida com isso no dia a dia). Cadastro de Igreja somente pelo Django Admin.
 """
 from typing import Optional
 
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
-from ninja import Router, Schema
+from ninja import Field, Router, Schema
 from ninja.errors import HttpError
 
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
-from ..models import Embaixada, HorarioReuniao, Igreja, Membro, TipoMembro
+from ..models import DiaSemana, Embaixada, HorarioReuniao, Igreja, Membro, TipoMembro
+from .erros import R401, R403, R404
 
 router = Router(tags=["Embaixadas"], auth=AuthBearer())
 
-# Router público, sem autenticação — consumido pelo card de destaques da home.
-# Schema próprio (EmbaixadaPublicaOut), separado do EmbaixadaOut de gestão: garante que campos adicionados no futuro
-# para uso interno não vazem aqui sem decisão explícita — os dois nunca compartilham definição.
+# Router público, sem autenticação — consumido pelo card de destaques da home. Schema próprio (EmbaixadaPublicaOut),
+# separado do EmbaixadaOut de gestão: garante que campos adicionados no futuro para uso interno não vazem aqui sem
+# decisão explícita — os dois nunca compartilham definição.
 router_publico = Router(tags=["Embaixadas (público)"])
+
+_DESC_DIA_SEMANA = (
+    "Dia da semana: `domingo`, `segunda`, `terca`, `quarta`, `quinta`, "
+    "`sexta` ou `sabado`."
+)
 
 
 def _com_relacionados():
     """
-    Embaixadas já com tudo que os schemas de saída usam, em 3 consultas fixas
-    (embaixadas+igreja, conselheiros, horários) — independente de quantas
-    embaixadas existam. Os conselheiros vêm num Prefetch já filtrado: chamar
-    `obj.membros.filter(...)` dentro do resolver ignora o prefetch e faz uma
-    consulta nova por embaixada.
+    Embaixadas já com tudo que os schemas de saída usam, em 3 consultas fixas (embaixadas+igreja, conselheiros, horários),
+    independente de quantas embaixadas existam. Os conselheiros vêm num Prefetch já filtrado: chamar `obj.membros.filter(...)`
+    dentro do resolver ignora o prefetch e faz uma consulta nova por embaixada.
     """
     return Embaixada.objects.select_related("igreja").prefetch_related(
         Prefetch(
@@ -55,9 +57,9 @@ def _nomes_conselheiros(obj: Embaixada) -> list[str]:
 
 class HorarioReuniaoOut(Schema):
     id: int
-    dia_semana: str
-    dia_semana_display: str
-    horario: str
+    dia_semana: str = Field(..., description=_DESC_DIA_SEMANA)
+    dia_semana_display: str = Field(..., description="Nome do dia por extenso, para exibição (ex.: \"Sábado\").")
+    horario: str = Field(..., description="Horário no formato HH:MM.", examples=["19:30"])
 
     @staticmethod
     def resolve_dia_semana_display(obj: HorarioReuniao) -> str:
@@ -69,8 +71,8 @@ class HorarioReuniaoOut(Schema):
 
 
 class HorarioReuniaoPublicoOut(Schema):
-    dia_semana: str
-    horario: str
+    dia_semana: str = Field(..., description=_DESC_DIA_SEMANA)
+    horario: str = Field(..., description="Horário no formato HH:MM.", examples=["19:30"])
 
     @staticmethod
     def resolve_dia_semana(obj: HorarioReuniao) -> str:
@@ -103,7 +105,8 @@ class EmbaixadaOut(Schema):
 
 
 class EmbaixadaPublicaOut(Schema):
-    """Somente o que o site institucional precisa mostrar — sem qualquer dado pessoal (telefone, e-mail, data de nascimento) que existe em Membro."""
+    """Somente o que o site institucional precisa mostrar — sem qualquer dado pessoal (telefone, e-mail, data de
+    nascimento) que existe em Membro."""
 
     id: int
     nome: str
@@ -126,12 +129,12 @@ class EmbaixadaPublicaOut(Schema):
 
 
 class HorarioReuniaoIn(Schema):
-    dia_semana: str
-    horario: str
+    dia_semana: str = Field(..., description=_DESC_DIA_SEMANA)
+    horario: str = Field(..., description="Horário no formato HH:MM.", examples=["19:30"])
 
 
 class EmbaixadaIn(Schema):
-    nome: str
+    nome: str = Field(..., examples=["Embaixada Vale da Bênção"])
     igreja_id: int
     horarios_reuniao: list[HorarioReuniaoIn] = []
 
@@ -139,12 +142,16 @@ class EmbaixadaIn(Schema):
 class EmbaixadaUpdate(Schema):
     nome: Optional[str] = None
     igreja_id: Optional[int] = None
-    horarios_reuniao: Optional[list[HorarioReuniaoIn]] = None
+    horarios_reuniao: Optional[list[HorarioReuniaoIn]] = Field(
+        None,
+        description=(
+            "Lista completa dos horários da embaixada — substitui os horários existentes por inteiro (não é um incremento)."
+        ),
+    )
 
 
 def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]) -> None:
-    """Substitui todos os horários da embaixada pela lista enviada — mais simples e previsível do que tentar
-    diferenciar quais mudaram, já que o formulário do painel sempre manda a lista completa."""
+    """Substitui todos os horários da embaixada pela lista enviada."""
     embaixada.horarios_reuniao.all().delete()
     HorarioReuniao.objects.bulk_create(
         [
@@ -154,18 +161,34 @@ def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]
     )
 
 
-@router.get("/", response=list[EmbaixadaOut])
+@router.get(
+    "/",
+    response={200: list[EmbaixadaOut], **R401},
+    summary="Lista as embaixadas",
+    operation_id="listar_embaixadas",
+)
 def listar_embaixadas(request):
     return _com_relacionados()
 
 
-@router.get("/{embaixada_id}/", response=EmbaixadaOut)
+@router.get(
+    "/{embaixada_id}/",
+    response={200: EmbaixadaOut, **R401, **R404},
+    summary="Detalha uma embaixada",
+    operation_id="detalhar_embaixada",
+)
 def detalhar_embaixada(request, embaixada_id: int):
     return get_object_or_404(_com_relacionados(), pk=embaixada_id)
 
 
-@router.post("/", response={201: EmbaixadaOut})
+@router.post(
+    "/",
+    response={201: EmbaixadaOut, **R401, **R403, **R404},
+    summary="Cria uma embaixada",
+    operation_id="criar_embaixada",
+)
 def criar_embaixada(request, payload: EmbaixadaIn):
+    """Restrito à Diretoria. 404 se `igreja_id` não existir."""
     exigir_diretoria(request)
     igreja = get_object_or_404(Igreja, pk=payload.igreja_id)
 
@@ -175,14 +198,28 @@ def criar_embaixada(request, payload: EmbaixadaIn):
     return 201, embaixada
 
 
-@router_publico.get("/", response=list[EmbaixadaPublicaOut])
+@router_publico.get(
+    "/",
+    response={200: list[EmbaixadaPublicaOut]},
+    summary="Lista as embaixadas (público)",
+    operation_id="listar_embaixadas_publicas",
+)
 def listar_embaixadas_publicas(request):
     """Consumido pelo card de destaques da home — só os campos de EmbaixadaPublicaOut."""
     return _com_relacionados()
 
 
-@router.put("/{embaixada_id}/", response=EmbaixadaOut)
+@router.put(
+    "/{embaixada_id}/",
+    response={200: EmbaixadaOut, **R401, **R403, **R404},
+    summary="Atualiza uma embaixada",
+    operation_id="atualizar_embaixada",
+)
 def atualizar_embaixada(request, embaixada_id: int, payload: EmbaixadaUpdate):
+    """
+    A Diretoria pode alterar qualquer campo. O conselheiro da própria embaixada só pode alterar `horarios_reuniao` —
+    tentar mudar `nome` ou `igreja_id` devolve 403.
+    """
     membro_logado = membro_do_usuario(request.auth)
     embaixada = get_object_or_404(Embaixada, pk=embaixada_id)
 
@@ -213,8 +250,14 @@ def atualizar_embaixada(request, embaixada_id: int, payload: EmbaixadaUpdate):
     return embaixada
 
 
-@router.delete("/{embaixada_id}/", response={204: None})
+@router.delete(
+    "/{embaixada_id}/",
+    response={204: None, **R401, **R403, **R404},
+    summary="Exclui uma embaixada",
+    operation_id="excluir_embaixada",
+)
 def excluir_embaixada(request, embaixada_id: int):
+    """Restrito à Diretoria."""
     exigir_diretoria(request)
     embaixada = get_object_or_404(Embaixada, pk=embaixada_id)
     embaixada.delete()
