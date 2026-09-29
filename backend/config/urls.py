@@ -14,16 +14,13 @@ api = NinjaAPI(
     title="DAER Nilopolitano API",
     version="1.0.0",
     description=(
-        "API do sistema de gestão do DAER Nilopolitano (Embaixadores do Rei "
-        "Nilopolitano).\n\n"
-        "A maior parte dos endpoints exige login: faça `POST /api/auth/login/` "
-        "com e-mail e senha e envie o `access_token` recebido em toda "
-        "requisição, no cabeçalho `Authorization: Bearer <token>`. O token "
-        "expira em alguns dias (ver `JWT_EXPIRATION_MINUTES`).\n\n"
-        "Os endpoints em **Igrejas**, **Embaixadas (público)** e o próprio "
-        "login não exigem autenticação. Os demais respeitam o tipo do membro "
-        "logado (Diretoria, Conselheiro, Auxiliar ou Embaixador do Rei) e "
-        "retornam 403 quando a ação não é permitida para esse papel."
+        "API do sistema de gestão do DAER Nilopolitano (Departamento Associacional de Embaixadores do Rei Nilopolitano).\n\n"
+        "A maior parte dos endpoints exige login: faça `POST /api/auth/login/` com e-mail e senha e envie o `access_token` "
+        "recebido em toda requisição, no cabeçalho `Authorization: Bearer <token>`. O token expira em alguns dias "
+        "(ver `JWT_EXPIRATION_MINUTES`).\n\n"
+        "Os endpoints em **Igrejas**, **Embaixadas (público)** e o próprio login não exigem autenticação. Os demais "
+        "respeitam o tipo do membro logado (Diretoria, Conselheiro, Auxiliar ou Embaixador do Rei) e retornam 403 quando "
+        "a ação não é permitida para esse papel."
     ),
     docs=ScalarApiReference(),
     openapi_extra={

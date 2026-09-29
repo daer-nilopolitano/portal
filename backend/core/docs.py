@@ -40,6 +40,7 @@ class ScalarApiReference(DocsBase):
             "withDefaultFonts": True,
 
             # Navegação
+            "defaultOpenFirstTag": False,
             "showSidebar": True,
             "hideClientButton": True,
             "hideSearch": False,
@@ -52,7 +53,7 @@ class ScalarApiReference(DocsBase):
             # Modelos e schemas
             "hideModels": False,
             "documentDownloadType": "json",
-            "expandAllParameters": True,
+            "expandAllParameters": False,
             "orderSchemaPropertiesBy": "alpha",
             "orderRequiredPropertiesFirst": True,
 
@@ -60,8 +61,8 @@ class ScalarApiReference(DocsBase):
             "hideDarkModeToggle": False,
 
             # Desenvolvimento
-            "showDeveloperTools": "localhost",
-            "showToolbar": "localhost",
+            "showDeveloperTools": "never",
+            "showToolbar": "never",
 
             # Privacidade
             "persistAuth": False,
