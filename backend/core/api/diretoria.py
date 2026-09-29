@@ -7,22 +7,41 @@ from datetime import date
 from typing import Optional
 
 from django.shortcuts import get_object_or_404
-from ninja import Router, Schema
+from ninja import Field, Query, Router, Schema
 from ninja.errors import HttpError
 
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
 from ..models import Diretoria, Membro, TipoMembro
+from .erros import R400, R401, R403, R404
 
 router = Router(tags=["Diretoria"], auth=AuthBearer())
 
+_DESC_CARGO = (
+    "Cargo do membro na Diretoria da associação. Valores: `coordenador`, `presidente`, `vice_presidente`, "
+    "`primeiro_secretario`, `segundo_secretario`, `diretor_midia_comunicacao`, `diretor_esportes`."
+)
+_DESC_DATA_INICIO = "Data de início do mandato, no formato `AAAA-MM-DD`."
+_DESC_DATA_FIM = (
+    "Data de término do mandato, no formato `AAAA-MM-DD`. `null` significa mandato **ativo**. "
+    "Para encerrar um mandato preservando o histórico, preencha este campo via `PUT` em vez de excluir."
+)
+
+
+def _validar_cargo(cargo: Optional[str]) -> None:
+    if cargo not in Diretoria.Cargo.values:
+        raise HttpError(
+            400,
+            "Cargo inválido. Valores aceitos: " + ", ".join(Diretoria.Cargo.values) + ".",
+        )
+
 
 class DiretoriaOut(Schema):
-    id: int
-    membro_id: int
-    membro_nome: str
-    cargo: str
-    data_inicio: date
-    data_fim: Optional[date] = None
+    id: int = Field(..., description="Identificador do mandato (não é o id do membro).")
+    membro_id: int = Field(..., description="Identificador do membro que ocupa o cargo.")
+    membro_nome: str = Field(..., examples=["Maria Exemplo da Silva"])
+    cargo: str = Field(..., description=_DESC_CARGO, examples=["presidente"])
+    data_inicio: date = Field(..., description=_DESC_DATA_INICIO, examples=["2026-01-15"])
+    data_fim: Optional[date] = Field(None, description=_DESC_DATA_FIM)
 
     @staticmethod
     def resolve_membro_nome(obj: Diretoria) -> str:
@@ -30,19 +49,43 @@ class DiretoriaOut(Schema):
 
 
 class DiretoriaIn(Schema):
-    membro_id: int
-    cargo: str
-    data_inicio: date
+    membro_id: int = Field(
+        ...,
+        description=(
+            "Membro que assumirá o cargo. Precisa ter `tipo` = `conselheiro` e não pode ter outro mandato ativo."
+        ),
+        examples=[1],
+    )
+    cargo: str = Field(..., description=_DESC_CARGO, examples=["presidente"])
+    data_inicio: date = Field(..., description=_DESC_DATA_INICIO, examples=["2026-01-15"])
 
 
 class DiretoriaUpdate(Schema):
-    cargo: Optional[str] = None
-    data_inicio: Optional[date] = None
-    data_fim: Optional[date] = None
+    cargo: Optional[str] = Field(None, description=_DESC_CARGO)
+    data_inicio: Optional[date] = Field(None, description=_DESC_DATA_INICIO)
+    data_fim: Optional[date] = Field(None, description=_DESC_DATA_FIM)
 
 
-@router.get("/", response=list[DiretoriaOut])
-def listar_diretoria(request, apenas_ativos: bool = True):
+@router.get(
+    "/",
+    response={200: list[DiretoriaOut], **R401},
+    summary="Lista os mandatos da Diretoria",
+    operation_id="listar_diretoria",
+)
+def listar_diretoria(
+    request,
+    apenas_ativos: bool = Query(
+        True,
+        description=(
+            "Se `true` (padrão), devolve só os mandatos ativos (sem `data_fim`). Use `false` para incluir também o histórico."
+        ),
+    ),
+):
+    """
+    **Permissão:** qualquer membro logado (Diretoria, conselheiro, auxiliar ou embaixador do rei).
+
+    Por padrão lista apenas os mandatos ativos; envie `apenas_ativos=false` para ver também os encerrados.
+    """
     membro_do_usuario(request.auth)  # só exige estar logado
     qs = Diretoria.objects.select_related("membro")
     if apenas_ativos:
@@ -50,9 +93,21 @@ def listar_diretoria(request, apenas_ativos: bool = True):
     return qs
 
 
-@router.post("/", response={201: DiretoriaOut})
+@router.post(
+    "/",
+    response={201: DiretoriaOut, **R400, **R401, **R403, **R404},
+    summary="Cria um mandato na Diretoria",
+    operation_id="criar_mandato",
+)
 def criar_mandato(request, payload: DiretoriaIn):
+    """
+    **Permissão:** restrito à Diretoria (quem já tem mandato ativo). Os demais recebem 403.
+
+    Regras: 404 se `membro_id` não existir; 400 se `cargo` não for um dos valores válidos, se o membro não for
+    `conselheiro` ou se já tiver um mandato ativo.
+    """
     exigir_diretoria(request)
+    _validar_cargo(payload.cargo)
 
     membro_alvo = get_object_or_404(Membro, pk=payload.membro_id)
     if membro_alvo.tipo != TipoMembro.CONSELHEIRO:
@@ -66,18 +121,48 @@ def criar_mandato(request, payload: DiretoriaIn):
     return 201, mandato
 
 
-@router.put("/{mandato_id}/", response=DiretoriaOut)
+@router.put(
+    "/{mandato_id}/",
+    response={200: DiretoriaOut, **R400, **R401, **R403, **R404},
+    summary="Atualiza um mandato",
+    operation_id="atualizar_mandato",
+)
 def atualizar_mandato(request, mandato_id: int, payload: DiretoriaUpdate):
+    """
+    **Permissão:** restrito à Diretoria. Os demais recebem 403.
+
+    Atualização parcial: só os campos enviados são alterados. Para encerrar um mandato mantendo o histórico,
+    envie `data_fim`. 404 se o mandato não existir; 400 se `cargo` não for um dos valores válidos ou se
+    `cargo` / `data_inicio` forem enviados como `null` (só `data_fim` aceita `null`).
+    """
     exigir_diretoria(request)
     mandato = get_object_or_404(Diretoria, pk=mandato_id)
-    for campo, valor in payload.dict(exclude_unset=True).items():
+
+    dados = payload.dict(exclude_unset=True)
+    if "cargo" in dados:
+        _validar_cargo(dados["cargo"])  # também recusa null
+    if "data_inicio" in dados and dados["data_inicio"] is None:
+        raise HttpError(400, "data_inicio não pode ser nula.")
+
+    for campo, valor in dados.items():
         setattr(mandato, campo, valor)
     mandato.save()
     return mandato
 
 
-@router.delete("/{mandato_id}/", response={204: None})
+@router.delete(
+    "/{mandato_id}/",
+    response={204: None, **R401, **R403, **R404},
+    summary="Exclui um mandato",
+    operation_id="excluir_mandato",
+)
 def excluir_mandato(request, mandato_id: int):
+    """
+    **Permissão:** restrito à Diretoria. Os demais recebem 403.
+
+    Remove o registro definitivamente, inclusive do histórico. Para apenas encerrar o mandato, use `PUT` com `data_fim`.
+    404 se o mandato não existir.
+    """
     exigir_diretoria(request)
     mandato = get_object_or_404(Diretoria, pk=mandato_id)
     mandato.delete()

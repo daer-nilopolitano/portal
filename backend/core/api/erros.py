@@ -26,6 +26,6 @@ class ErroOut(Schema):
 
 
 R400 = {400: ErroOut}
-R401 = {401: ErroOut}  # token ausente, inválido ou expirado — endpoints com AuthBearer()
+R401 = {401: ErroOut}  # token ausente, inválido ou expirado, ou membro inativo — endpoints com AuthBearer()
 R403 = {403: ErroOut}
 R404 = {404: ErroOut}

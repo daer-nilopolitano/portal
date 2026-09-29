@@ -5,16 +5,18 @@ Leitura liberada para qualquer usuário autenticado. Criar/excluir uma embaixada
 é restrito à Diretoria — são dados mais "estruturais". Editar os horários de reunião é liberado também para o conselheiro
 da própria embaixada (é quem lida com isso no dia a dia). Cadastro de Igreja somente pelo Django Admin.
 """
+from datetime import datetime
 from typing import Optional
 
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from ninja import Field, Router, Schema
 from ninja.errors import HttpError
+from pydantic import field_validator
 
 from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
 from ..models import DiaSemana, Embaixada, HorarioReuniao, Igreja, Membro, TipoMembro
-from .erros import R401, R403, R404
+from .erros import R400, R401, R403, R404
 
 router = Router(tags=["Embaixadas"], auth=AuthBearer())
 
@@ -129,8 +131,25 @@ class EmbaixadaPublicaOut(Schema):
 
 
 class HorarioReuniaoIn(Schema):
-    dia_semana: str = Field(..., description=_DESC_DIA_SEMANA)
+    dia_semana: str = Field(..., description=_DESC_DIA_SEMANA, examples=["sabado"])
     horario: str = Field(..., description="Horário no formato HH:MM.", examples=["19:30"])
+
+    # Valores inválidos são recusados com 422 (erro de validação do Ninja), antes de chegar ao banco.
+    @field_validator("dia_semana")
+    @classmethod
+    def _validar_dia_semana(cls, valor: str) -> str:
+        if valor not in DiaSemana.values:
+            raise ValueError("dia_semana inválido. Valores aceitos: " + ", ".join(DiaSemana.values) + ".")
+        return valor
+
+    @field_validator("horario")
+    @classmethod
+    def _validar_horario(cls, valor: str) -> str:
+        try:
+            datetime.strptime(valor, "%H:%M")
+        except ValueError:
+            raise ValueError("horario inválido. Use o formato HH:MM (ex.: 19:30).")
+        return valor
 
 
 class EmbaixadaIn(Schema):
@@ -148,6 +167,15 @@ class EmbaixadaUpdate(Schema):
             "Lista completa dos horários da embaixada — substitui os horários existentes por inteiro (não é um incremento)."
         ),
     )
+
+
+def _validar_igreja_livre(igreja: Igreja, ignorar_embaixada_id: Optional[int] = None) -> None:
+    """Uma igreja só pode ter uma embaixada (OneToOne) — evita IntegrityError (500) no banco."""
+    qs = Embaixada.objects.filter(igreja=igreja)
+    if ignorar_embaixada_id is not None:
+        qs = qs.exclude(pk=ignorar_embaixada_id)
+    if qs.exists():
+        raise HttpError(400, "Essa igreja já tem uma embaixada cadastrada.")
 
 
 def _sincronizar_horarios(embaixada: Embaixada, horarios: list[HorarioReuniaoIn]) -> None:
@@ -183,14 +211,20 @@ def detalhar_embaixada(request, embaixada_id: int):
 
 @router.post(
     "/",
-    response={201: EmbaixadaOut, **R401, **R403, **R404},
+    response={201: EmbaixadaOut, **R400, **R401, **R403, **R404},
     summary="Cria uma embaixada",
     operation_id="criar_embaixada",
 )
 def criar_embaixada(request, payload: EmbaixadaIn):
-    """Restrito à Diretoria. 404 se `igreja_id` não existir."""
+    """
+    **Permissão:** restrito à Diretoria.
+
+    404 se `igreja_id` não existir; 400 se a igreja já tiver uma embaixada (cada igreja tem no máximo uma).
+    `dia_semana` ou `horario` inválidos nos horários retornam 422.
+    """
     exigir_diretoria(request)
     igreja = get_object_or_404(Igreja, pk=payload.igreja_id)
+    _validar_igreja_livre(igreja)
 
     embaixada = Embaixada.objects.create(nome=payload.nome, igreja=igreja)
     if payload.horarios_reuniao:
@@ -211,7 +245,7 @@ def listar_embaixadas_publicas(request):
 
 @router.put(
     "/{embaixada_id}/",
-    response={200: EmbaixadaOut, **R401, **R403, **R404},
+    response={200: EmbaixadaOut, **R400, **R401, **R403, **R404},
     summary="Atualiza uma embaixada",
     operation_id="atualizar_embaixada",
 )
@@ -219,6 +253,10 @@ def atualizar_embaixada(request, embaixada_id: int, payload: EmbaixadaUpdate):
     """
     A Diretoria pode alterar qualquer campo. O conselheiro da própria embaixada só pode alterar `horarios_reuniao` —
     tentar mudar `nome` ou `igreja_id` devolve 403.
+
+    404 se a embaixada ou a nova `igreja_id` não existirem; 400 se a nova igreja já tiver outra embaixada ou se
+    `nome` / `igreja_id` forem enviados como `null` (ou `nome` vazio).
+    `dia_semana` ou `horario` inválidos nos horários retornam 422.
     """
     membro_logado = membro_do_usuario(request.auth)
     embaixada = get_object_or_404(Embaixada, pk=embaixada_id)
@@ -236,8 +274,16 @@ def atualizar_embaixada(request, embaixada_id: int, payload: EmbaixadaUpdate):
     else:
         raise HttpError(403, "Ação restrita à Diretoria ou ao conselheiro desta embaixada.")
 
+    # Campos obrigatórios no banco: enviar null (ou nome vazio) daria erro 500.
+    if "nome" in dados and not (dados["nome"] or "").strip():
+        raise HttpError(400, "nome não pode ser nulo nem vazio.")
+    if "igreja_id" in dados and dados["igreja_id"] is None:
+        raise HttpError(400, "igreja_id não pode ser nulo.")
+
     if "igreja_id" in dados:
-        embaixada.igreja = get_object_or_404(Igreja, pk=dados.pop("igreja_id"))
+        nova_igreja = get_object_or_404(Igreja, pk=dados.pop("igreja_id"))
+        _validar_igreja_livre(nova_igreja, ignorar_embaixada_id=embaixada.pk)
+        embaixada.igreja = nova_igreja
     horarios_reuniao = dados.pop("horarios_reuniao", None)
 
     for campo, valor in dados.items():

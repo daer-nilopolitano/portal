@@ -30,10 +30,10 @@ _DESC_POSTO = (
     "Valores: `escudeiro`, `arauto`, `senior`, `emerito`."
 )
 _DESC_CARGO_EMBAIXADA = (
-    "Cargo do membro no quadro de oficiais da própria embaixada, se ele ocupar algum (só aplicável a `embaixador_do_rei`) " 
-    "caso contrário, `null` "
-    "Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, `consul`, `tesoureiro`, "
-    "`diretor_musica`, `diretor_esportes`. Definido via `PUT /membros/{id}/cargo-embaixada/`, não neste endpoint."
+    "Cargo do membro no quadro de oficiais da própria embaixada, se ele ocupar algum (só aplicável a `embaixador_do_rei`); "
+    "caso contrário, `null`. Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, "
+    "`consul`, `tesoureiro`, `diretor_musica`, `diretor_esportes`. Definido via `PUT /membros/{id}/cargo-embaixada/`, "
+    "não neste endpoint."
 )
 _DESC_NOME_RESPONSAVEL = "Nome do responsável — só relevante para tipo `embaixador_do_rei` (é menor de idade)."
 _DESC_TELEFONE_RESPONSAVEL = "Telefone do responsável — só relevante para tipo `embaixador_do_rei`."
@@ -126,6 +126,17 @@ def _validar_posto(tipo: str, posto_embaixador: Optional[str]):
         raise HttpError(400, "posto_embaixador só deve ser preenchido quando tipo = embaixador_do_rei.")
 
 
+def _validar_email_unico(email: Optional[str], ignorar_membro_id: Optional[int] = None) -> None:
+    """E-mail é único (e vira o username no login) — evita IntegrityError (500) no banco. Vazio/nulo não conflita."""
+    if not email:
+        return
+    qs = Membro.objects.filter(email__iexact=email)
+    if ignorar_membro_id is not None:
+        qs = qs.exclude(pk=ignorar_membro_id)
+    if qs.exists():
+        raise HttpError(400, "Já existe um membro cadastrado com esse e-mail.")
+
+
 def _pode_gerenciar_embaixada(membro_logado: Membro, embaixada_id: int) -> bool:
     """Escrita (criar/editar/excluir) — Diretoria ou conselheiro da própria embaixada."""
     if membro_logado.eh_diretoria:
@@ -188,14 +199,21 @@ def detalhar_membro(request, membro_id: int):
     operation_id="criar_membro",
 )
 def criar_membro(request, payload: MembroIn):
-    """Restrito à Diretoria ou ao conselheiro da embaixada informada em `embaixada_id`."""
+    """
+    **Permissão:** restrito à Diretoria ou ao conselheiro da embaixada informada em `embaixada_id`.
+
+    400 se o `email` já estiver em uso por outro membro ou se `posto_embaixador` não combinar com o `tipo`;
+    404 se a embaixada não existir. E-mail vazio é gravado como `null`.
+    """
     membro_logado = membro_do_usuario(request.auth)
     if not _pode_gerenciar_embaixada(membro_logado, payload.embaixada_id):
         raise HttpError(403, "Você só pode cadastrar membros na sua própria embaixada.")
     _validar_posto(payload.tipo, payload.posto_embaixador)
+    _validar_email_unico(payload.email)
 
     embaixada = get_object_or_404(Embaixada, pk=payload.embaixada_id)
     dados = payload.dict(exclude={"embaixada_id"})
+    dados["email"] = dados["email"] or None  # "" viraria um segundo valor "" e violaria a unicidade
     membro = Membro.objects.create(embaixada=embaixada, **dados)
     return 201, membro
 
@@ -207,13 +225,21 @@ def criar_membro(request, payload: MembroIn):
     operation_id="atualizar_membro",
 )
 def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
-    """Restrito à Diretoria ou ao conselheiro da embaixada atual (ou de destino, se `embaixada_id` mudar) do membro."""
+    """
+    **Permissão:** restrito à Diretoria ou ao conselheiro da embaixada atual (ou de destino, se `embaixada_id` mudar) do membro.
+
+    400 se o `email` já estiver em uso por outro membro ou se `posto_embaixador` não combinar com o `tipo`;
+    404 se o membro ou a nova embaixada não existirem. E-mail vazio é gravado como `null`.
+    """
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro, pk=membro_id)
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
         raise HttpError(403, "Você só pode editar membros da sua própria embaixada.")
 
     dados = payload.dict(exclude_unset=True)
+    if "email" in dados:
+        dados["email"] = dados["email"] or None
+        _validar_email_unico(dados["email"], ignorar_membro_id=membro.pk)
     if "embaixada_id" in dados:
         nova_embaixada_id = dados.pop("embaixada_id")
         if not _pode_gerenciar_embaixada(membro_logado, nova_embaixada_id):
@@ -254,8 +280,13 @@ def excluir_membro(request, membro_id: int):
 )
 def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
     """
-    Cria o login (Django User) de um Membro que ainda não tem conta — usado pela Diretoria ou por um conselheiro da
-    própria embaixada para dar acesso a um membro recém-cadastrado. Requer que o Membro já tenha um e-mail (vira o username).
+    **Permissão:** restrito à Diretoria ou ao conselheiro da própria embaixada do membro.
+
+    Cria o login (Django User) de um Membro que ainda não tem conta — usado para dar acesso a um membro recém-cadastrado.
+    Requer que o Membro já tenha um e-mail (vira o username).
+
+    400 se o membro já tiver acesso, se não tiver e-mail cadastrado, se já existir outro usuário do sistema com esse
+    e-mail ou se a senha não passar nos validadores do Django.
     """
     from django.contrib.auth import get_user_model
 
@@ -270,6 +301,9 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
         raise HttpError(400, "Esse membro já tem acesso criado.")
     if not membro.email:
         raise HttpError(400, "Cadastre um e-mail para esse membro antes de criar o acesso.")
+    # O e-mail vira o username, que é único: um User já existente (ex.: conta de administrador) daria erro 500.
+    if User.objects.filter(username__iexact=membro.email).exists():
+        raise HttpError(400, "Já existe um usuário do sistema com esse e-mail. Use outro e-mail ou fale com a administração.")
 
     # Roda os mesmos AUTH_PASSWORD_VALIDATORS do settings.py (tamanho mínimo, senha comum, etc.) — sem isso,
     # make_password() aceita qualquer string. O User ainda não existe neste ponto, então passa um objeto não salvo só

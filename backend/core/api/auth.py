@@ -12,11 +12,17 @@ from .erros import R401, R403
 router = Router(tags=["Autenticação"])
 
 _DESC_TIPO = (
-    "Tipo do membro: `conselheiro`, `auxiliar` ou `embaixador_do_rei`."
+    "Tipo do membro: `conselheiro`, `auxiliar` ou `embaixador_do_rei`. Quem está na Diretoria do DAER  Nilopolitano "
+    "tem `tipo` = `conselheiro` — veja `cargo_diretoria`."
 )
 _DESC_POSTO = (
-    "Posto do Embaixador do Rei — só vem preenchido quando tipo é "
-    "`embaixador_do_rei`. Valores: `escudeiro`, `arauto`, `senior`, `emerito`."
+    "Posto do Embaixador do Rei — só vem preenchido quando tipo é `embaixador_do_rei`. "
+    "Valores: `escudeiro`, `arauto`, `senior`, `emerito`."
+)
+_DESC_CARGO_DIRETORIA = (
+    "Cargo do membro na Diretoria da associação, se ele tiver mandato ativo; caso contrário, `null`. "
+    "Valores: `coordenador`, `presidente`, `vice_presidente`, `primeiro_secretario`, `segundo_secretario`, "
+    "`diretor_midia_comunicacao`, `diretor_esportes`. Um valor não nulo indica que o membro pertence à Diretoria."
 )
 
 
@@ -26,39 +32,38 @@ def _cargo_diretoria_ativo(membro: Membro) -> Optional[str]:
 
 
 class LoginIn(Schema):
-    email: str = Field(..., examples=["conselheiro@exemplo.org"])
-    senha: str
+    email: str = Field(
+        ...,
+        description="E-mail cadastrado no Membro (é o nome de usuário do login).",
+        examples=["conselheiro@exemplo.org"],
+    )
+    senha: str = Field(..., description="Senha definida na criação do acesso.")
 
 
 class LoginOut(Schema):
-    access_token: str
-    membro_id: int
-    nome: str
-    tipo: str = Field(..., description=_DESC_TIPO)
-    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
-    cargo_diretoria: Optional[str] = Field(
-        None,
+    access_token: str = Field(
+        ...,
         description=(
-            "Cargo do membro na Diretoria da associação, se ele tiver mandato "
-            "ativo — caso contrário, `null`."
+            "Token JWT. Envie-o em toda requisição autenticada, no cabeçalho `Authorization: Bearer <token>`. "
+            "Expira após o prazo configurado no servidor; depois disso, faça login novamente."
         ),
+        examples=["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."],
     )
+    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário.")
+    nome: str = Field(..., examples=["Paulo Roberto da Silva"])
+    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
 
 
 class MeOut(Schema):
-    membro_id: int
-    nome: str
-    embaixada_id: int
-    embaixada_nome: str
-    tipo: str = Field(..., description=_DESC_TIPO)
+    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário do token.")
+    nome: str = Field(..., examples=["Paulo Roberto da Silva"])
+    embaixada_id: int = Field(..., description="Identificador da embaixada do membro.")
+    embaixada_nome: str = Field(..., examples=["Embaixada Vale da Bênção"])
+    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
     posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
-    cargo_diretoria: Optional[str] = Field(
-        None,
-        description=(
-            "Cargo do membro na Diretoria da associação, se ele tiver mandato "
-            "ativo — caso contrário, `null`."
-        ),
-    )
+    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
 
 
 @router.post(
@@ -70,12 +75,13 @@ class MeOut(Schema):
 )
 def login(request, payload: LoginIn):
     """
-    Autentica com e-mail e senha e devolve um `access_token` (JWT). Envie-o
-    nas próximas requisições como `Authorization: Bearer <token>`.
+    **Permissão:** público, sem login. É a porta de entrada da API.
 
-    401 se e-mail ou senha estiverem errados; 403 se o usuário existir, mas
-    não estiver vinculado a nenhum Membro cadastrado (não deveria acontecer
-    em uso normal — ver `core/auth.py`).
+    Autentica com e-mail e senha e devolve um `access_token` (JWT). Envie-o nas próximas requisições como
+    `Authorization: Bearer <token>`.
+
+    401 se e-mail ou senha estiverem errados; 403 se o usuário existir, mas não estiver vinculado a nenhum Membro
+    cadastrado (não deveria acontecer em uso normal — ver `core/auth.py`) ou se o Membro estiver inativo.
     """
     # O username do Django User é o e-mail do Membro (ver criação de acesso em membros.py).
     user = authenticate(request, username=payload.email, password=payload.senha)
@@ -85,6 +91,8 @@ def login(request, payload: LoginIn):
     membro = getattr(user, "membro", None)
     if membro is None:
         raise HttpError(403, "Este usuário não está vinculado a nenhum Membro cadastrado.")
+    if not membro.ativo:
+        raise HttpError(403, "Este membro está inativo. Procure o conselheiro da sua embaixada ou a Diretoria.")
 
     return LoginOut(
         access_token=gerar_token(user),
@@ -104,7 +112,15 @@ def login(request, payload: LoginIn):
     operation_id="me",
 )
 def me(request):
-    """Dados do Membro vinculado ao usuário do token — usado pelo frontend logo após o login."""
+    """
+    **Permissão:** qualquer membro logado, sempre para os **próprios** dados.
+
+    Devolve os dados do Membro vinculado ao usuário do token — usado pelo frontend logo após o login para saber o tipo,
+    a embaixada e o cargo na Diretoria de quem entrou.
+
+    401 se o token estiver ausente, inválido ou expirado, ou se o Membro tiver sido inativado depois da emissão do token;
+    403 se o usuário do token não estiver vinculado a nenhum Membro.
+    """
     membro = membro_do_usuario(request.auth)
     return MeOut(
         membro_id=membro.id,
