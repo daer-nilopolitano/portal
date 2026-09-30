@@ -14,11 +14,14 @@ const midiaOrigins = remotePatterns.map(
   (p) => `${p.protocol}://${p.hostname}${p.port ? `:${p.port}` : ""}`,
 );
 
+// Tiles do mapa (OpenStreetMap usa os subdomínios a, b e c).
+const mapaOrigins = ["https://*.tile.openstreetmap.org"];
+
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: ${apiOrigin} ${midiaOrigins.join(" ")}`,
+  `img-src 'self' data: blob: ${apiOrigin} ${midiaOrigins.join(" ")} ${mapaOrigins.join(" ")}`,
   `media-src 'self' ${midiaOrigins.join(" ")}`,
   "font-src 'self' data:",
   `connect-src 'self' ${apiOrigin}`,
