@@ -131,10 +131,7 @@ def login(request, payload: LoginIn):
         raise HttpError(429, "Muitas tentativas de login. Aguarde alguns minutos e tente novamente.")
 
     import logging
-    logging.getLogger(__name__).warning(
-        "REMOTE_ADDR=%s XFF=%s",
-        request.META.get("REMOTE_ADDR"), request.META.get("HTTP_X_FORWARDED_FOR"),
-    )
+    logging.getLogger(__name__).warning("IP=%s", _ip_do_cliente(request))
 
     user = authenticate(request, username=payload.email, password=payload.senha)
     if user is None:

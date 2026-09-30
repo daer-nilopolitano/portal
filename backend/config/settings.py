@@ -184,8 +184,8 @@ JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080")) 
 # Liga/desliga o "Try it" (requisições reais) na documentação da API (Scalar API Reference, em /api/docs).
 API_DOCS_TRY_IT = os.environ.get("API_DOCS_TRY_IT", "True") == "True"
 
-# Limite de proxies confiáveis para X-Forwarded-For (Northflank envia vários, mas só o último é confiável).
-NUM_PROXIES_CONFIAVEIS = 1
+# Limite de proxies confiáveis para X-Forwarded-For.
+NUM_PROXIES_CONFIAVEIS = int(os.environ.get("NUM_PROXIES_CONFIAVEIS", "0"))
 
 # Configuração de logging — envia logs para stdout.
 LOGGING = {
