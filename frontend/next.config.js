@@ -30,6 +30,9 @@ const csp = [
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ["sanitize-html"],
+  },
   images: {
     // Imagens vêm do backend Django (MEDIA_URL), que é outro domínio.
     remotePatterns,
