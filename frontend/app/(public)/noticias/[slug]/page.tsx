@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { GaleriaFotos } from "@/components/public/galeria-fotos";
 import { formatarDataBR } from "@/lib/format";
 import { getNoticiaPorSlug } from "@/lib/noticias";
+import { sanitizarCorpo } from "@/lib/sanitizar-html";
 
 interface Props {
   params: { slug: string };
@@ -51,7 +52,7 @@ export default async function NoticiaDetalhePage({ params }: Props) {
         </div>
       ) : null}
 
-      <div className="noticia-corpo text-measure mt-8" dangerouslySetInnerHTML={{ __html: noticia.corpo }} />
+      <div className="noticia-corpo text-measure mt-8" dangerouslySetInnerHTML={{ __html: sanitizarCorpo(noticia.corpo) }} />
 
       <GaleriaFotos fotos={noticia.galeria} />
     </main>

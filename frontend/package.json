@@ -21,6 +21,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-leaflet": "^4.2.1",
+    "sanitize-html": "^2.17.7",
+    "server-only": "^0.0.1",
     "swr": "^2.5.1"
   },
   "devDependencies": {
@@ -28,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sanitize-html": "^2.16.2",
     "autoprefixer": "^10",
     "postcss": "^8",
     "tailwindcss": "^3",

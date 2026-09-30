@@ -20,7 +20,7 @@ export function Inline({ text }: { text: string }) {
           return <em key={i}>{part.slice(1, -1)}</em>;
         }
         const link = LINK.exec(part);
-        if (link && /^(https?:\/\/|\/|#|mailto:)/.test(link[2])) {
+        if (link && /^(https?:\/\/|\/(?![\/\\])|#|mailto:)/.test(link[2])) {
           const external = /^https?:/.test(link[2]);
           return (
             <a
