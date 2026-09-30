@@ -85,7 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, senha }),
     });
     if (!res.ok) {
-      throw new Error("E-mail ou senha inválidos.");
+      const erro = await res.json().catch(() => null);
+      throw new Error(
+        typeof erro?.detail === "string"
+          ? erro.detail
+          : "Não foi possível entrar. Tente novamente.",
+      );
     }
     const dados = await res.json();
     limparCache(); // nada de dados do usuário anterior sobrando em memória

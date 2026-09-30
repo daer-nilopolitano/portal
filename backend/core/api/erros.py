@@ -29,3 +29,4 @@ R400 = {400: ErroOut}
 R401 = {401: ErroOut}  # token ausente, inválido ou expirado, ou membro inativo — endpoints com AuthBearer()
 R403 = {403: ErroOut}
 R404 = {404: ErroOut}
+R429 = {429: ErroOut}  # tentativas demais — hoje só o login

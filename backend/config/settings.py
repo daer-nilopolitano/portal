@@ -110,9 +110,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Whitenoise serve os arquivos de STATIC_ROOT direto pelo processo Django —
-# sem isso, com DEBUG=False, nada de CSS/JS/ícones do admin é servido.
-# (MEDIA continua em disco local por enquanto; migra pro R2 depois.)
+# Whitenoise serve os arquivos de STATIC_ROOT direto pelo processo Django — sem isso, com DEBUG=False, nada de
+# CSS/JS/ícones do admin é servido.
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -120,6 +119,14 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
+}
+
+# Cache de falhas de login (para limitar tentativas) — usa cache em banco de dados, persiste entre reinícios do container.
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_tabela",
+    }
 }
 
 # Cloudflare R2 (S3-compatível) para mídia — fotos de membro, documentos, imagens do Wagtail.
@@ -148,8 +155,8 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 
-# Necessário atrás de proxy (Northflank termina o TLS antes do container) —
-# sem isso o Django acha que a conexão é HTTP e falha a checagem de CSRF/CSRF cookie em produção.
+# Necessário atrás de proxy (Northflank termina o TLS antes do container) — sem isso o Django acha que a conexão é HTTP
+# e falha a checagem de CSRF/CSRF cookie em produção.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Origens confiáveis para POST (login do django-admin/cms-admin). Precisa do scheme completo, igual ao CORS_ALLOWED_ORIGINS.
@@ -165,18 +172,20 @@ WAGTAIL_SITE_NAME = SITE_NAME
 WAGTAILADMIN_BASE_URL = os.environ.get(
     "WAGTAILADMIN_BASE_URL", "http://localhost:8000"
 )
-# Necessário para a Wagtail API devolver URLs absolutas de imagem (capa/galeria das
-# notícias) — sem isso, o campo "url" das renditions vem relativo e quebra no
-# frontend, que roda em outra origem (Next.js).
+# Necessário para a Wagtail API devolver URLs absolutas de imagem (capa/galeria das notícias) — sem isso, o campo "url"
+# das renditions vem relativo e quebra no frontend, que roda em outra origem (Next.js).
 WAGTAILAPI_BASE_URL = os.environ.get("WAGTAILAPI_BASE_URL", WAGTAILADMIN_BASE_URL)
 
-# Autenticação da API (JWT simples, sem refresh token por enquanto — ver core/auth.py).
+# Autenticação da API (JWT simples, sem refresh token — ver core/auth.py).
 # Por padrão reaproveita a SECRET_KEY do Django; em produção, defina um valor próprio em JWT_SECRET_KEY no .env.
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", SECRET_KEY)
 JWT_EXPIRATION_MINUTES = int(os.environ.get("JWT_EXPIRATION_MINUTES", "10080"))  # 7 dias
 
 # Liga/desliga o "Try it" (requisições reais) na documentação da API (Scalar API Reference, em /api/docs).
 API_DOCS_TRY_IT = os.environ.get("API_DOCS_TRY_IT", "True") == "True"
+
+# Limite de proxies confiáveis para X-Forwarded-For (Northflank envia vários, mas só o último é confiável).
+NUM_PROXIES_CONFIAVEIS = 1
 
 # Configuração de logging — envia logs para stdout.
 LOGGING = {

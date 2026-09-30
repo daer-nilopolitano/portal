@@ -7,6 +7,7 @@ import { useAuth, type Tipo } from "@/lib/auth-context";
 import { ROTULO_TIPO } from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import Image from "next/image";
 
 interface ItemNav {
   href: string;
@@ -45,30 +46,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      {/*
-        Sidebar é "chrome" de painel — cinza-carvão que acompanha o tema (ver
-        --color-chrome no globals.css), não o token `primary` (que clareia no
-        escuro pra contrastar com fundo escuro; não faz sentido pra um painel
-        inteiro), com o dourado da marca só no indicador do item ativo.
-      */}
-      <aside className="flex w-60 flex-shrink-0 flex-col bg-chrome text-white">
-        <div className="px-6 py-5 font-heading text-base font-semibold">{NOME_SITE}</div>
-        <nav className="flex-1 px-3">
-          {itensVisiveis.map((item) => {
-            const ativo = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`mb-1 flex min-h-[44px] items-center rounded border-l-4 px-3 text-sm ${
-                  ativo ? "border-daer-yellow bg-white/10 font-medium" : "border-transparent text-white/80 hover:bg-white/10"
-                }`}
-              >
-                {item.rotulo}
-              </Link>
-            );
-          })}
-        </nav>
+      <aside className="w-60 flex-shrink-0 bg-chrome text-white">
+        <div className="flex flex-col [@media(min-height:40rem)]:sticky [@media(min-height:40rem)]:top-0 [@media(min-height:40rem)]:h-screen">
+          <Link
+            href="/painel"
+            className="flex h-20 flex-shrink-0 items-center gap-3 border-b border-white/10 px-6"
+          >
+            <Image src="/logo.png" alt="logo" width={32} height={32} className="h-8 w-auto" priority />
+            <span className="font-heading text-base font-semibold">{NOME_SITE}</span>
+          </Link>
+          <nav className="flex-1 overflow-y-auto px-3 py-3">
+            {itensVisiveis.map((item) => {
+              const ativo = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`mb-1 flex min-h-[44px] items-center rounded border-l-4 px-3 text-sm ${
+                    ativo ? "border-daer-yellow bg-white/10 font-medium" : "border-transparent text-white/80 hover:bg-white/10"
+                  }`}
+                >
+                  {item.rotulo}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </aside>
 
       <div className="flex flex-1 flex-col bg-background">
