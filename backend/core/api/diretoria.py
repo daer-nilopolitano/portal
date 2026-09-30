@@ -7,10 +7,11 @@ from datetime import date
 from typing import Optional
 
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError, transaction
 from ninja import Field, Query, Router, Schema
 from ninja.errors import HttpError
 
-from ..auth import AuthBearer, exigir_diretoria, membro_do_usuario
+from ..auth import AuthBearer, exigir_diretoria, exigir_senha, membro_do_usuario
 from ..models import Diretoria, Membro, TipoMembro
 from .erros import R400, R401, R403, R404
 
@@ -58,12 +59,18 @@ class DiretoriaIn(Schema):
     )
     cargo: str = Field(..., description=_DESC_CARGO, examples=["presidente"])
     data_inicio: date = Field(..., description=_DESC_DATA_INICIO, examples=["2026-01-15"])
+    senha_confirmacao: str = Field(
+        ..., description="Sua senha. Conceder cargo na Diretoria dá poder sobre o sistema inteiro."
+    )
 
 
 class DiretoriaUpdate(Schema):
     cargo: Optional[str] = Field(None, description=_DESC_CARGO)
     data_inicio: Optional[date] = Field(None, description=_DESC_DATA_INICIO)
     data_fim: Optional[date] = Field(None, description=_DESC_DATA_FIM)
+    senha_confirmacao: Optional[str] = Field(
+        None, description="Obrigatória só ao reabrir um mandato encerrado (`data_fim` = null)."
+    )
 
 
 @router.get(
@@ -107,17 +114,24 @@ def criar_mandato(request, payload: DiretoriaIn):
     `conselheiro` ou se já tiver um mandato ativo.
     """
     exigir_diretoria(request)
+    exigir_senha(request, payload.senha_confirmacao)
     _validar_cargo(payload.cargo)
 
     membro_alvo = get_object_or_404(Membro, pk=payload.membro_id)
     if membro_alvo.tipo != TipoMembro.CONSELHEIRO:
         raise HttpError(400, "Só um Membro com tipo=conselheiro pode ocupar cargo na Diretoria.")
+    if not membro_alvo.ativo:
+        raise HttpError(400, "Esse membro está inativo.")
     if Diretoria.objects.filter(membro=membro_alvo, data_fim__isnull=True).exists():
         raise HttpError(400, "Esse membro já tem um mandato ativo na Diretoria.")
 
-    mandato = Diretoria.objects.create(
-        membro=membro_alvo, cargo=payload.cargo, data_inicio=payload.data_inicio
-    )
+    try:
+        with transaction.atomic():
+            mandato = Diretoria.objects.create(
+                membro=membro_alvo, cargo=payload.cargo, data_inicio=payload.data_inicio
+            )
+    except IntegrityError:  # dois pedidos simultâneos
+        raise HttpError(400, "Esse membro já tem um mandato ativo na Diretoria.")
     return 201, mandato
 
 
@@ -136,17 +150,40 @@ def atualizar_mandato(request, mandato_id: int, payload: DiretoriaUpdate):
     `cargo` / `data_inicio` forem enviados como `null` (só `data_fim` aceita `null`).
     """
     exigir_diretoria(request)
-    mandato = get_object_or_404(Diretoria, pk=mandato_id)
+    mandato = get_object_or_404(Diretoria.objects.select_related("membro"), pk=mandato_id)
 
     dados = payload.dict(exclude_unset=True)
+    senha_confirmacao = dados.pop("senha_confirmacao", None)  # não é campo do modelo
     if "cargo" in dados:
-        _validar_cargo(dados["cargo"])  # também recusa null
+        _validar_cargo(dados["cargo"])
     if "data_inicio" in dados and dados["data_inicio"] is None:
         raise HttpError(400, "data_inicio não pode ser nula.")
 
-    for campo, valor in dados.items():
-        setattr(mandato, campo, valor)
-    mandato.save()
+    inicio = dados.get("data_inicio", mandato.data_inicio)
+    fim = dados.get("data_fim", mandato.data_fim)
+    if "data_fim" in dados or "data_inicio" in dados:
+        if fim is not None and fim < inicio:
+            raise HttpError(400, "data_fim não pode ser anterior a data_inicio.")
+    if "data_fim" in dados and fim is not None and fim > date.today():
+        raise HttpError(400, "data_fim não pode estar no futuro: o mandato encerra assim que for preenchida.")
+
+    reabrindo = "data_fim" in dados and dados["data_fim"] is None and mandato.data_fim is not None
+    if reabrindo:
+        if not senha_confirmacao:
+            raise HttpError(400, "Informe sua senha para reabrir um mandato.")
+        exigir_senha(request, senha_confirmacao)
+        if not mandato.membro.ativo or mandato.membro.tipo != TipoMembro.CONSELHEIRO:
+            raise HttpError(400, "Só um conselheiro ativo pode ocupar cargo na Diretoria.")
+        if Diretoria.objects.filter(membro=mandato.membro, data_fim__isnull=True).exclude(pk=mandato.pk).exists():
+            raise HttpError(400, "Esse membro já tem outro mandato ativo na Diretoria.")
+
+    try:
+        with transaction.atomic():
+            for campo, valor in dados.items():
+                setattr(mandato, campo, valor)
+            mandato.save()
+    except IntegrityError:
+        raise HttpError(400, "Esse membro já tem um mandato ativo na Diretoria.")
     return mandato
 
 

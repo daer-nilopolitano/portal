@@ -187,6 +187,20 @@ API_DOCS_TRY_IT = os.environ.get("API_DOCS_TRY_IT", "True") == "True"
 # Limite de proxies confiáveis para X-Forwarded-For.
 NUM_PROXIES_CONFIAVEIS = int(os.environ.get("NUM_PROXIES_CONFIAVEIS", "0"))
 
+# Configurações de e-mail
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "DAER Nilopolitano <nao-responder@exemplo.org>")
+
+# Sempre fixo no settings (nunca montado a partir do Host da requisição).
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 24  # 1 dia; se expirar, o membro usa "esqueci minha senha"
+
 # Configuração de logging — envia logs para stdout.
 LOGGING = {
     "version": 1,

@@ -1,8 +1,5 @@
 """
 Entidades principais do sistema de gestão do DAER Nilopolitano.
-
-Ver o plano de desenvolvimento para o desenho completo dessas entidades.
-Eventos ficam como páginas do Wagtail (app `cms`, modelo `EventoPage`).
 """
 import uuid
 from functools import cached_property
@@ -105,6 +102,13 @@ class Membro(models.Model):
     foto = models.ImageField(upload_to="membros/fotos/", null=True, blank=True)
     telefone_contato = models.CharField(max_length=20, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
+
+    versao_token = models.PositiveIntegerField(
+        default=0, help_text="Incrementar invalida todos os tokens já emitidos."
+    )
+    deve_trocar_senha = models.BooleanField(
+        default=False, help_text="Senha temporária definida por um admin: trocar no primeiro acesso."
+    )
 
     tipo = models.CharField(max_length=30, choices=TipoMembro.choices)
 

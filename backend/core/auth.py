@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from ninja.errors import HttpError
 from ninja.security import HttpBearer
 
@@ -20,11 +21,22 @@ from .models import Membro, TipoMembro
 User = get_user_model()
 
 
+def contar_falha(chave: str, janela: int = 15 * 60) -> None:
+    if cache.add(chave, 1, timeout=janela):
+        return
+    try:
+        cache.incr(chave)
+    except ValueError:
+        cache.set(chave, 1, timeout=janela)
+
+
 def gerar_token(user) -> str:
     agora = datetime.now(timezone.utc)
+    membro = getattr(user, "membro", None)
     payload = {
         "user_id": user.pk,
         "sah": user.get_session_auth_hash(),
+        "tv": membro.versao_token if membro else 0,
         "iat": agora,
         "exp": agora + timedelta(minutes=settings.JWT_EXPIRATION_MINUTES),
     }
@@ -34,6 +46,9 @@ def gerar_token(user) -> str:
 class AuthBearer(HttpBearer):
     """Valida o token e devolve o usuário Django autenticado (fica em request.auth). Recusa (401) token inválido ou
     expirado, usuário inativo e membro inativo."""
+
+    # Com senha temporária pendente, só /me, /trocar-senha e /sair-todos funcionam.
+    permitir_senha_temporaria = False
 
     def authenticate(self, request, token):
         try:
@@ -60,10 +75,31 @@ class AuthBearer(HttpBearer):
         # Membro inativado depois da emissão do token: o token deixa de valer (401) na hora.
         # Usuário sem Membro (ex.: superusuário criado direto no Django) segue adiante, e membro_do_usuario() devolve 403.
         membro = getattr(user, "membro", None)
-        if membro is not None and not membro.ativo:
-            return None
-
+        if membro is not None:
+            if not membro.ativo:
+                return None
+            # Versão do token: "sair de todos" e revogação pelo admin incrementam este campo.
+            if payload.get("tv", -1) != membro.versao_token:
+                return None
+            if membro.deve_trocar_senha and not self.permitir_senha_temporaria:
+                raise HttpError(403, "Você precisa definir uma nova senha antes de continuar.")
         return user
+
+
+class AuthBearerTrocaSenha(AuthBearer):
+    permitir_senha_temporaria = True
+
+
+def exigir_senha(request, senha: str) -> None:
+    """Reautenticação para ações sensíveis (alterar permissões/papéis)."""
+    user = request.auth
+    chave = f"reauth_falhas_{user.pk}"
+    if cache.get(chave, 0) >= 5:
+        raise HttpError(429, "Muitas tentativas. Aguarde alguns minutos.")
+    if not user.check_password(senha):
+        contar_falha(chave)
+        raise HttpError(400, "Senha incorreta.")
+    cache.delete(chave)
 
 
 def membro_do_usuario(user) -> Membro:
