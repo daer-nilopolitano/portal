@@ -130,9 +130,6 @@ def login(request, payload: LoginIn):
     if cache.get(chave_email, 0) >= _MAX_FALHAS_POR_EMAIL or cache.get(chave_ip, 0) >= _MAX_FALHAS_POR_IP:
         raise HttpError(429, "Muitas tentativas de login. Aguarde alguns minutos e tente novamente.")
 
-    import logging
-    logging.getLogger(__name__).warning("IP=%s", _ip_do_cliente(request))
-
     user = authenticate(request, username=payload.email, password=payload.senha)
     if user is None:
         _contar_falha(chave_email)
