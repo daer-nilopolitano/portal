@@ -1,6 +1,6 @@
 /**
  * Helper para chamar a API do backend Django (Ninja + Wagtail headless).
- * Ex.: apiFetch("/igrejas/") ou apiFetch("/membros/", { token })
+ * Ex.: apiFetch "/igrejas/" ou apiFetch "/membros/", { token }
  */
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 const MEDIA_ORIGIN = API_URL.replace(/\/api\/?$/, "");
@@ -15,9 +15,8 @@ export function mediaUrl(caminho: string | null | undefined): string | null {
 interface ApiFetchOptions extends RequestInit {
   token?: string | null;
   /**
-   * Segundos de cache no servidor do Next.js (só para dados públicos).
-   * Sem isso, a chamada nunca usa cache (`no-store`) — o padrão para tudo
-   * que é autenticado ou precisa estar sempre atual.
+   * Segundos de cache no servidor do Next.js (só para dados públicos). Sem isso, a chamada nunca usa cache (`no-store`).
+   * O padrão para tudo que é autenticado ou precisa estar sempre atual.
    */
   revalidate?: number;
 }

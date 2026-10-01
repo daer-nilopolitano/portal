@@ -375,7 +375,7 @@ def excluir_membro(request, membro_id: int):
     membro = get_object_or_404(Membro.objects.select_related("user"), pk=membro_id)
     _exigir_poder_sobre_acesso(membro_logado, membro)
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
-        raise HttpError(403, "Você só pode excluir membros da sua própria embaixada.")
+        raise HttpError(403, "Você não pode excluir este membro.")
     user = membro.user
     with transaction.atomic():
         membro.delete()

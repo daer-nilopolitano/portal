@@ -8,7 +8,7 @@ import { ROTULO_CARGO_DIRETORIA_EMBAIXADA, ROTULO_FAIXA_ETARIA, ROTULO_POSTO } f
 import { DataTable, type Coluna } from "@/components/ui/data-table";
 import type { Membro, Embaixada as EmbaixadaCompleta } from "@/lib/types";
 
-// Esta tela só usa id/nome de Embaixada (pra popular o <select>)
+// Esta tela só usa id/nome de Embaixada (para popular o <select>)
 type Embaixada = Pick<EmbaixadaCompleta, "id" | "nome">;
 
 interface FormularioMembro {
