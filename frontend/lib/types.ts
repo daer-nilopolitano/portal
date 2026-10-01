@@ -1,17 +1,9 @@
 /**
  * Tipos que espelham as entidades da API do backend (Django Ninja).
  *
- * Centralizados aqui porque antes viviam duplicados em vários componentes
- * (ex.: `Igreja` tinha 3 versões divergentes, `Embaixada` tinha 2) — o que
- * gera risco de um componente ficar desatualizado quando o schema do
- * backend muda. Cada componente importa só os campos que usa, com `Pick`
- * quando só precisa de um subconjunto (ex.: um <select> só precisa de
- * `id` e `nome`).
- *
- * Se o projeto crescer bastante, vale considerar gerar este arquivo
- * automaticamente a partir do OpenAPI que o Django Ninja já expõe em
- * /api/openapi.json (ex.: com `openapi-typescript`), eliminando de vez o
- * risco de desatualização manual.
+ * Centralizados aqui porque antes viviam duplicados em vários componentes, o que gera risco de um componente ficar
+ * desatualizado quando o schema do backend muda. Cada componente importa só os campos que usa, com `Pick` quando só
+ * precisa de um subconjunto (ex.: um <select> só precisa de `id` e `nome`).
  */
 
 export interface Igreja {
@@ -107,9 +99,8 @@ export interface GrupoTrabalho {
   participantes: ParticipanteGrupo[];
 }
 
-// Formato do endpoint público /embaixadas-publicas/ — só o que o site
-// institucional pode mostrar (sem qualquer dado pessoal de Membro como
-// telefone, e-mail ou data de nascimento).
+// Formato do endpoint público /embaixadas-publicas/ — só o que o site institucional pode mostrar (sem qualquer dado
+// pessoal de Membro como telefone, e-mail ou data de nascimento).
 export interface HorarioReuniaoPublico {
   dia_semana: string;
   horario: string;
@@ -125,12 +116,10 @@ export interface EmbaixadaPublica {
 }
 
 /**
- * Formato combinado usado pelo card de destaques da home (carrossel + mapa):
- * junta o endereço de `Igreja` com os dados públicos da `Embaixada`
- * associada. Montado no frontend a partir de dois endpoints distintos —
- * /igrejas/ e /embaixadas-publicas/ — porque no backend são recursos com
- * responsabilidades diferentes (geografia vs. gestão de embaixada). Só
- * igrejas que já têm uma embaixada correspondente viram um `EmbaixadaDestaque`.
+ * Formato combinado usado pelo card de destaques da home (carrossel + mapa): junta o endereço de `Igreja` com os dados
+ * públicos da `Embaixada` associada. Montado no frontend a partir de dois endpoints distintos — /igrejas/ e
+ * /embaixadas-publicas/ — porque no backend são recursos com responsabilidades diferentes (geografia vs. gestão de
+ * embaixada). Só igrejas que já têm uma embaixada correspondente viram um `EmbaixadaDestaque`.
  */
 export interface EmbaixadaDestaque extends Igreja {
   embaixada_id: number;
@@ -159,9 +148,8 @@ export interface Estatisticas {
   conselheiros_embaixada: string[];
 }
 
-// Formato do campo de imagem devolvido pela Wagtail API (via ImageRenditionField).
-// `url` é relativo ao backend (ex.: "/media/..."); use `full_url` (absoluto) como
-// `src` de <Image>, já que o frontend roda em outra origem.
+// Formato do campo de imagem devolvido pela Wagtail API (via ImageRenditionField). `url` é relativo ao backend
+// (ex.: "/media/..."); use `full_url` (absoluto) como `src` de <Image>, já que o frontend roda em outra origem.
 export interface ImagemRendition {
   url: string;
   full_url?: string;
@@ -170,8 +158,7 @@ export interface ImagemRendition {
   alt: string;
 }
 
-// Item de galeria de fotos — formato compartilhado por Notícias (campo
-// "galeria") e Álbuns da galeria de fotos (campo "fotos").
+// Item de galeria de fotos — formato compartilhado por Notícias (campo "galeria") e Álbuns da galeria de fotos (campo "fotos").
 export interface Foto {
   imagem: ImagemRendition | null;
   legenda: string;

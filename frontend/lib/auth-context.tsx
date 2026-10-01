@@ -1,15 +1,8 @@
 "use client";
 
 /**
- * Contexto de autenticação, compartilhado por toda a aplicação (site público
- * e área logada). Guarda o token JWT e os dados do Membro logado (via
- * /api/auth/me/), e expõe login/logout.
- *
- * TODO(segurança): o token fica em localStorage por simplicidade no MVP —
- * funciona bem, mas é acessível a qualquer script (risco de XSS). Uma
- * evolução futura é mover para um cookie httpOnly setado por uma rota do
- * Next.js, o que também permite proteger rotas no middleware (server-side)
- * em vez de só no client como está agora.
+ * Contexto de autenticação, compartilhado por toda a aplicação (site público e área logada).
+ * Guarda o token JWT e os dados do Membro logado (via /api/auth/me/), e expõe login/logout.
  */
 import {
   createContext,
