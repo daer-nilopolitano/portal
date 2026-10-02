@@ -121,7 +121,8 @@ class MembroOut(Schema):
     ativo: bool
     idade: int
     faixa_etaria: Optional[str] = Field(None, description=_DESC_FAIXA_ETARIA)
-    tem_acesso: bool = Field(..., description="Se o membro já tem login (Django User) criado — ver POST .../criar-acesso/.")
+    tem_acesso: bool = Field(...,
+                             description="Se o membro já tem login (Django User) criado — ver POST .../criar-acesso/.")
     convite_pendente: bool = Field(False, description="Tem login criado mas ainda não definiu a senha.")
     usuario: Optional[str] = None
 
@@ -218,7 +219,8 @@ class CargoEmbaixadaIn(Schema):
 
 class SenhaTemporariaIn(Schema):
     senha_confirmacao: str = Field(..., description="Sua própria senha (reautenticação).")
-    senha_temporaria: Optional[str] = Field(None, description="Senha temporária a ser atribuída ao membro (ele precisará trocá-la no primeiro acesso).")
+    senha_temporaria: Optional[str] = Field(None,
+                                            description="Senha temporária a ser atribuída ao membro (ele precisará trocá-la no primeiro acesso).")
 
 
 @router.get(
@@ -442,7 +444,9 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
         logger.exception("Falha ao enviar convite")
         return 201, {"detail": "Acesso criado, mas o e-mail não pôde ser enviado. Use 'Reenviar link'.",
                      "usuario": username}
-    return 201, {"detail": f"Acesso criado. Enviamos um link para {membro.email}.", "usuario": username}
+    return 201, {
+        "detail": f"Acesso criado. Enviamos um link para {membro.email} (remetente: daernil.oficial@gmail.com). Peça para conferir o spam.",
+        "usuario": username}
 
 
 @router.put(

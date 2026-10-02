@@ -31,7 +31,9 @@ def enviar_link_definir_senha(membro, *, convite: bool) -> None:
         assunto = "Redefinição de senha - DAER Nilopolitano"
         intro = "Recebemos um pedido para redefinir sua senha. Use o link abaixo:"
     corpo = (
-        f"Olá, {membro.nome}!\n\n{intro}\n\n{link}\n\n"
+        f"Olá, {membro.nome}!\n\n{intro}\n\n"
+        f"Seu usuário para entrar: {user.username}\n\n"
+        f"{link}\n\n"
         "O link vale por 24 horas e só pode ser usado uma vez. "
         "Se você não pediu isso, ignore este e-mail."
     )
