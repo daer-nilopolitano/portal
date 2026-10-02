@@ -51,9 +51,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col [@media(min-height:40rem)]:sticky [@media(min-height:40rem)]:top-0 [@media(min-height:40rem)]:h-screen">
           <Link
             href="/painel"
-            className="flex h-20 flex-shrink-0 items-center gap-3 border-b border-white/10 px-6"
+            className="flex h-20 flex-shrink-0 items-center gap-1 border-b border-white/10 px-4"
           >
-            <Image src="/logo.png" alt="logo" width={32} height={32} className="h-8 w-auto" priority />
+            <Image src="/logo.png" alt="logo" width={32} height={32} className="h-10 w-auto" priority />
             <span className="font-heading text-base font-semibold">{NOME_SITE}</span>
           </Link>
           <nav className="flex-1 overflow-y-auto px-3 py-3">
@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex flex-1 flex-col bg-background">
-        <header className="flex items-center justify-between border-b border-border bg-surface px-8 py-4">
+        <header className="flex h-20 items-center justify-between border-b border-border bg-surface px-8">
           <div>
             <p className="text-sm text-text-muted">{membro.tipo ? ROTULO_TIPO[membro.tipo] : "Sem tipo definido"}</p>
             <p className="font-heading text-base font-semibold text-primary">{membro.nome}</p>

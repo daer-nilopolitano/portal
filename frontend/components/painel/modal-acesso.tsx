@@ -187,7 +187,7 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
     }
   }
 
-  // ---------- Resultado ----------
+  // Resultado (usuário e senha temporária, ou link enviado por e-mail)
   if (etapa === "resultado" && resultado) {
     return (
       <div className="space-y-4">
@@ -230,7 +230,7 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
     );
   }
 
-  // ---------- Escolha (membro que já tem acesso) ----------
+  // Escolha (membro que já tem acesso)
   if (etapa === "escolha") {
     return (
       <div className="space-y-4">
@@ -246,14 +246,14 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
 
         <div className="flex flex-col items-start gap-2">
           {temEmail && (
-            <button type="button" onClick={reenviarLink} disabled={enviando} className="btn-ghost">
+            <button type="button" onClick={reenviarLink} disabled={enviando} className="btn-ghost w-full">
               {membro.convite_pendente ? "Reenviar convite por e-mail" : "Enviar link para redefinir a senha"}
             </button>
           )}
-          <button type="button" onClick={() => setEtapa("formulario")} disabled={enviando} className="btn-ghost">
+          <button type="button" onClick={() => setEtapa("formulario")} disabled={enviando} className="btn-ghost w-full">
             Definir nova senha temporária
           </button>
-          <button type="button" onClick={encerrarSessoes} disabled={enviando} className="btn-ghost">
+          <button type="button" onClick={encerrarSessoes} disabled={enviando} className="btn-ghost w-full">
             Encerrar todas as sessões abertas
           </button>
         </div>
@@ -275,14 +275,14 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
           </p>
         )}
 
-        <button type="button" onClick={onFechar} disabled={enviando} className="btn-ghost">
+        <button type="button" onClick={onFechar} disabled={enviando} className="btn-ghost w-full">
           Fechar
         </button>
       </div>
     );
   }
 
-  // ---------- Formulário (criar acesso ou nova senha temporária) ----------
+  // Formulário (criar acesso ou nova senha temporária)
   const mostraSenhaTemporaria = jaTemAcesso || metodo === "temporaria";
 
   return (
@@ -355,7 +355,7 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
               type="button"
               onClick={() => setSenhaTemporaria(gerarSenhaTemporaria())}
               disabled={enviando}
-              className="btn-ghost whitespace-nowrap"
+              className="btn-ghost whitespace-nowrap mt-1"
             >
               Gerar outra
             </button>
@@ -379,7 +379,7 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
       )}
 
       <div className="flex gap-3">
-        <button type="submit" disabled={enviando} className="btn-primary">
+        <button type="submit" disabled={enviando} className="btn-primary w-full">
           {enviando && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
           {enviando ? "Salvando…" : jaTemAcesso ? "Definir senha" : "Criar acesso"}
         </button>
@@ -387,7 +387,7 @@ function Conteudo({ membro, token, onFechar, onAtualizado, onBloquear }: Conteud
           type="button"
           onClick={jaTemAcesso ? () => setEtapa("escolha") : onFechar}
           disabled={enviando}
-          className="btn-ghost"
+          className="btn-ghost w-full"
         >
           {jaTemAcesso ? "Voltar" : "Cancelar"}
         </button>
