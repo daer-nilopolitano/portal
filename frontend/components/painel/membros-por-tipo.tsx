@@ -450,7 +450,9 @@ export function MembrosPorTipo({
         membro={membroAcesso}
         token={token}
         onFechar={() => setMembroAcesso(null)}
-        onAtualizado={revalidarTudo}
+        onAtualizado={async () => {
+          await revalidarTudo();
+        }}
       />
       <ModalSenha
         aberto={confirmandoSenha}
