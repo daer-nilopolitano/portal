@@ -6,9 +6,11 @@ import { useAuth } from "@/lib/auth-context";
 import { revalidarTudo, useApi } from "@/lib/use-api";
 import { ROTULO_CARGO_DIRETORIA_EMBAIXADA, ROTULO_FAIXA_ETARIA, ROTULO_POSTO } from "@/lib/labels";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
+import { ModalAcesso, type MembroAcesso } from "@/components/painel/modal-acesso";
+import { ModalSenha } from "@/components/painel/modal-senha";
 import type { Membro, Embaixada as EmbaixadaCompleta } from "@/lib/types";
 
-// Esta tela só usa id/nome de Embaixada (para popular o <select>)
+// Esta tela só usa id/nome de Embaixada (pra popular o <select>)
 type Embaixada = Pick<EmbaixadaCompleta, "id" | "nome">;
 
 interface FormularioMembro {
@@ -50,7 +52,7 @@ export function MembrosPorTipo({
   const mostraCamposEmbaixador = tipo === "embaixador_do_rei";
 
   const { data: listaCarregada, isLoading: carregando, error: erroCarga } =
-    useApi<Membro[]>(`/membros/?tipo=${tipo}`);
+    useApi<MembroAcesso[]>(`/membros/?tipo=${tipo}`);
   const { data: embaixadasCarregadas } = useApi<Embaixada[]>(ehDiretoria ? "/embaixadas/" : null);
   const lista = listaCarregada ?? [];
   const embaixadas = embaixadasCarregadas ?? [];
@@ -61,6 +63,13 @@ export function MembrosPorTipo({
   const [formulario, setFormulario] = useState<FormularioMembro>(FORMULARIO_VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
+  const [confirmandoSenha, setConfirmandoSenha] = useState(false);
+  const [membroAcesso, setMembroAcesso] = useState<MembroAcesso | null>(null);
+
+  // Trocar o e-mail de quem já tem acesso muda o canal de recuperação da conta: o backend exige a senha de quem edita.
+  const membroEditado = editandoId ? lista.find((m) => m.id === editandoId) : undefined;
+  const emailMudou = (formulario.email.trim() || null) !== (membroEditado?.email ?? null);
+  const precisaConfirmarSenha = !!membroEditado?.tem_acesso && emailMudou;
 
   function abrirNovo() {
     setEditandoId(null);
@@ -90,17 +99,13 @@ export function MembrosPorTipo({
     setFormularioAberto(true);
   }
 
-  async function salvar(evento: FormEvent) {
-    evento.preventDefault();
-    if (!token) return;
-    setEnviando(true);
-    setErroFormulario(null);
-
+  /** Grava o formulário. Lança erro se a API recusar (quem chama decide onde mostrar a mensagem). */
+  async function persistir(senhaConfirmacao?: string) {
     const payloadBase = {
       nome: formulario.nome,
       data_nascimento: formulario.data_nascimento,
       telefone_contato: formulario.telefone_contato,
-      email: formulario.email || null,
+      email: formulario.email.trim() || null,
       tipo,
       ...(mostraCamposEmbaixador
         ? {
@@ -112,41 +117,52 @@ export function MembrosPorTipo({
       ativo: formulario.ativo,
     };
 
+    let membroId = editandoId;
+    if (editandoId) {
+      await apiFetch(`/membros/${editandoId}/`, {
+        token,
+        method: "PUT",
+        body: JSON.stringify({
+          ...payloadBase,
+          embaixada_id: Number(formulario.embaixada_id),
+          ...(senhaConfirmacao ? { senha_confirmacao: senhaConfirmacao } : {}),
+        }),
+      });
+    } else {
+      const embaixadaId = ehDiretoria ? Number(formulario.embaixada_id) : membroLogado?.embaixada_id;
+      const novoMembro = await apiFetch<Membro>("/membros/", {
+        token,
+        method: "POST",
+        body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
+      });
+      membroId = novoMembro.id;
+    }
+
+    // Cargo no quadro de oficiais é um endpoint à parte — o backend troca
+    // automaticamente o titular anterior se o cargo já estiver ocupado.
+    if (mostraCamposEmbaixador && membroId) {
+      await apiFetch(`/membros/${membroId}/cargo-embaixada/`, {
+        token,
+        method: "PUT",
+        body: JSON.stringify({ cargo: formulario.cargo_embaixada || null }),
+      });
+    }
+
+    setFormularioAberto(false);
+    await revalidarTudo();
+  }
+
+  async function salvar(evento: FormEvent) {
+    evento.preventDefault();
+    if (!token) return;
+    if (precisaConfirmarSenha) {
+      setConfirmandoSenha(true);
+      return;
+    }
+    setEnviando(true);
+    setErroFormulario(null);
     try {
-      let membroId = editandoId;
-      if (editandoId) {
-        await apiFetch(`/membros/${editandoId}/`, {
-          token,
-          method: "PUT",
-          body: JSON.stringify({
-            ...payloadBase,
-            embaixada_id: Number(formulario.embaixada_id),
-          }),
-        });
-      } else {
-        const embaixadaId = ehDiretoria
-          ? Number(formulario.embaixada_id)
-          : membroLogado?.embaixada_id;
-        const novoMembro = await apiFetch<Membro>("/membros/", {
-          token,
-          method: "POST",
-          body: JSON.stringify({ ...payloadBase, embaixada_id: embaixadaId }),
-        });
-        membroId = novoMembro.id;
-      }
-
-      // Cargo no quadro de oficiais é um endpoint à parte — o backend troca
-      // automaticamente o titular anterior se o cargo já estiver ocupado.
-      if (mostraCamposEmbaixador && membroId) {
-        await apiFetch(`/membros/${membroId}/cargo-embaixada/`, {
-          token,
-          method: "PUT",
-          body: JSON.stringify({ cargo: formulario.cargo_embaixada || null }),
-        });
-      }
-
-      setFormularioAberto(false);
-      await revalidarTudo();
+      await persistir();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -154,41 +170,30 @@ export function MembrosPorTipo({
     }
   }
 
+  async function confirmarComSenha(senha: string) {
+    await persistir(senha); // se a API recusar, o erro aparece dentro da janela de senha
+    setConfirmandoSenha(false);
+  }
+
   async function excluir(m: Membro) {
     if (!token) return;
     if (!window.confirm(`Excluir ${m.nome}? Essa ação não pode ser desfeita.`)) return;
-    await apiFetch(`/membros/${m.id}/`, { token, method: "DELETE" });
-    await revalidarTudo();
-  }
-
-  async function criarAcesso(m: Membro) {
-    if (!token) return;
-    if (!m.email) {
-      window.alert("Cadastre um e-mail para esse membro antes de criar o acesso.");
-      return;
-    }
-    const senha = window.prompt(`Senha inicial para ${m.nome}:`);
-    if (!senha) return;
     try {
-      await apiFetch(`/membros/${m.id}/criar-acesso/`, {
-        token,
-        method: "POST",
-        body: JSON.stringify({ senha }),
-      });
+      await apiFetch(`/membros/${m.id}/`, { token, method: "DELETE" });
       await revalidarTudo();
     } catch (e) {
-      window.alert(e instanceof Error ? e.message : "Erro ao criar acesso.");
+      window.alert(e instanceof Error ? e.message : "Não foi possível excluir.");
     }
   }
 
-  const colunas: Coluna<Membro>[] = [
+  const colunas: Coluna<MembroAcesso>[] = [
     { cabecalho: "Nome", render: (m) => <span className="font-medium text-text">{m.nome}</span> },
     { cabecalho: "Embaixada", render: (m) => <span className="text-text-muted">{m.embaixada_nome}</span> },
     ...(mostraCamposEmbaixador
       ? [
           {
             cabecalho: "Faixa etária",
-            render: (m: Membro) => (
+            render: (m: MembroAcesso) => (
               <span className="text-text-muted">
                 {m.faixa_etaria ? ROTULO_FAIXA_ETARIA[m.faixa_etaria] : "—"}
               </span>
@@ -196,7 +201,7 @@ export function MembrosPorTipo({
           },
           {
             cabecalho: "Posto",
-            render: (m: Membro) => (
+            render: (m: MembroAcesso) => (
               <span className="text-text-muted">
                 {m.posto_embaixador ? ROTULO_POSTO[m.posto_embaixador] : "—"}
               </span>
@@ -204,7 +209,7 @@ export function MembrosPorTipo({
           },
           {
             cabecalho: "Cargo",
-            render: (m: Membro) => (
+            render: (m: MembroAcesso) => (
               <span className="text-text-muted">
                 {m.cargo_embaixada ? ROTULO_CARGO_DIRETORIA_EMBAIXADA[m.cargo_embaixada] : "—"}
               </span>
@@ -214,19 +219,39 @@ export function MembrosPorTipo({
       : []),
     {
       cabecalho: "Acesso",
-      render: (m) =>
-        m.tem_acesso ? (
-          <span className="text-xs text-success">Criado</span>
-        ) : ehAuxiliar ? (
-          <span className="text-xs text-text-muted">Sem acesso</span>
-        ) : (
-          <button
-            onClick={() => criarAcesso(m)}
-            className="text-xs font-medium text-primary underline underline-offset-2"
-          >
-            Criar acesso
-          </button>
-        ),
+      render: (m) => {
+        if (!m.tem_acesso) {
+          return ehAuxiliar ? (
+            <span className="text-xs text-text-muted">Sem acesso</span>
+          ) : (
+            <button
+              onClick={() => setMembroAcesso(m)}
+              className="text-xs font-medium text-primary underline underline-offset-2"
+            >
+              Criar acesso
+            </button>
+          );
+        }
+        return (
+          <div className="flex flex-col items-start gap-0.5">
+            <span className={`text-xs ${m.convite_pendente ? "text-text-muted" : "text-success"}`}>
+              {m.convite_pendente ? "Convite pendente" : "Criado"}
+            </span>
+            {/* Usuários gerados (membros sem e-mail) não são óbvios; o e-mail já é conhecido, então não repete. */}
+            {m.usuario && !m.usuario.includes("@") && (
+              <span className="text-xs text-text-muted">Usuário: {m.usuario}</span>
+            )}
+            {!ehAuxiliar && (
+              <button
+                onClick={() => setMembroAcesso(m)}
+                className="text-xs font-medium text-primary underline underline-offset-2"
+              >
+                Gerenciar
+              </button>
+            )}
+          </div>
+        );
+      },
     },
     {
       cabecalho: "Status",
@@ -296,6 +321,11 @@ export function MembrosPorTipo({
               onChange={(e) => setFormulario({ ...formulario, email: e.target.value })}
               className="field"
             />
+            <p className="mt-1 text-xs text-text-muted">
+              {membroEditado?.tem_acesso
+                ? "Alterar o e-mail de quem já tem acesso pede a sua senha e encerra as sessões abertas dele(a)."
+                : "Opcional. Sem e-mail, o acesso é criado com um usuário gerado e uma senha temporária."}
+            </p>
           </div>
 
           {mostraCamposEmbaixador && (
@@ -413,6 +443,22 @@ export function MembrosPorTipo({
         onExcluir={ehAuxiliar ? undefined : excluir}
         rotuloEditar={(m) => `Editar ${m.nome}`}
         rotuloExcluir={(m) => `Excluir ${m.nome}`}
+      />
+
+      {/* Fora do <form>: as janelas são irmãs dele, não filhas (form dentro de form é inválido). */}
+      <ModalAcesso
+        membro={membroAcesso}
+        token={token}
+        onFechar={() => setMembroAcesso(null)}
+        onAtualizado={revalidarTudo}
+      />
+      <ModalSenha
+        aberto={confirmandoSenha}
+        titulo="Confirme com a sua senha"
+        descricao="Alterar o e-mail de um membro que já tem acesso muda como ele recupera a conta, então precisamos confirmar que é você."
+        rotuloConfirmar="Confirmar e salvar"
+        onConfirmar={confirmarComSenha}
+        onFechar={() => setConfirmandoSenha(false)}
       />
     </div>
   );

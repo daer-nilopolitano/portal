@@ -10,7 +10,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db.models import F
+from django.db.models import F, Q
 from ninja import Field, Router, Schema
 from ninja.errors import HttpError
 
@@ -20,9 +20,7 @@ from ..models import Membro
 from ..senhas import enviar_link_definir_senha, usuario_por_uid
 
 logger = logging.getLogger(__name__)
-
 router = Router(tags=["Autenticação"])
-
 User = get_user_model()
 
 _DESC_TIPO = (
@@ -38,7 +36,6 @@ _DESC_CARGO_DIRETORIA = (
     "Valores: `coordenador`, `presidente`, `vice_presidente`, `primeiro_secretario`, `segundo_secretario`, "
     "`diretor_midia_comunicacao`, `diretor_esportes`. Um valor não nulo indica que o membro pertence à Diretoria."
 )
-
 
 # Proteção contra força bruta no login. Conta só as tentativas que FALHARAM (senha errada), numa janela fixa que começa
 # na primeira falha: por e-mail (protege uma conta específica) e por IP (protege contra quem testa vários e-mails).
@@ -79,20 +76,31 @@ def _validar_nova_senha(user, senha: str) -> None:
         raise HttpError(400, " ".join(e.messages))
 
 
+def _enviar_em_segundo_plano(membro):
+    try:
+        enviar_link_definir_senha(membro, convite=False)
+    except Exception:
+        logger.exception("Falha ao enviar e-mail de redefinição")
+
+
 class TrocarSenhaIn(Schema):
     senha_atual: str
     nova_senha: str
 
+
 class EsqueciSenhaIn(Schema):
     email: str
+
 
 class RedefinirSenhaIn(Schema):
     uid: str
     token: str
     nova_senha: str
 
+
 class NovoTokenOut(Schema):
     access_token: str
+
 
 class MensagemOut(Schema):
     mensagem: str
@@ -135,32 +143,27 @@ def trocar_senha(request, payload: TrocarSenhaIn):
     operation_id="esqueci_senha",
 )
 def esqueci_senha(request, payload: EsqueciSenhaIn):
-    resposta = MensagemOut(mensagem="Se o e-mail estiver cadastrado, enviaremos um link para redefinir a senha.")
-    email = payload.email.strip().lower()
-    email_hash = hashlib.sha256(email.encode()).hexdigest()
+    resposta = MensagemOut(mensagem="Se existir uma conta com esses dados e um e-mail cadastrado, enviaremos um link.")
+    identificador = payload.email.strip().lower()
+    email_hash = hashlib.sha256(identificador.encode()).hexdigest()
     chave_email, chave_ip = f"reset_email_{email_hash}", f"reset_ip_{_ip_do_cliente(request)}"
+
     # Conta todo pedido (não só falhas): limita spam de e-mails para um membro e uso do endpoint por IP.
     if cache.get(chave_email, 0) >= 3 or cache.get(chave_ip, 0) >= 20:
         raise HttpError(429, "Muitos pedidos. Aguarde alguns minutos e tente novamente.")
     contar_falha(chave_email, 60 * 60)
     contar_falha(chave_ip, 60 * 60)
 
-    membro = (
+    membros = list(
         Membro.objects.select_related("user")
-        .filter(email__iexact=email, ativo=True, user__isnull=False, user__is_active=True)
-        .first()
+        .filter(ativo=True, user__isnull=False, user__is_active=True)
+        .filter(Q(email__iexact=identificador) | Q(user__username__iexact=identificador))
+        .exclude(email__isnull=True).exclude(email="")[:5]
     )
-
-    def _enviar_em_segundo_plano(membro):
-        try:
-            enviar_link_definir_senha(membro, convite=False)
-        except Exception:
-            logger.exception("Falha ao enviar e-mail de redefinição")
-
-    if membro:
+    for membro in membros:
         threading.Thread(target=_enviar_em_segundo_plano, args=(membro,), daemon=True).start()
 
-    return resposta # mesma resposta exista o e-mail ou não (não revela quem é cadastrado)
+    return resposta
 
 
 @router.post(
@@ -184,7 +187,6 @@ def redefinir_senha(request, payload: RedefinirSenhaIn):
     membro.deve_trocar_senha = False
     membro.save(update_fields=["deve_trocar_senha"])
     return MensagemOut(mensagem="Senha definida. Você já pode entrar.")
-
 
 
 @router.post(
@@ -223,12 +225,14 @@ class LoginOut(Schema):
     tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
     posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
     cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
-    deve_trocar_senha: bool = Field(False, description="Se `true`, o membro precisa trocar a senha antes de usar o sistema.")
+    deve_trocar_senha: bool = Field(False,
+                                    description="Se `true`, o membro precisa trocar a senha antes de usar o sistema.")
 
 
 class MeOut(Schema):
     membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário do token.")
     nome: str = Field(..., examples=["Paulo Roberto de Souza"])
+    usuario: str = Field(..., description="Usuário do Django vinculado ao Membro.")
     embaixada_id: int = Field(..., description="Identificador da embaixada do membro.")
     embaixada_nome: str = Field(..., examples=["Embaixada Vale da Bênção"])
     tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
@@ -276,8 +280,8 @@ def login(request, payload: LoginIn):
         contar_falha(chave_email)
         contar_falha(chave_ip)
         raise HttpError(401, "E-mail/usuário ou senha inválidos.")
-    # Login correto zera o contador do e-mail. O do IP não é zerado, para não permitir "lavar" tentativas
-    # alternando com o login de uma conta própria.
+    # Login correto zera o contador do e-mail. O do IP não é zerado, para não permitir "lavar" tentativas alternando com
+    # o login de uma conta própria.
     cache.delete(chave_email)
 
     membro = getattr(user, "membro", None)
@@ -318,6 +322,7 @@ def me(request):
     return MeOut(
         membro_id=membro.id,
         nome=membro.nome,
+        usuario=request.auth.username,
         embaixada_id=membro.embaixada_id,
         embaixada_nome=membro.embaixada.nome,
         tipo=membro.tipo,

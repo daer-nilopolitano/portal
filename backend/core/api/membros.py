@@ -59,17 +59,6 @@ def _validar_posto(tipo: str, posto_embaixador: Optional[str]):
         raise HttpError(400, "posto_embaixador só deve ser preenchido quando tipo = embaixador_do_rei.")
 
 
-def _validar_email_unico(email: Optional[str], ignorar_membro_id: Optional[int] = None) -> None:
-    """E-mail é único (e vira o username no login) — evita IntegrityError (500) no banco. Vazio/nulo não conflita."""
-    if not email:
-        return
-    qs = Membro.objects.filter(email__iexact=email)
-    if ignorar_membro_id is not None:
-        qs = qs.exclude(pk=ignorar_membro_id)
-    if qs.exists():
-        raise HttpError(400, "Já existe um membro cadastrado com esse e-mail.")
-
-
 def _pode_gerenciar_embaixada(membro_logado: Membro, embaixada_id: int) -> bool:
     """Escrita (criar/editar/excluir) — Diretoria ou conselheiro da própria embaixada."""
     if membro_logado.eh_diretoria:
@@ -277,14 +266,13 @@ def criar_membro(request, payload: MembroIn):
     """
     **Permissão:** restrito à Diretoria ou ao conselheiro da embaixada informada em `embaixada_id`.
 
-    400 se o `email` já estiver em uso por outro membro ou se `posto_embaixador` não combinar com o `tipo`;
+    400 se `posto_embaixador` não combinar com o `tipo`;
     404 se a embaixada não existir. E-mail vazio é gravado como `null`.
     """
     membro_logado = membro_do_usuario(request.auth)
     if not _pode_gerenciar_embaixada(membro_logado, payload.embaixada_id):
         raise HttpError(403, "Você só pode cadastrar membros na sua própria embaixada.")
     _validar_posto(payload.tipo, payload.posto_embaixador)
-    _validar_email_unico(payload.email)
 
     embaixada = get_object_or_404(Embaixada, pk=payload.embaixada_id)
     dados = payload.dict(exclude={"embaixada_id"})
@@ -303,7 +291,7 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     """
     **Permissão:** restrito à Diretoria ou ao conselheiro da embaixada atual (ou de destino, se `embaixada_id` mudar) do membro.
 
-    400 se o `email` já estiver em uso por outro membro ou se `posto_embaixador` não combinar com o `tipo`;
+    400 se `posto_embaixador` não combinar com o `tipo`;
     404 se o membro ou a nova embaixada não existirem. E-mail vazio é gravado como `null`.
     """
     membro_logado = membro_do_usuario(request.auth)
@@ -315,7 +303,6 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     senha_confirmacao = dados.pop("senha_confirmacao", None)  # não é campo do modelo
     if "email" in dados:
         dados["email"] = dados["email"] or None
-        _validar_email_unico(dados["email"], ignorar_membro_id=membro.pk)
     if "embaixada_id" in dados:
         nova_embaixada_id = dados.pop("embaixada_id")
         if not _pode_gerenciar_embaixada(membro_logado, nova_embaixada_id):
@@ -334,6 +321,12 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
         if not senha_confirmacao:
             raise HttpError(400, "Informe sua senha para confirmar esta alteração.")
         exigir_senha(request, senha_confirmacao)
+
+    ativo_muda = "ativo" in dados and dados["ativo"] != membro.ativo
+    if ativo_muda:
+        _exigir_poder_sobre_acesso(membro_logado, membro)
+        if membro.pk == membro_logado.pk and not dados["ativo"]:
+            raise HttpError(400, "Você não pode inativar a si mesmo.")
 
     # Um membro com mandato ativo precisa continuar conselheiro (a Diretoria só aceita conselheiros).
     if (tipo_muda and dados["tipo"] != TipoMembro.CONSELHEIRO
@@ -374,6 +367,8 @@ def excluir_membro(request, membro_id: int):
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro.objects.select_related("user"), pk=membro_id)
     _exigir_poder_sobre_acesso(membro_logado, membro)
+    if membro.pk == membro_logado.pk:
+        raise HttpError(400, "Você não pode excluir a si mesmo.")
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
         raise HttpError(403, "Você não pode excluir este membro.")
     user = membro.user
@@ -410,13 +405,13 @@ def criar_acesso(request, membro_id: int, payload: CriarAcessoIn):
     if membro.user_id is not None:
         raise HttpError(400, "Esse membro já tem acesso criado.")
 
-    if membro.email:
+    email_dividido = bool(membro.email) and Membro.objects.filter(
+        email__iexact=membro.email
+    ).exclude(pk=membro.pk).exists()
+    if membro.email and not email_dividido and not User.objects.filter(username__iexact=membro.email).exists():
         username = membro.email
-        if User.objects.filter(username__iexact=username).exists():
-            raise HttpError(400,
-                            "Já existe um usuário do sistema com esse e-mail. Use outro e-mail ou fale com a administração.")
     else:
-        username = _gerar_username(membro.nome)
+        username = _gerar_username(membro.nome)  # sem e-mail, ou e-mail de outro membro/usuário
 
     gerada = False
     senha = payload.senha_temporaria

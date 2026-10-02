@@ -63,9 +63,8 @@ class Embaixada(models.Model):
 
 class HorarioReuniao(models.Model):
     """
-    Uma embaixada pode ter mais de uma reunião por semana (ex.: reunião
-    normal no sábado + culto infantil no domingo) — por isso é um model à
-    parte com FK pra Embaixada, em vez de dois campos soltos nela.
+    Uma embaixada pode ter mais de uma reunião por semana (ex.: reunião normal no sábado + culto infantil no domingo) e
+    por isso é um model à parte com FK pra Embaixada, em vez de dois campos soltos nela.
     """
 
     embaixada = models.ForeignKey(
@@ -101,7 +100,7 @@ class Membro(models.Model):
     data_nascimento = models.DateField()
     foto = models.ImageField(upload_to="membros/fotos/", null=True, blank=True)
     telefone_contato = models.CharField(max_length=20, blank=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
 
     versao_token = models.PositiveIntegerField(
         default=0, help_text="Incrementar invalida todos os tokens já emitidos."
@@ -112,9 +111,8 @@ class Membro(models.Model):
 
     tipo = models.CharField(max_length=30, choices=TipoMembro.choices)
 
-    # Só preenchido quando tipo = embaixador_do_rei. "Escudeiro" é o posto
-    # inicial; sobe informalmente (~1 ano, mas varia) a critério do
-    # conselheiro — não existe regra automática de progressão.
+    # Só preenchido quando tipo = embaixador_do_rei. "Escudeiro" é o posto inicial; sobe informalmente (~1 ano, mas
+    # varia) a critério do conselheiro — não existe regra automática de progressão.
     posto_embaixador = models.CharField(
         "Posto",
         max_length=20,
@@ -137,9 +135,8 @@ class Membro(models.Model):
     )
     ativo = models.BooleanField(default=True)
 
-    # Login do membro no sistema (todos os tipos podem ter conta). Fica nulo
-    # até um conselheiro da própria embaixada (ou a Diretoria) criar o
-    # acesso via endpoint dedicado — ver core/api/membros.py.
+    # Login do membro no sistema (todos os tipos podem ter conta). Fica nulo até um conselheiro da própria embaixada
+    # (ou a Diretoria) criar o acesso via endpoint dedicado — ver core/api/membros.py.
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -180,17 +177,15 @@ class Membro(models.Model):
     def eh_diretoria(self) -> bool:
         """Tem mandato ativo (sem data_fim) na Diretoria da associação.
 
-        cached_property: o Membro logado é carregado de novo a cada request,
-        então o valor fica guardado só durante ele — no máximo 1 consulta
-        por request, em vez de 1 por chamada."""
+        cached_property: o Membro logado é carregado de novo a cada request, então o valor fica guardado só durante ele,
+        no máximo 1 consulta por request, em vez de 1 por chamada."""
         return self.mandatos_diretoria.filter(data_fim__isnull=True).exists()
 
 
 class Diretoria(models.Model):
     """
-    Diretoria da associação (DAER Nilopolitano) — só Membros com
-    tipo=conselheiro podem ocupar um cargo aqui (validado na API, não no
-    banco). Mantém data_fim para preservar histórico de mandatos.
+    Diretoria da associação (DAER Nilopolitano) — só Membros com tipo=conselheiro podem ocupar um cargo aqui (validado
+    na API, não no banco). Mantém data_fim para preservar histórico de mandatos.
     """
 
     class Cargo(models.TextChoices):
@@ -217,8 +212,7 @@ class Diretoria(models.Model):
         verbose_name_plural = "Diretoria"
         ordering = ["-data_inicio"]
         constraints = [
-            # Um membro só pode ter 1 mandato ativo (sem data_fim) por vez —
-            # "não pode ter mais de um cargo" na diretoria.
+            # Um membro só pode ter 1 mandato ativo (sem data_fim) por vez — "não pode ter mais de um cargo" na diretoria.
             models.UniqueConstraint(
                 fields=["membro"],
                 condition=models.Q(data_fim__isnull=True),
@@ -232,9 +226,8 @@ class Diretoria(models.Model):
 
 class GrupoTrabalho(models.Model):
     """
-    Catálogo de grupos (Música, Programações, Evangelismo, hoje) —
-    tabela em vez de enum fixo, pra permitir criar um grupo novo no
-    futuro sem precisar de migração.
+    Catálogo de grupos (Música, Programações, Evangelismo, hoje) — tabela em vez de enum fixo, para permitir criar um
+    grupo novo no futuro sem precisar de migração.
     """
 
     nome = models.CharField(max_length=100, unique=True)
@@ -264,10 +257,9 @@ class GrupoMembro(models.Model):
         constraints = [
             # Uma pessoa só entra 1 vez em cada grupo (como líder OU membro).
             models.UniqueConstraint(fields=["grupo", "membro"], name="unico_membro_por_grupo"),
-            # Regra de negócio "lidera no máximo 1 grupo": um Membro só pode
-            # ter no máximo uma linha com papel_no_grupo=lider em toda a
-            # tabela (não só dentro de um grupo) — daí o campo único ser só
-            # `membro`, com a condição restringindo à liderança.
+            # Regra de negócio "lidera no máximo 1 grupo": um Membro só pode ter no máximo uma linha com
+            # papel_no_grupo=lider em toda a tabela (não só num grupo) — daí o campo único ser só `membro`, com a
+            # condição restringindo à liderança.
             models.UniqueConstraint(
                 fields=["membro"],
                 condition=models.Q(papel_no_grupo="lider"),
@@ -281,11 +273,9 @@ class GrupoMembro(models.Model):
 
 class DiretoriaEmbaixada(models.Model):
     """
-    Quadro de oficiais de uma embaixada — cargos ocupados pelos próprios
-    Embaixadores do Rei (tipo=embaixador_do_rei), como prática de
-    liderança, não por conselheiros. Cargo é editável pelo conselheiro da
-    embaixada; atribuir um cargo já ocupado troca o titular automaticamente
-    (sem manter histórico, diferente da Diretoria da associação).
+    Diretoria de uma embaixada — cargos ocupados pelos próprios Embaixadores do Rei (tipo=embaixador_do_rei), como
+    prática de liderança, não por conselheiros. Cargo é editável pelo conselheiro da embaixada; atribuir um cargo já
+    ocupado troca o titular automaticamente (sem manter histórico, diferente da Diretoria da associação).
     """
 
     class Cargo(models.TextChoices):

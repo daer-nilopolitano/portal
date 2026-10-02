@@ -12,6 +12,29 @@ export function mediaUrl(caminho: string | null | undefined): string | null {
   return `${MEDIA_ORIGIN}${caminho}`;
 }
 
+/** Erro devolvido pela API. Além da mensagem (`detail`), guarda o status HTTP para quem precisar distinguir 401/429/etc. */
+export class ErroApi extends Error {
+  status: number;
+
+  constructor(mensagem: string, status: number) {
+    super(mensagem);
+    this.name = "ErroApi";
+    this.status = status;
+  }
+}
+
+type AoNaoAutorizado = (tokenRecusado: string) => void;
+let aoNaoAutorizado: AoNaoAutorizado | null = null;
+
+/**
+ * O AuthProvider registra aqui o que fazer quando o servidor recusa um token (401): sessão encerrada em outro
+ * dispositivo, senha trocada, membro inativado... Recebe o token que foi recusado, para ignorar respostas atrasadas
+ * de um token que já foi substituído.
+ */
+export function registrarAoNaoAutorizado(fn: AoNaoAutorizado | null) {
+  aoNaoAutorizado = fn;
+}
+
 interface ApiFetchOptions extends RequestInit {
   token?: string | null;
   /**
@@ -37,8 +60,11 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   });
 
   if (!res.ok) {
+    if (res.status === 401 && token) aoNaoAutorizado?.(token);
     const corpo = await res.json().catch(() => null);
-    throw new Error(corpo?.detail ?? `Erro ${res.status} ao chamar ${path}`);
+    // Erros de validação (422) trazem `detail` como lista, não como texto.
+    const detalhe = typeof corpo?.detail === "string" ? corpo.detail : null;
+    throw new ErroApi(detalhe ?? `Erro ${res.status} ao chamar ${path}`, res.status);
   }
 
   if (res.status === 204) {

@@ -7,6 +7,7 @@ import { useAuth, type Tipo } from "@/lib/auth-context";
 import { ROTULO_TIPO } from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { MenuUsuario } from "@/components/layout/menu-usuario";
 import Image from "next/image";
 
 interface ItemNav {
@@ -29,7 +30,7 @@ const ITENS_NAV: ItemNav[] = [
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { membro, carregando, logout } = useAuth();
+  const { membro, carregando } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -71,6 +72,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
+          <div className="flex-shrink-0 border-t border-white/10 p-3">
+            <MenuUsuario variante="sidebar" />
+          </div>
         </div>
       </aside>
 
@@ -82,9 +86,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <button onClick={logout} className="btn-ghost">
-              Sair
-            </button>
+            <MenuUsuario variante="header" />
           </div>
         </header>
         <main className="flex-1 p-8">{children}</main>

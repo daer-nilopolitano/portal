@@ -1,11 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { ErroApi } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { EMAIL_CONTATO, NOME_SITE } from "@/lib/content/site";
+import { NOME_SITE } from "@/lib/content/site";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -21,10 +23,18 @@ export default function LoginPage() {
     setErro(null);
     setEnviando(true);
     try {
-      await login(email, senha);
-      router.push("/painel");
-    } catch {
-      setErro("Usuário ou senha inválidos.");
+      const membro = await login(email, senha);
+      // Senha temporária (criada por um conselheiro): a primeira coisa a fazer é trocá-la.
+      router.push(membro.deve_trocar_senha ? "/trocar-senha" : "/painel");
+    } catch (e) {
+      if (e instanceof ErroApi && e.status !== 401) {
+        // 429 (muitas tentativas) e 403 (membro inativo) trazem uma mensagem útil do servidor.
+        setErro(e.message);
+      } else if (e instanceof ErroApi) {
+        setErro("Usuário ou senha inválidos.");
+      } else {
+        setErro("Não foi possível conectar. Verifique sua internet e tente de novo.");
+      }
     } finally {
       setEnviando(false);
     }
@@ -47,12 +57,15 @@ export default function LoginPage() {
         >
           <div>
             <label htmlFor="email" className="field-label">
-              Usuário
+              E-mail ou usuário
             </label>
             <input
               id="email"
               type="text"
               autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="field"
@@ -101,9 +114,14 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-xs text-text-muted">
-          Esqueceu a senha? Entre em contato pelo email: {EMAIL_CONTATO}
-        </p>
+        <div className="mt-4 space-y-1 text-center text-xs text-text-muted">
+          <p>
+            <Link href="/esqueci-senha" className="text-primary underline underline-offset-2">
+              Esqueci minha senha
+            </Link>
+          </p>
+          <p>Não tem e-mail cadastrado? Peça ao seu conselheiro uma nova senha.</p>
+        </div>
       </div>
     </div>
   );

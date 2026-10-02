@@ -20,7 +20,7 @@ from ninja import Schema
 
 
 class ErroOut(Schema):
-    """Formato de erro devolvido por todo HttpError da API (ver ninja.errors.HttpError)."""
+
 
     detail: str
 
@@ -29,4 +29,4 @@ R400 = {400: ErroOut}
 R401 = {401: ErroOut}  # token ausente, inválido ou expirado, ou membro inativo — endpoints com AuthBearer()
 R403 = {403: ErroOut}
 R404 = {404: ErroOut}
-R429 = {429: ErroOut}  # tentativas demais — hoje só o login
+R429 = {429: ErroOut}  # tentativas de login ou redefinição de senha acima do limite

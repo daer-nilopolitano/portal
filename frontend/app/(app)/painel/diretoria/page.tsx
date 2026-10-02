@@ -5,6 +5,7 @@ import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { revalidarTudo, useApi } from "@/lib/use-api";
 import { DataTable, type Coluna } from "@/components/ui/data-table";
+import { ModalSenha } from "@/components/painel/modal-senha";
 import { ROTULO_CARGO_DIRETORIA } from "@/lib/labels";
 import type { Diretoria, Membro } from "@/lib/types";
 
@@ -16,11 +17,19 @@ interface FormularioMandato {
   data_inicio: string;
 }
 
-const FORMULARIO_VAZIO: FormularioMandato = {
+/**
+ * Data de hoje (AAAA-MM-DD) no fuso de Brasília. `toISOString()` usa UTC e, à noite, já devolve o dia seguinte — e o
+ * backend recusa `data_fim` no futuro.
+ */
+function hojeISO(): string {
+  return new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+}
+
+const formularioVazio = (): FormularioMandato => ({
   membro_id: "",
   cargo: "",
-  data_inicio: new Date().toISOString().slice(0, 10),
-};
+  data_inicio: hojeISO(),
+});
 
 export default function PainelDiretoriaPage() {
   const { token, membro: membroLogado } = useAuth();
@@ -37,13 +46,14 @@ export default function PainelDiretoriaPage() {
 
   const [formularioAberto, setFormularioAberto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [formulario, setFormulario] = useState<FormularioMandato>(FORMULARIO_VAZIO);
+  const [formulario, setFormulario] = useState<FormularioMandato>(formularioVazio);
   const [enviando, setEnviando] = useState(false);
   const [erroFormulario, setErroFormulario] = useState<string | null>(null);
+  const [confirmandoSenha, setConfirmandoSenha] = useState(false);
 
   function abrirNovo() {
     setEditandoId(null);
-    setFormulario(FORMULARIO_VAZIO);
+    setFormulario(formularioVazio());
     setErroFormulario(null);
     setFormularioAberto(true);
   }
@@ -59,31 +69,44 @@ export default function PainelDiretoriaPage() {
     setFormularioAberto(true);
   }
 
+  async function atualizarMandato() {
+    await apiFetch(`/diretoria/${editandoId}/`, {
+      token,
+      method: "PUT",
+      body: JSON.stringify({ cargo: formulario.cargo, data_inicio: formulario.data_inicio }),
+    });
+    setFormularioAberto(false);
+    await revalidarTudo();
+  }
+
+  /** Dar cargo na Diretoria é o maior poder do sistema: o backend exige a senha de quem está concedendo. */
+  async function criarMandato(senhaConfirmacao: string) {
+    await apiFetch("/diretoria/", {
+      token,
+      method: "POST",
+      body: JSON.stringify({
+        membro_id: Number(formulario.membro_id),
+        cargo: formulario.cargo,
+        data_inicio: formulario.data_inicio,
+        senha_confirmacao: senhaConfirmacao,
+      }),
+    });
+    setConfirmandoSenha(false);
+    setFormularioAberto(false);
+    await revalidarTudo();
+  }
+
   async function salvar(evento: FormEvent) {
     evento.preventDefault();
     if (!token) return;
+    if (!editandoId) {
+      setConfirmandoSenha(true);
+      return;
+    }
     setEnviando(true);
     setErroFormulario(null);
     try {
-      if (editandoId) {
-        await apiFetch(`/diretoria/${editandoId}/`, {
-          token,
-          method: "PUT",
-          body: JSON.stringify({ cargo: formulario.cargo, data_inicio: formulario.data_inicio }),
-        });
-      } else {
-        await apiFetch("/diretoria/", {
-          token,
-          method: "POST",
-          body: JSON.stringify({
-            membro_id: Number(formulario.membro_id),
-            cargo: formulario.cargo,
-            data_inicio: formulario.data_inicio,
-          }),
-        });
-      }
-      setFormularioAberto(false);
-      await revalidarTudo();
+      await atualizarMandato();
     } catch (e) {
       setErroFormulario(e instanceof Error ? e.message : "Erro ao salvar.");
     } finally {
@@ -94,19 +117,27 @@ export default function PainelDiretoriaPage() {
   async function encerrarMandato(d: Diretoria) {
     if (!token) return;
     if (!window.confirm(`Encerrar o mandato de ${d.membro_nome}?`)) return;
-    await apiFetch(`/diretoria/${d.id}/`, {
-      token,
-      method: "PUT",
-      body: JSON.stringify({ data_fim: new Date().toISOString().slice(0, 10) }),
-    });
-    await revalidarTudo();
+    try {
+      await apiFetch(`/diretoria/${d.id}/`, {
+        token,
+        method: "PUT",
+        body: JSON.stringify({ data_fim: hojeISO() }),
+      });
+      await revalidarTudo();
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : "Não foi possível encerrar o mandato.");
+    }
   }
 
   async function excluir(d: Diretoria) {
     if (!token) return;
     if (!window.confirm("Excluir este registro de mandato? Essa ação não pode ser desfeita.")) return;
-    await apiFetch(`/diretoria/${d.id}/`, { token, method: "DELETE" });
-    await revalidarTudo();
+    try {
+      await apiFetch(`/diretoria/${d.id}/`, { token, method: "DELETE" });
+      await revalidarTudo();
+    } catch (e) {
+      window.alert(e instanceof Error ? e.message : "Não foi possível excluir.");
+    }
   }
 
   const colunas: Coluna<Diretoria>[] = [
@@ -203,7 +234,7 @@ export default function PainelDiretoriaPage() {
 
           <div className="flex gap-3 sm:col-span-2">
             <button type="submit" disabled={enviando} className="btn-primary">
-              {enviando ? "Salvando…" : "Salvar"}
+              {enviando ? "Salvando…" : editandoId ? "Salvar" : "Continuar"}
             </button>
             <button type="button" onClick={() => setFormularioAberto(false)} className="btn-ghost">
               Cancelar
@@ -223,6 +254,15 @@ export default function PainelDiretoriaPage() {
         onExcluir={ehDiretoria ? excluir : undefined}
         rotuloEditar={(d) => `Editar mandato de ${d.membro_nome}`}
         rotuloExcluir={(d) => `Excluir mandato de ${d.membro_nome}`}
+      />
+
+      <ModalSenha
+        aberto={confirmandoSenha}
+        titulo="Confirme com a sua senha"
+        descricao="Dar um cargo na Diretoria concede poder sobre o sistema inteiro, então precisamos confirmar que é você."
+        rotuloConfirmar="Conceder cargo"
+        onConfirmar={criarMandato}
+        onFechar={() => setConfirmandoSenha(false)}
       />
     </div>
   );

@@ -21,7 +21,7 @@ export function ThemeToggle() {
       onClick={alternar}
       title={`Tema: ${ROTULOS[tema]}`}
       aria-label={`Alternar tema (atual: ${ROTULOS[tema]})`}
-      className="btn-ghost"
+      className="text-text-muted hover:text-text transition-colors p-0 m-0 leading-none"
     >
       <Icone size={16} />
     </button>
