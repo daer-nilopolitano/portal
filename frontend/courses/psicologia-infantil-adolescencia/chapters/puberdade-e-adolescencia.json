@@ -100,10 +100,6 @@
       "variant": "attention",
       "content": "Adolescentes que amadurecem mais tarde correm o risco de serem tratados como crianças por colegas e adultos, o que pode gerar problemas de ajustamento social e sentimento de rejeição. Em alguns casos, essas inseguranças persistem até a vida adulta."
     },
-    {
-      "type": "text",
-      "content": "*(Fonte citada no material: Collins, G. R. Aconselhamento Cristão, p. 199; e Eckert, Cláudio. Conselhos para Adolescentes: princípios práticos a partir da exegese da adolescência de Jesus.)*"
-    },
 
     {
       "type": "heading",
@@ -113,10 +109,6 @@
       "type": "text",
       "content": "O ministério com adolescentes é uma modalidade do ministério cristão, que deve manter sempre as dimensões de discipulado e cuidado presentes em qualquer forma de ministério, e estar integrado à vida geral da igreja, mesmo quando ocorre em ambientes específicos (grupos de jovens, acampamentos) ou programas pontuais (orientação sexual e vocacional, apoio em crises e traumas)."
     },
-    {
-      "type": "text",
-      "content": "*(Fonte citada no material: Santos, H. N. Dimensões do Cuidado e Aconselhamento Pastoral, p. 286.)*"
-    },
 
     {
       "type": "heading",
@@ -124,9 +116,7 @@
     },
     {
       "type": "quote",
-      "content": "O papel da igreja é acompanhar o adolescente em sua caminhada, mas, acima de tudo, ajudá-lo a perceber o amor de Deus manifesto em Jesus.",
-      "author": "Cláudio Eckert",
-      "source": "citado no material da aula"
+      "content": "O papel da igreja é acompanhar o adolescente em sua caminhada, mas, acima de tudo, ajudá-lo a perceber o amor de Deus manifesto em Jesus."
     },
     {
       "type": "text",
@@ -149,23 +139,6 @@
         {
           "text": "O ministério com adolescentes deve estar integrado à vida da igreja, com discipulado e cuidado, e ter como centro o relacionamento do adolescente com Deus."
         }
-      ]
-    },
-
-    {
-      "type": "references",
-      "title": "Bibliografia citada no material",
-      "items": [
-        { "label": "BEE, Helen", "detail": "A criança em desenvolvimento. Porto Alegre: Artmed, 2003." },
-        { "label": "PIAGET, J.; INHELDER, B.", "detail": "A psicologia da Criança. São Paulo: Bertrand Brasil, 1995." },
-        { "label": "COLLINS, G. R.", "detail": "Aconselhamento Cristão (citação da p. 199)." },
-        { "label": "ECKERT, Cláudio", "detail": "Conselhos para Adolescentes: princípios práticos a partir da exegese da adolescência de Jesus." },
-        { "label": "SANTOS, H. N.", "detail": "Dimensões do Cuidado e Aconselhamento Pastoral (citação da p. 286)." },
-        { "label": "FAY, Roberta; JOHNSON, Eunice V.", "detail": "Psicologia da Criança. APEC." },
-        { "label": "LOPES, Jamiel de Oliveira", "detail": "Psicologia Aplicada à Educação Cristã. CPAD." },
-        { "label": "NÚÑEZ PEREIRA, Cristina", "detail": "Emocionário: Diga o que você sente. Editora Sextante." },
-        { "label": "SPURGEON, Charles H.", "detail": "Pescadores de Crianças. Editora Penkall." },
-        { "label": "BAKER, Mark W.", "detail": "Jesus, o maior psicólogo que já existiu." }
       ]
     }
   ]

@@ -9,8 +9,7 @@ export default function CursosPage() {
       <header className="c-index__head">
         <h1 className="c-display">Cursos</h1>
         <p className="c-subtitle">
-          Estudos para conselheiros de Embaixadores do Rei, no seu ritmo e em
-          qualquer tela.
+          Estudos para conselheiros de Embaixadores do Rei, no seu ritmo e em qualquer tela.
         </p>
       </header>
 

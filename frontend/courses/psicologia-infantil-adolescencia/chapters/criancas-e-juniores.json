@@ -56,10 +56,6 @@
       "text": "Características dos juniores"
     },
     {
-      "type": "text",
-      "content": "O material organiza as características dos juniores em cinco áreas: mental, emocional, física, social e espiritual."
-    },
-    {
       "type": "heading",
       "level": 3,
       "text": "Mentais (intelectuais)"
@@ -182,7 +178,7 @@
       "type": "callout",
       "variant": "note",
       "title": "Estágio operatório concreto (Piaget), 6 a 12 anos",
-      "content": "Ao entrar na “segunda infância”, a criança se torna capaz de operações mentais internalizadas e organizadas em um sistema lógico, o que lhe permite combinar, separar, ordenar e transformar objetos e ações mentalmente. Essas operações são chamadas “concretas” porque dependem da presença real dos objetos e eventos envolvidos. (Fonte citada no material: Bee, 2003.)"
+      "content": "Ao entrar na “segunda infância”, a criança se torna capaz de operações mentais internalizadas e organizadas em um sistema lógico, o que lhe permite combinar, separar, ordenar e transformar objetos e ações mentalmente. Essas operações são chamadas “concretas” porque dependem da presença real dos objetos e eventos envolvidos."
     },
     {
       "type": "callout",
@@ -225,7 +221,7 @@
     },
     {
       "type": "text",
-      "content": "O material cita Daniel Goleman: a inteligência emocional começa a se desenvolver nos primeiros anos de vida, e todas as trocas sociais que a criança vive com pais, professores e colegas carregam “mensagens emocionais”."
+      "content": "A inteligência emocional começa a se desenvolver nos primeiros anos de vida, e todas as trocas sociais que a criança vive com pais, professores e colegas carregam “mensagens emocionais”."
     },
     {
       "type": "text",
@@ -247,7 +243,7 @@
     {
       "type": "callout",
       "variant": "attention",
-      "content": "Segundo o material, a ausência desses cuidados pode levar a um adulto com carências afetivas e emocionais, com problemas de autoestima, dificuldade de convivência e autoconfiança, e questões mais sérias, como ansiedade, raiva e depressão."
+      "content": "A ausência desses cuidados pode levar a um adulto com carências afetivas e emocionais, com problemas de autoestima, dificuldade de convivência e autoconfiança, e questões mais sérias, como ansiedade, raiva e depressão."
     },
     {
       "type": "heading",
@@ -275,11 +271,11 @@
     },
     {
       "type": "heading",
-      "text": "Ferramenta prática: “Conhecendo meus Embaixadores do Rei”"
+      "text": "Ficha prática: “Conhecendo meus Embaixadores do Rei”"
     },
     {
       "type": "text",
-      "content": "O material sugere uma ficha de acompanhamento individual por ER, com quatro colunas: nome do ER, o que está acontecendo, o que o conselheiro pode fazer diante da situação, e qual foi a resposta ao cuidado oferecido."
+      "content": "É interessante utilizar uma ficha de acompanhamento individual por ER, com quatro colunas: nome do ER, o que está acontecendo, o que pode ser feito diante da situação, e qual foi a resposta ao cuidado oferecido."
     },
     {
       "type": "table",
