@@ -1,20 +1,12 @@
 "use client";
 
 /**
- * Contexto de autenticação, compartilhado por toda a aplicação (site público
- * e área logada). Guarda o token JWT e os dados do Membro logado (via
- * /api/auth/me/), e expõe login/logout.
+ * Contexto de autenticação, compartilhado por toda a aplicação (site público e área logada). Guarda o token JWT e os
+ * dados do Membro logado (via /api/auth/me/), e expõe login/logout.
  *
- * - Se o servidor recusar o token (401: sessão encerrada em outro dispositivo,
- *   senha trocada, membro inativado), a sessão local é encerrada sozinha.
- * - Membro com senha temporária (`deve_trocar_senha`) é levado a /trocar-senha
- *   ao tentar usar a área logada.
- *
- * TODO(segurança): o token fica em localStorage por simplicidade no MVP —
- * funciona bem, mas é acessível a qualquer script (risco de XSS). Uma
- * evolução futura é mover para um cookie httpOnly setado por uma rota do
- * Next.js, o que também permite proteger rotas no middleware (server-side)
- * em vez de só no client como está agora.
+ * - Se o servidor recusar o token (401: sessão encerrada em outro dispositivo, senha trocada, membro inativado), a
+ *   sessão local é encerrada sozinha.
+ * - Membro com senha temporária (`deve_trocar_senha`) é levado a /trocar-senha ao tentar usar a área logada.
  */
 import {
   createContext,
