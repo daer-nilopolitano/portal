@@ -19,6 +19,7 @@ interface ItemNav {
 const ITENS_NAV: ItemNav[] = [
   { href: "/painel", rotulo: "Painel", papeis: ["conselheiro", "auxiliar", "embaixador_do_rei"] },
   { href: "/painel/embaixadas", rotulo: "Embaixadas", papeis: ["conselheiro"] },
+  { href: "/painel/consulados", rotulo: "Consulados", papeis: ["conselheiro"] },
   { href: "/painel/conselheiros", rotulo: "Conselheiros", papeis: ["conselheiro", "auxiliar"] },
   { href: "/painel/auxiliares", rotulo: "Auxiliares", papeis: ["conselheiro", "auxiliar"] },
   { href: "/painel/embaixadores", rotulo: "Embaixadores", papeis: ["conselheiro", "auxiliar"] },

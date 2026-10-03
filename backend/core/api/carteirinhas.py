@@ -29,7 +29,10 @@ _DESC_IDENTIFICADOR = (
     "URL pública `/carteirinhas/verificar/{identificador}/`."
 )
 _DESC_VALIDADE = "Data limite de validade da carteirinha, no formato `AAAA-MM-DD`. No dia da validade ela ainda é válida."
-
+_DESC_FAIXA_ETARIA = (
+    "Faixa etária calculada a partir da data de nascimento: `junior` (9-11 anos), `adolescente` (12-14) ou "
+    "`juvenil` (15-17). `null` fora dessa faixa. A data de nascimento não é exposta."
+)
 
 class CarteirinhaOut(Schema):
     id: int = Field(..., description="Identificador da carteirinha (não é o `identificador` do QR code nem o id do membro).")
@@ -38,6 +41,7 @@ class CarteirinhaOut(Schema):
     foto_url: Optional[str] = Field(None, description="URL da foto do membro, ou `null` se ele não tiver foto cadastrada.")
     embaixada_nome: str = Field(..., examples=["Embaixada Rei Davi"])
     posto: Optional[str] = Field(None, description=_DESC_POSTO, examples=["escudeiro"])
+    faixa_etaria: Optional[str] = Field(None, description=_DESC_FAIXA_ETARIA, examples=["junior"])
     identificador: UUID = Field(..., description=_DESC_IDENTIFICADOR, examples=["3fa85f64-5717-4562-b3fc-2c963f66afa6"])
     validade: date = Field(..., description=_DESC_VALIDADE, examples=["2027-03-31"])
     emitida_em: date = Field(..., description="Data de emissão, preenchida automaticamente. Não muda nas renovações.", examples=["2026-03-10"])
@@ -58,6 +62,9 @@ class CarteirinhaOut(Schema):
     def resolve_posto(obj: Carteirinha) -> Optional[str]:
         return obj.membro.posto_embaixador
 
+    @staticmethod
+    def resolve_faixa_etaria(obj: Carteirinha) -> Optional[str]:
+        return obj.membro.faixa_etaria
 
 class CarteirinhaIn(Schema):
     membro_id: int = Field(
@@ -74,10 +81,9 @@ class CarteirinhaUpdate(Schema):
 
 class VerificacaoOut(Schema):
     """Resposta pública da verificação por QR code — só o essencial."""
-
-
     nome: str = Field(..., examples=["Lucas Pereira de Souza"])
     embaixada: str = Field(..., examples=["Embaixada Rei Davi"])
+    faixa_etaria: Optional[str] = Field(None, description=_DESC_FAIXA_ETARIA, examples=["junior"])
     valida: bool = Field(
         ...,
         description=(
@@ -86,6 +92,10 @@ class VerificacaoOut(Schema):
         ),
     )
     validade: date = Field(..., description=_DESC_VALIDADE, examples=["2027-03-31"])
+
+    @staticmethod
+    def resolve_faixa_etaria(obj: Carteirinha) -> Optional[str]:
+        return obj.membro.faixa_etaria
 
 
 def _pode_gerenciar_carteirinha_de(membro_logado: Membro, membro_alvo: Membro) -> bool:

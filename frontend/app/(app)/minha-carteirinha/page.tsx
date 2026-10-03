@@ -5,7 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { mediaUrl } from "@/lib/api";
 import { useApi } from "@/lib/use-api";
 import { formatarDataBR } from "@/lib/format";
-import { ROTULO_POSTO } from "@/lib/labels";
+import {ROTULO_FAIXA_ETARIA, ROTULO_POSTO} from "@/lib/labels";
 import { NOME_SITE } from "@/lib/content/site";
 
 interface CarteirinhaMe {
@@ -14,6 +14,7 @@ interface CarteirinhaMe {
   foto_url: string | null;
   embaixada_nome: string;
   posto: string | null;
+  faixa_etaria: string | null;
   identificador: string;
   validade: string;
   emitida_em: string;
@@ -86,10 +87,20 @@ export default function MinhaCarteirinhaPage() {
 
           <div className="my-5 h-px w-full bg-gray-100" />
 
-          <p className="text-xs text-gray-500">Válida até</p>
-          <p className="text-sm font-medium text-gray-800">
-            {formatarDataBR(carteirinha.validade)}
-          </p>
+          <div className="flex justify-center gap-8 text-center">
+            {carteirinha.faixa_etaria && (
+              <div>
+                <p className="text-xs text-gray-500">Faixa etária</p>
+                <p className="text-sm font-medium text-gray-800">
+                  {ROTULO_FAIXA_ETARIA[carteirinha.faixa_etaria] ?? carteirinha.faixa_etaria}
+                </p>
+              </div>
+            )}
+            <div>
+              <p className="text-xs text-gray-500">Válida até</p>
+              <p className="text-sm font-medium text-gray-800">{formatarDataBR(carteirinha.validade)}</p>
+            </div>
+          </div>
 
           {urlVerificacao && (
             <div className="mt-5 rounded-lg border border-gray-100 p-3">
