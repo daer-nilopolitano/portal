@@ -11,9 +11,11 @@ export function EmbaixadasDestaques({ igrejas }: { igrejas: EmbaixadaDestaque[] 
   );
   const [pausado, setPausado] = useState(false);
 
+  // minmax(0,1fr) no celular: sem isso a coluna cresce até caber o conteúdo (ex.: a linha de pontinhos) e a página
+  // fica mais larga que a tela.
   return (
     <div
-      className="mt-12 grid gap-8 md:grid-cols-2"
+      className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6 md:mt-12 md:grid-cols-2 md:gap-8"
       onMouseEnter={() => setPausado(true)}
       onMouseLeave={() => setPausado(false)}
     >

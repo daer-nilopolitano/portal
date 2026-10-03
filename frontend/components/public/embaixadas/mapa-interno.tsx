@@ -55,13 +55,41 @@ function CentralizarEmSelecao({
   return null;
 }
 
+// Sem visual próprio. Liga/desliga a interação conforme `interativo` (as opções do MapContainer só valem na criação,
+// então isto roda pelo objeto do mapa) e recalcula o tamanho quando o contêiner muda de altura/largura.
+function ControleDeInteracao({ interativo }: { interativo: boolean }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const manipuladores = [map.dragging, map.touchZoom, map.doubleClickZoom, map.boxZoom, map.keyboard];
+    manipuladores.forEach((m) => (interativo ? m.enable() : m.disable()));
+
+    if (!interativo) return;
+    const zoom = L.control.zoom({ position: "topleft" });
+    zoom.addTo(map);
+    return () => {
+      zoom.remove();
+    };
+  }, [interativo, map]);
+
+  useEffect(() => {
+    const observador = new ResizeObserver(() => map.invalidateSize());
+    observador.observe(map.getContainer());
+    return () => observador.disconnect();
+  }, [map]);
+
+  return null;
+}
+
 interface Props {
   igrejas: IgrejaMapa[];
   igrejaSelecionadaId: number | null;
   onSelecionarIgreja: (id: number) => void;
+  /** Com `false` o mapa não arrasta nem dá zoom (útil no celular, onde ele prenderia a rolagem da página). */
+  interativo?: boolean;
 }
 
-export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecionarIgreja }: Props) {
+export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecionarIgreja, interativo = false }: Props) {
   const comCoordenadas = igrejas.filter(
     (igreja): igreja is IgrejaMapa & { latitude: number; longitude: number } =>
       igreja.latitude !== null && igreja.longitude !== null
@@ -73,11 +101,12 @@ export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecion
   const igrejaSelecionada = comCoordenadas.find((igreja) => igreja.id === igrejaSelecionadaId);
 
   return (
-    <MapContainer center={centro} zoom={13} scrollWheelZoom={false} className="h-full w-full">
+    <MapContainer center={centro} zoom={13} scrollWheelZoom={false} zoomControl={false} className="h-full w-full">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ControleDeInteracao interativo={interativo} />
       <CentralizarEmSelecao igreja={igrejaSelecionada} />
       {comCoordenadas.map((igreja) => (
         <Marker

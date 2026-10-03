@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Clock, MapPin, User } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect } from "react";
+import { useMediaQuery } from "@/lib/use-media-query";
 import type { EmbaixadaDestaque } from "@/lib/types";
 
 const INTERVALO_MS = 6000;
@@ -44,6 +45,11 @@ interface Props {
 
 export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionarIgreja, pausado }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  // Troca automática só com mouse (que pausa ao passar por cima) e sem "reduzir movimento". No toque ela mudaria o
+  // cartão e moveria o mapa enquanto a pessoa lê ou rola a página.
+  const mouseDisponivel = useMediaQuery("(hover: hover) and (pointer: fine)");
+  const reduzirMovimento = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const autoplayPermitido = mouseDisponivel && !reduzirMovimento;
 
   const scrollAnterior = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollProximo = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -70,39 +76,39 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
   }, [emblaApi, igrejaSelecionadaId, igrejas]);
 
   useEffect(() => {
-    if (!emblaApi || pausado || igrejas.length <= 1) return;
+    if (!emblaApi || !autoplayPermitido || pausado || igrejas.length <= 1) return;
     const id = setInterval(() => emblaApi.scrollNext(), INTERVALO_MS);
     return () => clearInterval(id);
-  }, [emblaApi, pausado, igrejas.length]);
+  }, [emblaApi, autoplayPermitido, pausado, igrejas.length]);
 
   if (igrejas.length === 0) {
     return (
-      <div className="flex h-[350px] items-center justify-center rounded-lg border border-border bg-surface text-sm text-text-muted">
+      <div className="flex min-h-[350px] items-center justify-center rounded-lg border border-border bg-surface p-4 text-center text-sm text-text-muted">
         Nenhuma embaixada cadastrada ainda.
       </div>
     );
   }
 
   return (
-    <div className="relative flex h-[350px] flex-col justify-between rounded-lg border border-border bg-surface p-6">
+    <div className="relative flex min-h-[350px] flex-col justify-between gap-4 rounded-lg border border-border bg-surface p-4 sm:p-6">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {igrejas.map((igreja) => (
             <div key={igreja.id} className="min-w-0 flex-[0_0_100%]">
-              <p className="font-heading text-xl font-semibold text-primary">{igreja.nome}</p>
+              <p className="break-words font-heading text-xl font-semibold text-primary">{igreja.nome}</p>
               <p className="text-lg text-text-muted mt-3">Embaixada: {igreja.embaixada_nome}</p>
               <div className="mt-4 space-y-3 text-sm text-text-muted">
                 <div className="flex items-start gap-2 mt-5">
                   <MapPin size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                  <span className="line-clamp-2 leading-relaxed">{enderecoCompleto(igreja)}</span>
+                  <span className="min-w-0 break-words leading-relaxed">{enderecoCompleto(igreja)}</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Clock size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                  <span className="leading-relaxed">{horariosReuniao(igreja)}</span>
+                  <span className="min-w-0 break-words leading-relaxed">{horariosReuniao(igreja)}</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <User size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
-                  <span className="leading-relaxed">{conselheirosResponsaveis(igreja)}</span>
+                  <span className="min-w-0 break-words leading-relaxed">{conselheirosResponsaveis(igreja)}</span>
                 </div>
               </div>
             </div>
@@ -115,7 +121,11 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
           <ChevronLeft size={16} />
         </button>
 
-        <div className="flex gap-1">
+        {/* Celular: contador no lugar dos pontinhos (com muitas embaixadas eles não cabem na largura). */}
+        <p className="text-sm text-text-muted sm:hidden" aria-live="polite">
+          {Math.max(igrejas.findIndex((igreja) => igreja.id === igrejaSelecionadaId), 0) + 1} / {igrejas.length}
+        </p>
+        <div className="hidden min-w-0 flex-wrap justify-center gap-1 sm:flex">
           {igrejas.map((igreja) => (
             <button
               key={igreja.id}
