@@ -143,14 +143,6 @@ class MembroOut(Schema):
     eh_consul: bool = Field(False, description="Se o membro é o cônsul (líder) do consulado a que pertence.")
 
     @staticmethod
-    def resolve_consulado_nome(obj: Membro) -> Optional[str]:
-        return obj.consulado.nome if obj.consulado_id else None
-
-    @staticmethod
-    def resolve_eh_consul(obj: Membro) -> bool:
-        return obj.consulado_id is not None and obj.consulado.consul_id == obj.pk
-
-    @staticmethod
     def resolve_convite_pendente(obj: Membro) -> bool:
         return obj.user is not None and not obj.user.has_usable_password()
 
@@ -158,6 +150,9 @@ class MembroOut(Schema):
     def resolve_usuario(obj: Membro) -> Optional[str]:
         return obj.user.username if obj.user else None
 
+    @staticmethod
+    def resolve_embaixada_nome(obj: Membro) -> str:
+        return obj.embaixada.nome
 
     @staticmethod
     def resolve_cargo_embaixada(obj: Membro) -> Optional[str]:
@@ -168,10 +163,17 @@ class MembroOut(Schema):
         cargos = list(obj.cargos_embaixada.all())
         return cargos[0].cargo if cargos else None
 
-
     @staticmethod
     def resolve_tem_acesso(obj: Membro) -> bool:
         return obj.user_id is not None
+
+    @staticmethod
+    def resolve_consulado_nome(obj: Membro) -> Optional[str]:
+        return obj.consulado.nome if obj.consulado_id else None
+
+    @staticmethod
+    def resolve_eh_consul(obj: Membro) -> bool:
+        return obj.consulado_id is not None and obj.consulado.consul_id == obj.pk
 
 
 class MembroIn(Schema):
