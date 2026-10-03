@@ -3,6 +3,7 @@ from django.conf import settings
 
 from .models import (
     Carteirinha,
+    Consulado,
     Diretoria,
     DiretoriaEmbaixada,
     Embaixada,
@@ -36,7 +37,6 @@ class DiretoriaEmbaixadaInline(admin.TabularInline):
 
 class MandatoDiretoriaInline(admin.TabularInline):
     """Mostrado no MembroAdmin — histórico de mandatos daquele membro na Diretoria."""
-
     model = Diretoria
     extra = 0
 
@@ -49,7 +49,7 @@ class GrupoMembroInline(admin.TabularInline):
 
 @admin.register(Igreja)
 class IgrejaAdmin(admin.ModelAdmin):
-    list_display = ("nome", "municipio", "bairro", "contato_nome", "contato_telefone")
+    list_display = ("nome", "municipio", "bairro", "nome_pastor", "telefone_pastor")
     search_fields = ("nome", "bairro", "municipio")
 
 
@@ -88,3 +88,11 @@ class DiretoriaEmbaixadaAdmin(admin.ModelAdmin):
     list_display = ("membro", "cargo", "embaixada", "data_inicio")
     list_filter = ("cargo", "embaixada")
     autocomplete_fields = ("membro", "embaixada")
+
+
+@admin.register(Consulado)
+class ConsuladoAdmin(admin.ModelAdmin):
+    list_display = ("nome", "embaixada", "consul")
+    list_filter = ("embaixada",)
+    search_fields = ("nome", "embaixada__nome")
+    autocomplete_fields = ("embaixada", "consul")

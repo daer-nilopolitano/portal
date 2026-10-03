@@ -7,7 +7,7 @@ from functools import cached_property
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
+from django.core.exceptions import ValidationError
 
 class Igreja(models.Model):
     nome = models.CharField(max_length=200)
@@ -24,8 +24,8 @@ class Igreja(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
-    contato_nome = models.CharField("Nome do contato", max_length=150, blank=True)
-    contato_telefone = models.CharField("Telefone do contato", max_length=20, blank=True)
+    nome_pastor = models.CharField("Nome do pastor", max_length=150, blank=True)
+    telefone_pastor = models.CharField("Telefone do pastor", max_length=20, blank=True)
 
     class Meta:
         verbose_name = "Igreja"
@@ -130,10 +130,31 @@ class Membro(models.Model):
         "Telefone do responsável", max_length=20, blank=True
     )
 
+    # Preenchido apenas quando tipo = embaixador_do_rei. Dado sensível: guarda a adaptação de que a pessoa precisa
+    # nas atividades, nunca o diagnóstico. Não expor em endpoints públicos, carteirinha, estatísticas, exportações nem logs.
+    adaptacoes = models.CharField(
+        "Adaptações",
+        max_length=300,
+        blank=True,
+        help_text=(
+            "Preencher apenas quando tipo = Embaixador do Rei. Registre a adaptação necessária "
+            "(ex.: tempo adicional em provas escritas), não o diagnóstico."
+        ),
+    )
+
     embaixada = models.ForeignKey(
         Embaixada, on_delete=models.PROTECT, related_name="membros"
     )
     ativo = models.BooleanField(default=True)
+
+    consulado = models.ForeignKey(
+        "Consulado",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="integrantes",
+        help_text="Só para Embaixadores do Rei; opcional (nem toda embaixada tem consulados).",
+    )
 
     # Login do membro no sistema (todos os tipos podem ter conta). Fica nulo até um conselheiro da própria embaixada
     # (ou a Diretoria) criar o acesso via endpoint dedicado — ver core/api/membros.py.
@@ -180,6 +201,22 @@ class Membro(models.Model):
         cached_property: o Membro logado é carregado de novo a cada request, então o valor fica guardado só durante ele,
         no máximo 1 consulta por request, em vez de 1 por chamada."""
         return self.mandatos_diretoria.filter(data_fim__isnull=True).exists()
+
+    def clean(self):
+        if self.adaptacoes.strip() and self.tipo != TipoMembro.EMBAIXADOR_DO_REI:
+            raise ValidationError({"adaptacoes": "Só deve ser preenchido para Embaixadores do Rei."})
+        if self.consulado_id:
+            if self.tipo != TipoMembro.EMBAIXADOR_DO_REI:
+                raise ValidationError({"consulado": "Só Embaixadores do Rei participam de consulados."})
+            if self.consulado.embaixada_id != self.embaixada_id:
+                raise ValidationError({"consulado": "O consulado precisa ser da mesma embaixada do membro."})
+        if self.pk:
+            # Verifica se o membro é o cônsul de algum consulado
+            lidera = Consulado.objects.filter(consul=self).first()
+            if lidera and self.consulado_id != lidera.pk:
+                raise ValidationError(
+                    {"consulado": f"Este membro é o cônsul de {lidera}; troque o cônsul antes de mudar o consulado dele."}
+                )
 
 
 class Diretoria(models.Model):
@@ -284,7 +321,6 @@ class DiretoriaEmbaixada(models.Model):
         SECRETARIO = "secretario", "Secretário"
         INTENDENTE = "intendente", "Intendente"
         PORTA_VOZ = "porta_voz", "Porta-voz"
-        CONSUL = "consul", "Cônsul"
         TESOUREIRO = "tesoureiro", "Tesoureiro"
         DIRETOR_MUSICA = "diretor_musica", "Diretor de Música"
         DIRETOR_ESPORTES = "diretor_esportes", "Diretor de Esportes"
@@ -309,6 +345,51 @@ class DiretoriaEmbaixada(models.Model):
 
     def __str__(self):
         return f"{self.membro} — {self.get_cargo_display()} ({self.embaixada})"
+
+class Consulado(models.Model):
+    """
+    Pequeno grupo de Embaixadores do Rei dentro de uma embaixada. Opcional: nem toda embaixada tem consulados.
+    O líder é o cônsul — um por consulado, então uma embaixada pode ter vários cônsules. O cônsul precisa pertencer
+    ao consulado que lidera (save() garante isso). Quantos consulados existem e quem participa de cada um é decisão
+    do conselheiro da embaixada.
+    """
+
+    embaixada = models.ForeignKey(
+        Embaixada, on_delete=models.CASCADE, related_name="consulados"
+    )
+    nome = models.CharField(max_length=100)
+    consul = models.OneToOneField(
+        Membro,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="consulado_liderado",
+        help_text="Líder do consulado. Precisa ser Embaixador do Rei da mesma embaixada.",
+    )
+
+    class Meta:
+        verbose_name = "Consulado"
+        verbose_name_plural = "Consulados"
+        ordering = ["embaixada", "nome"]
+        constraints = [
+            models.UniqueConstraint(fields=["embaixada", "nome"], name="unico_nome_consulado_por_embaixada"),
+        ]
+
+    def __str__(self):
+        return f"{self.nome} ({self.embaixada})"
+
+    def clean(self):
+        if self.consul_id:
+            if self.consul.tipo != TipoMembro.EMBAIXADOR_DO_REI:
+                raise ValidationError({"consul": "O cônsul precisa ser um Embaixador do Rei."})
+            if self.consul.embaixada_id != self.embaixada_id:
+                raise ValidationError({"consul": "O cônsul precisa ser da mesma embaixada do consulado."})
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # O cônsul sempre integra o consulado que lidera (vale para API e Admin).
+        if self.consul_id:
+            Membro.objects.filter(pk=self.consul_id).update(consulado=self)
 
 
 class Carteirinha(models.Model):

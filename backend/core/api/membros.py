@@ -25,7 +25,7 @@ from ninja.errors import HttpError
 
 from .erros import R400, R401, R403, R404
 from ..auth import AuthBearer, contar_falha, exigir_senha, membro_do_usuario
-from ..models import DiretoriaEmbaixada, Embaixada, Membro, TipoMembro
+from ..models import Consulado, DiretoriaEmbaixada, Embaixada, Membro, TipoMembro
 from ..senhas import enviar_link_definir_senha, gerar_senha_temporaria
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,8 @@ _DESC_CARGO_EMBAIXADA = (
     "Cargo do membro no quadro de oficiais da própria embaixada, se ele ocupar algum (só aplicável a `embaixador_do_rei`); "
     "caso contrário, `null`. Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, "
     "`consul`, `tesoureiro`, `diretor_musica`, `diretor_esportes`. Definido via `PUT /membros/{id}/cargo-embaixada/`, "
-    "não neste endpoint."
+    "O cargo `consul` vem de liderar um consulado (ver `/consulados/`); os demais são definidos via "
+    "`PUT /membros/{id}/cargo-embaixada/`, não neste endpoint."
 )
 _DESC_NOME_RESPONSAVEL = "Nome do responsável — só relevante para tipo `embaixador_do_rei` (é menor de idade)."
 _DESC_TELEFONE_RESPONSAVEL = "Telefone do responsável — só relevante para tipo `embaixador_do_rei`."
@@ -50,6 +51,12 @@ _DESC_FAIXA_ETARIA = (
     "`adolescente` (12-14) ou `juvenil` (15-17). `null` fora dessa faixa ou para os demais tipos. "
     "Não é um campo salvo no banco, não dá pra alterar."
 )
+_DESC_ADAPTACOES = (
+    "Adaptações de que o embaixador precisa nas atividades (ex.: tempo adicional em provas escritas, letras ampliadas). "
+    "Só relevante para tipo `embaixador_do_rei`. Dado sensível: registre a necessidade, não o diagnóstico. "
+    "Visível apenas para a Diretoria, o conselheiro e o auxiliar da própria embaixada e o próprio embaixador "
+    "(`/api/auth/me/`). Edição restrita à Diretoria e ao conselheiro da embaixada."
+)
 
 
 def _validar_posto(tipo: str, posto_embaixador: Optional[str]):
@@ -57,6 +64,11 @@ def _validar_posto(tipo: str, posto_embaixador: Optional[str]):
         raise HttpError(400, "posto_embaixador é obrigatório quando tipo = embaixador_do_rei.")
     if tipo != TipoMembro.EMBAIXADOR_DO_REI and posto_embaixador:
         raise HttpError(400, "posto_embaixador só deve ser preenchido quando tipo = embaixador_do_rei.")
+
+
+def _validar_adaptacoes(tipo: str, adaptacoes: str):
+    if adaptacoes and tipo != TipoMembro.EMBAIXADOR_DO_REI:
+        raise HttpError(400, "adaptacoes só deve ser preenchido quando tipo = embaixador_do_rei.")
 
 
 def _pode_gerenciar_embaixada(membro_logado: Membro, embaixada_id: int) -> bool:
@@ -116,6 +128,7 @@ class MembroOut(Schema):
     cargo_embaixada: Optional[str] = Field(None, description=_DESC_CARGO_EMBAIXADA)
     nome_responsavel: str = Field("", description=_DESC_NOME_RESPONSAVEL)
     telefone_responsavel: str = Field("", description=_DESC_TELEFONE_RESPONSAVEL)
+    adaptacoes: str = Field("", description=_DESC_ADAPTACOES)
     embaixada_id: int
     embaixada_nome: str
     ativo: bool
@@ -125,6 +138,17 @@ class MembroOut(Schema):
                              description="Se o membro já tem login (Django User) criado — ver POST .../criar-acesso/.")
     convite_pendente: bool = Field(False, description="Tem login criado mas ainda não definiu a senha.")
     usuario: Optional[str] = None
+    consulado_id: Optional[int] = None
+    consulado_nome: Optional[str] = None
+    eh_consul: bool = Field(False, description="Se o membro é o cônsul (líder) do consulado a que pertence.")
+
+    @staticmethod
+    def resolve_consulado_nome(obj: Membro) -> Optional[str]:
+        return obj.consulado.nome if obj.consulado_id else None
+
+    @staticmethod
+    def resolve_eh_consul(obj: Membro) -> bool:
+        return obj.consulado_id is not None and obj.consulado.consul_id == obj.pk
 
     @staticmethod
     def resolve_convite_pendente(obj: Membro) -> bool:
@@ -134,16 +158,16 @@ class MembroOut(Schema):
     def resolve_usuario(obj: Membro) -> Optional[str]:
         return obj.user.username if obj.user else None
 
-    @staticmethod
-    def resolve_embaixada_nome(obj: Membro) -> str:
-        return obj.embaixada.nome
 
     @staticmethod
     def resolve_cargo_embaixada(obj: Membro) -> Optional[str]:
+        if obj.consulado_id is not None and obj.consulado.consul_id == obj.pk:
+            return "consul"
         # .all() aproveita o prefetch de _queryset_visivel; .first() sempre faria uma consulta nova por membro.
         # Um membro tem no máximo 1 cargo.
         cargos = list(obj.cargos_embaixada.all())
         return cargos[0].cargo if cargos else None
+
 
     @staticmethod
     def resolve_tem_acesso(obj: Membro) -> bool:
@@ -159,6 +183,7 @@ class MembroIn(Schema):
     posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
     nome_responsavel: str = Field("", description=_DESC_NOME_RESPONSAVEL)
     telefone_responsavel: str = Field("", description=_DESC_TELEFONE_RESPONSAVEL)
+    adaptacoes: str = Field("", max_length=500, description=_DESC_ADAPTACOES)
     embaixada_id: int
     ativo: bool = True
 
@@ -172,6 +197,7 @@ class MembroUpdate(Schema):
     posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
     nome_responsavel: Optional[str] = Field(None, description=_DESC_NOME_RESPONSAVEL)
     telefone_responsavel: Optional[str] = Field(None, description=_DESC_TELEFONE_RESPONSAVEL)
+    adaptacoes: Optional[str] = Field(None, max_length=500, description=_DESC_ADAPTACOES)
     embaixada_id: Optional[int] = None
     ativo: Optional[bool] = None
     senha_confirmacao: Optional[str] = Field(
@@ -211,9 +237,16 @@ class CargoEmbaixadaIn(Schema):
         None,
         description=(
             "Cargo na diretoria da embaixada, ou `null` para remover o membro do quadro. "
-            "Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, `consul`, "
+            "Valores: `embaixador_chefe`, `embaixador_assistente`, `secretario`, `intendente`, `porta_voz`, "
             "`tesoureiro`, `diretor_musica`, `diretor_esportes`."
         ),
+    )
+
+
+class ConsuladoDoMembroIn(Schema):
+    consulado_id: Optional[int] = Field(
+        None,
+        description="Consulado de destino (da mesma embaixada do membro) ou `null` para tirar o membro do consulado.",
     )
 
 
@@ -268,17 +301,20 @@ def criar_membro(request, payload: MembroIn):
     """
     **Permissão:** restrito à Diretoria ou ao conselheiro da embaixada informada em `embaixada_id`.
 
-    400 se `posto_embaixador` não combinar com o `tipo`;
+    400 se `posto_embaixador` não combinar com o `tipo` e se `adaptacoes` for preenchido para um tipo que não é embaixador_do_rei;
     404 se a embaixada não existir. E-mail vazio é gravado como `null`.
     """
     membro_logado = membro_do_usuario(request.auth)
     if not _pode_gerenciar_embaixada(membro_logado, payload.embaixada_id):
         raise HttpError(403, "Você só pode cadastrar membros na sua própria embaixada.")
-    _validar_posto(payload.tipo, payload.posto_embaixador)
 
+    _validar_posto(payload.tipo, payload.posto_embaixador)
+    adaptacoes = payload.adaptacoes.strip()
+    _validar_adaptacoes(payload.tipo, adaptacoes)
     embaixada = get_object_or_404(Embaixada, pk=payload.embaixada_id)
     dados = payload.dict(exclude={"embaixada_id"})
-    dados["email"] = dados["email"] or None  # "" viraria um segundo valor "" e violaria a unicidade
+    dados["email"] = dados["email"] or None
+    dados["adaptacoes"] = adaptacoes
     membro = Membro.objects.create(embaixada=embaixada, **dados)
     return 201, membro
 
@@ -298,6 +334,7 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     """
     membro_logado = membro_do_usuario(request.auth)
     membro = get_object_or_404(Membro.objects.select_related("user"), pk=membro_id)
+    embaixada_original_id = membro.embaixada_id
     if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
         raise HttpError(403, "Você só pode editar membros da sua própria embaixada.")
 
@@ -305,6 +342,8 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     senha_confirmacao = dados.pop("senha_confirmacao", None)  # não é campo do modelo
     if "email" in dados:
         dados["email"] = dados["email"] or None
+    if "adaptacoes" in dados:
+        dados["adaptacoes"] = (dados["adaptacoes"] or "").strip()  # null viraria erro 500 (campo não aceita null)
     if "embaixada_id" in dados:
         nova_embaixada_id = dados.pop("embaixada_id")
         if not _pode_gerenciar_embaixada(membro_logado, nova_embaixada_id):
@@ -314,6 +353,7 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
     tipo_final = dados.get("tipo", membro.tipo)
     posto_final = dados.get("posto_embaixador", membro.posto_embaixador)
     _validar_posto(tipo_final, posto_final)
+    _validar_adaptacoes(tipo_final, dados.get("adaptacoes", membro.adaptacoes))
 
     # Ações que mexem em poder/acesso: exigem a senha de quem está fazendo.
     tipo_muda = "tipo" in dados and dados["tipo"] != membro.tipo
@@ -323,6 +363,14 @@ def atualizar_membro(request, membro_id: int, payload: MembroUpdate):
         if not senha_confirmacao:
             raise HttpError(400, "Informe sua senha para confirmar esta alteração.")
         exigir_senha(request, senha_confirmacao)
+
+    # Mudou de embaixada ou deixou de ser Embaixador do Rei: sai do consulado. Cônsul precisa ser trocado antes.
+    embaixada_muda = membro.embaixada_id != embaixada_original_id
+    deixa_de_ser_er = tipo_muda and dados["tipo"] != TipoMembro.EMBAIXADOR_DO_REI
+    if membro.consulado_id and (embaixada_muda or deixa_de_ser_er):
+        if Consulado.objects.filter(consul=membro).exists():
+            raise HttpError(400, "Este membro é cônsul de um consulado. Troque o cônsul antes de mudar a embaixada ou o tipo dele.")
+        membro.consulado = None
 
     ativo_muda = "ativo" in dados and dados["ativo"] != membro.ativo
     if ativo_muda:
@@ -467,6 +515,12 @@ def definir_cargo_embaixada(request, membro_id: int, payload: CargoEmbaixadaIn):
     if membro.tipo != TipoMembro.EMBAIXADOR_DO_REI:
         raise HttpError(400, "Só um Embaixador do Rei pode ocupar cargo na diretoria da embaixada.")
 
+    if payload.cargo:
+        if payload.cargo not in DiretoriaEmbaixada.Cargo.values:
+            raise HttpError(400, "Cargo inválido. Para cônsul, defina o líder no consulado (/consulados/).")
+        if Consulado.objects.filter(consul=membro).exists():
+            raise HttpError(400, "Este membro é cônsul. Um membro só pode ter um cargo — remova a liderança do consulado antes.")
+
     # Remove qualquer cargo que esse membro já ocupasse (só pode ter 1 por vez).
     DiretoriaEmbaixada.objects.filter(membro=membro).delete()
 
@@ -480,6 +534,41 @@ def definir_cargo_embaixada(request, membro_id: int, payload: CargoEmbaixadaIn):
             data_inicio=date.today(),
         )
 
+    return membro
+
+
+@router.put(
+    "/{membro_id}/consulado/",
+    response={200: MembroOut, **R400, **R401, **R403, **R404},
+    summary="Define o consulado do membro (só para embaixador do rei)",
+    operation_id="definir_consulado_do_membro",
+)
+def definir_consulado_do_membro(request, membro_id: int, payload: ConsuladoDoMembroIn):
+    """
+    **Permissão:** Diretoria ou conselheiro da embaixada do membro.
+
+    400 se o membro não for embaixador do rei, se o consulado for de outra embaixada ou se o membro for o cônsul de um
+    consulado (troque o cônsul antes de movê-lo ou tirá-lo). 404 se o membro ou o consulado não existirem.
+    """
+    membro_logado = membro_do_usuario(request.auth)
+    membro = get_object_or_404(Membro, pk=membro_id)
+    if not _pode_gerenciar_embaixada(membro_logado, membro.embaixada_id):
+        raise HttpError(403, "Você só pode editar consulados da sua própria embaixada.")
+    if membro.tipo != TipoMembro.EMBAIXADOR_DO_REI:
+        raise HttpError(400, "Só um Embaixador do Rei pode participar de um consulado.")
+
+    lidera = Consulado.objects.filter(consul=membro).first()
+    if lidera and payload.consulado_id != lidera.pk:
+        raise HttpError(400, f"Este membro é o cônsul de {lidera.nome}. Troque o cônsul antes de movê-lo ou tirá-lo.")
+
+    if payload.consulado_id is None:
+        membro.consulado = None
+    else:
+        consulado = get_object_or_404(Consulado, pk=payload.consulado_id)
+        if consulado.embaixada_id != membro.embaixada_id:
+            raise HttpError(400, "O consulado precisa ser da mesma embaixada do membro.")
+        membro.consulado = consulado
+    membro.save(update_fields=["consulado"])
     return membro
 
 

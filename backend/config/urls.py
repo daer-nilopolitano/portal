@@ -42,6 +42,10 @@ api = NinjaAPI(
                 "description": "Versão sem dados pessoais, consumida pelo site institucional.",
             },
             {
+                "name": "Consulados",
+                "description": "Pequenos grupos de embaixadores do rei dentro da embaixada, cada um com seu cônsul (líder). Opcionais.",
+            },
+            {
                 "name": "Membros",
                 "description": "Cadastro de conselheiros, auxiliares e embaixadores do rei, e criação de acesso ao sistema.",
             },

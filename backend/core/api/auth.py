@@ -36,6 +36,10 @@ _DESC_CARGO_DIRETORIA = (
     "Valores: `coordenador`, `presidente`, `vice_presidente`, `primeiro_secretario`, `segundo_secretario`, "
     "`diretor_midia_comunicacao`, `diretor_esportes`. Um valor não nulo indica que o membro pertence à Diretoria."
 )
+_DESC_ADAPTACOES = (
+    "Adaptações de que o embaixador precisa nas atividades (ex.: tempo adicional em provas escritas). "
+    "Só vem preenchido para `embaixador_do_rei`. Dado sensível: aparece apenas para o próprio membro."
+)
 
 # Proteção contra força bruta no login. Conta só as tentativas que FALHARAM (senha errada), numa janela fixa que começa
 # na primeira falha: por e-mail (protege uma conta específica) e por IP (protege contra quem testa vários e-mails).
@@ -104,6 +108,46 @@ class NovoTokenOut(Schema):
 
 class MensagemOut(Schema):
     mensagem: str
+
+
+class LoginIn(Schema):
+    email: str = Field(
+        ...,
+        description="E-mail ou usuário cadastrado no Membro.",
+        examples=["conselheiro@exemplo.org"],
+    )
+    senha: str = Field(..., description="Senha definida na criação do acesso.")
+
+
+class LoginOut(Schema):
+    access_token: str = Field(
+        ...,
+        description=(
+            "Token JWT. Envie-o em toda requisição autenticada, no cabeçalho `Authorization: Bearer <token>`. "
+            "Expira após o prazo configurado no servidor; depois disso, faça login novamente."
+        ),
+        examples=["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."],
+    )
+    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário.")
+    nome: str = Field(..., examples=["Paulo Roberto de Souza"])
+    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
+    deve_trocar_senha: bool = Field(False,
+                                    description="Se `true`, o membro precisa trocar a senha antes de usar o sistema.")
+
+
+class MeOut(Schema):
+    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário do token.")
+    nome: str = Field(..., examples=["Paulo Roberto de Souza"])
+    usuario: str = Field(..., description="Usuário do Django vinculado ao Membro.")
+    embaixada_id: int = Field(..., description="Identificador da embaixada do membro.")
+    embaixada_nome: str = Field(..., examples=["Embaixada Vale da Bênção"])
+    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
+    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
+    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
+    adaptacoes: str = Field("", description=_DESC_ADAPTACOES)
+    deve_trocar_senha: bool = False
 
 
 @router.post(
@@ -202,45 +246,6 @@ def sair_de_todos(request):
     return MensagemOut(mensagem="Todas as sessões foram encerradas.")
 
 
-class LoginIn(Schema):
-    email: str = Field(
-        ...,
-        description="E-mail ou usuário cadastrado no Membro.",
-        examples=["conselheiro@exemplo.org"],
-    )
-    senha: str = Field(..., description="Senha definida na criação do acesso.")
-
-
-class LoginOut(Schema):
-    access_token: str = Field(
-        ...,
-        description=(
-            "Token JWT. Envie-o em toda requisição autenticada, no cabeçalho `Authorization: Bearer <token>`. "
-            "Expira após o prazo configurado no servidor; depois disso, faça login novamente."
-        ),
-        examples=["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."],
-    )
-    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário.")
-    nome: str = Field(..., examples=["Paulo Roberto de Souza"])
-    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
-    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
-    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
-    deve_trocar_senha: bool = Field(False,
-                                    description="Se `true`, o membro precisa trocar a senha antes de usar o sistema.")
-
-
-class MeOut(Schema):
-    membro_id: int = Field(..., description="Identificador do Membro vinculado ao usuário do token.")
-    nome: str = Field(..., examples=["Paulo Roberto de Souza"])
-    usuario: str = Field(..., description="Usuário do Django vinculado ao Membro.")
-    embaixada_id: int = Field(..., description="Identificador da embaixada do membro.")
-    embaixada_nome: str = Field(..., examples=["Embaixada Vale da Bênção"])
-    tipo: str = Field(..., description=_DESC_TIPO, examples=["conselheiro"])
-    posto_embaixador: Optional[str] = Field(None, description=_DESC_POSTO)
-    cargo_diretoria: Optional[str] = Field(None, description=_DESC_CARGO_DIRETORIA)
-    deve_trocar_senha: bool = False
-
-
 @router.post(
     "/login/",
     response={200: LoginOut, **R401, **R403, **R429},
@@ -328,5 +333,6 @@ def me(request):
         tipo=membro.tipo,
         posto_embaixador=membro.posto_embaixador,
         cargo_diretoria=_cargo_diretoria_ativo(membro),
+        adaptacoes=membro.adaptacoes,
         deve_trocar_senha=membro.deve_trocar_senha,
     )

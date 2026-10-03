@@ -16,6 +16,7 @@ from .estatisticas import router as estatisticas_router
 from .grupos import router as grupos_router
 from .igrejas import router as igrejas_router
 from .membros import router as membros_router
+from .consulados import router as consulados_router
 
 router = Router()
 
@@ -27,4 +28,5 @@ router.add_router("/membros", membros_router)
 router.add_router("/diretoria", diretoria_router)
 router.add_router("/grupos", grupos_router)
 router.add_router("/carteirinhas", carteirinhas_router)
+router.add_router("/consulados", consulados_router)
 router.add_router("/estatisticas", estatisticas_router)
