@@ -30,6 +30,7 @@
     var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);

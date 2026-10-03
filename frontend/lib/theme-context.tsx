@@ -20,8 +20,17 @@ function temaSalvo(): Tema | null {
   return salvo === "light" || salvo === "dark" ? salvo : null;
 }
 
+// Mesmas cores de fundo de --color-background em globals.css (claro e escuro).
+const COR_BARRA: Record<Tema, string> = { light: "#FAF9F6", dark: "#0D0C0B" };
+
 function aplicarClasse(tema: Tema) {
   document.documentElement.classList.toggle("dark", tema === "dark");
+  // A barra de status do celular / do PWA instalado acompanha o tema escolhido. As metas do layout usam `media`
+  // (só seguem o tema do sistema), então aqui fixamos a cor do tema ativo.
+  document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
+    meta.removeAttribute("media");
+    meta.content = COR_BARRA[tema];
+  });
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

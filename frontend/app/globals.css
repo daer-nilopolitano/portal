@@ -113,6 +113,12 @@
     @apply my-6 rounded-lg;
   }
 
+  /* Altura de tela cheia que acompanha a barra de endereço do navegador móvel (100vh de fallback). */
+  .min-h-app {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
   /* Botões — altura, raio e espaçamento padronizados (h-11 = 44px, área mínima de toque) em todas as variantes */
   .btn {
     @apply inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
@@ -137,8 +143,9 @@
   }
 
   /* Campos de formulário — mesmo raio/borda/tamanho e foco visível padronizado */
+  /* 16px no celular: abaixo disso o Safari do iPhone dá zoom na página ao focar o campo. */
   .field {
-    @apply mt-1 min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary;
+    @apply mt-1 min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base text-text focus:border-primary sm:text-sm;
   }
   .field-label {
     @apply block text-sm text-text;

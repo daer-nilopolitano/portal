@@ -69,7 +69,7 @@ export function Lightbox({ fotos, indiceInicial, onFechar }: Props) {
       ) : null}
 
       <div className="relative flex flex-1 items-center justify-center px-4" onClick={(evento) => evento.stopPropagation()}>
-        <div className="relative h-[75vh] w-full max-w-4xl overflow-hidden" ref={emblaRef}>
+        <div className="relative h-[75dvh] w-full max-w-4xl overflow-hidden" ref={emblaRef}>
           <div className="flex h-full">
             {fotos.map((foto, indice) => (
               <div key={indice} className="relative h-full min-w-0 flex-[0_0_100%]">

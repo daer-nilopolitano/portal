@@ -19,7 +19,7 @@ export default async function VerificarCarteirinhaPage({
   ).catch(() => null);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-6">
+    <main className="flex min-h-app items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm rounded-lg border border-border bg-surface p-8 text-center shadow-sm">
         {!verificacao ? (
           <>

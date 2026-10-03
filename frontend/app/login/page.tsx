@@ -41,7 +41,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6">
+    <div className="flex min-h-app items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center text-center">
           <Image src="/logo-daer.png" alt="" width={56} height={61} priority />

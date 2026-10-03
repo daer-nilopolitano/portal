@@ -11,7 +11,7 @@ interface Props {
 /** Moldura das telas de senha fora da área logada (esqueci / redefinir): mesmo visual da tela de login. */
 export function CartaoAuth({ subtitulo, children, rodape }: Props) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6 py-10">
+    <div className="flex min-h-app items-center justify-center bg-background px-6 py-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center text-center">
           <Image src="/logo-daer.png" alt="" width={56} height={61} priority />

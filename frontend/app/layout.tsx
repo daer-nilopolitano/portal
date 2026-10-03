@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope, Sora } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
@@ -19,6 +19,20 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: NOME_SITE,
   description: TAGLINE,
+  applicationName: NOME_SITE,
+  appleWebApp: { capable: true, title: "DAERNIL", statusBarStyle: "default" },
+};
+
+// viewport-fit=cover deixa a página ocupar a tela toda no celular (a barra inferior respeita a área segura com
+// env(safe-area-inset-bottom)). As cores da barra de status são as de --color-background em globals.css.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAF9F6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0D0C0B" },
+  ],
 };
 
 export default function RootLayout({

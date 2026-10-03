@@ -38,7 +38,7 @@ export function Modal({ aberto, titulo, onFechar, bloqueado = false, children }:
       onClose={() => {
         if (aberto) onFechar();
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-lg border border-border bg-surface p-0 text-text shadow-xl backdrop:bg-black/50"
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto overscroll-contain rounded-lg border border-border bg-surface p-0 text-text shadow-xl backdrop:bg-black/50"
     >
       {aberto && (
         <div className="p-5">
