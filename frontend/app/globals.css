@@ -118,6 +118,10 @@
     min-height: 100vh;
     min-height: 100dvh;
   }
+  .h-app {
+    height: 100vh;
+    height: 100dvh;
+  }
 
   /* Botões — altura, raio e espaçamento padronizados (h-11 = 44px, área mínima de toque) em todas as variantes */
   .btn {

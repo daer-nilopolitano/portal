@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import type { IgrejaMapa } from "@/components/public/embaixadas/mapa-interno";
 import { useMediaQuery } from "@/lib/use-media-query";
 
-const EmbaixadasMapaInterno = dynamic(
+// Carregado só no navegador (Leaflet usa `window`). Exportado também para a página /embaixadas.
+export const MapaDinamico = dynamic(
   () => import("@/components/public/embaixadas/mapa-interno").then((m) => m.EmbaixadasMapaInterno),
   {
     ssr: false,
@@ -32,9 +33,9 @@ export function EmbaixadasMapa({ igrejas, igrejaSelecionadaId, onSelecionarIgrej
   // Altura fixa só no celular (coluna única). Do md em diante o mapa acompanha a altura do cartão ao lado:
   // o wrapper estica na grade e o mapa preenche com `absolute inset-0`.
   return (
-    <div className="relative h-[260px] overflow-hidden rounded-lg border border-border bg-surface-2 md:h-auto md:min-h-[350px]">
+    <div className="relative isolate h-[260px] overflow-hidden rounded-lg border border-border bg-surface-2 md:h-auto md:min-h-[350px]">
       <div className="absolute inset-0">
-        <EmbaixadasMapaInterno
+        <MapaDinamico
           igrejas={igrejas}
           igrejaSelecionadaId={igrejaSelecionadaId}
           onSelecionarIgreja={onSelecionarIgreja}

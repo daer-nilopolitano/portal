@@ -55,6 +55,18 @@ function CentralizarEmSelecao({
   return null;
 }
 
+// Sem visual próprio. Enquadra todos os pins ao abrir (visão geral), em vez de começar numa igreja só.
+function AjustarAosPins({ pontos }: { pontos: [number, number][] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (pontos.length === 0) return;
+    map.fitBounds(L.latLngBounds(pontos), { padding: [48, 48], maxZoom: 15, animate: false });
+    // Só na abertura: depois o mapa segue a igreja selecionada, e não deve "pular" quando a lista re-renderizar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map]);
+  return null;
+}
+
 // Sem visual próprio. Liga/desliga a interação conforme `interativo` (as opções do MapContainer só valem na criação,
 // então isto roda pelo objeto do mapa) e recalcula o tamanho quando o contêiner muda de altura/largura.
 function ControleDeInteracao({ interativo }: { interativo: boolean }) {
@@ -87,9 +99,23 @@ interface Props {
   onSelecionarIgreja: (id: number) => void;
   /** Com `false` o mapa não arrasta nem dá zoom (útil no celular, onde ele prenderia a rolagem da página). */
   interativo?: boolean;
+  /** Zoom com a roda do mouse. Fica desligado na home (a roda deve rolar a página) e ligado na página em tela cheia. */
+  scrollWheelZoom?: boolean;
+  /** Balão com o nome ao tocar no pin. Desligue quando a igreja selecionada já aparece em outro lugar da tela. */
+  comPopup?: boolean;
+  /** Começa enquadrando todos os pins, em vez de centralizar na primeira igreja. */
+  ajustarAosPins?: boolean;
 }
 
-export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecionarIgreja, interativo = false }: Props) {
+export function EmbaixadasMapaInterno({
+  igrejas,
+  igrejaSelecionadaId,
+  onSelecionarIgreja,
+  interativo = false,
+  scrollWheelZoom = false,
+  comPopup = true,
+  ajustarAosPins = false,
+}: Props) {
   const comCoordenadas = igrejas.filter(
     (igreja): igreja is IgrejaMapa & { latitude: number; longitude: number } =>
       igreja.latitude !== null && igreja.longitude !== null
@@ -101,12 +127,13 @@ export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecion
   const igrejaSelecionada = comCoordenadas.find((igreja) => igreja.id === igrejaSelecionadaId);
 
   return (
-    <MapContainer center={centro} zoom={13} scrollWheelZoom={false} zoomControl={false} className="h-full w-full">
+    <MapContainer center={centro} zoom={13} scrollWheelZoom={scrollWheelZoom} zoomControl={false} className="h-full w-full">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <ControleDeInteracao interativo={interativo} />
+      {ajustarAosPins && <AjustarAosPins pontos={comCoordenadas.map((i) => [i.latitude, i.longitude])} />}
       <CentralizarEmSelecao igreja={igrejaSelecionada} />
       {comCoordenadas.map((igreja) => (
         <Marker
@@ -115,11 +142,13 @@ export function EmbaixadasMapaInterno({ igrejas, igrejaSelecionadaId, onSelecion
           icon={igreja.id === igrejaSelecionadaId ? ICONE_SELECIONADO : ICONE_PADRAO}
           eventHandlers={{ click: () => onSelecionarIgreja(igreja.id) }}
         >
-          <Popup>
-            <strong>{igreja.nome}</strong>
-            <br />
-            {igreja.bairro}, {igreja.municipio}
-          </Popup>
+          {comPopup && (
+            <Popup>
+              <strong>{igreja.nome}</strong>
+              <br />
+              {igreja.bairro}, {igreja.municipio}
+            </Popup>
+          )}
         </Marker>
       ))}
     </MapContainer>

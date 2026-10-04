@@ -3,38 +3,12 @@
 import { ChevronLeft, ChevronRight, Clock, MapPin, User } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect } from "react";
+import { ComoChegar } from "@/components/public/embaixadas/como-chegar";
+import { conselheirosResponsaveis, enderecoCompleto, horariosReuniao } from "@/lib/embaixadas";
 import { useMediaQuery } from "@/lib/use-media-query";
 import type { EmbaixadaDestaque } from "@/lib/types";
 
 const INTERVALO_MS = 6000;
-
-function enderecoCompleto(igreja: EmbaixadaDestaque) {
-  return [
-    [igreja.rua, igreja.numero].filter(Boolean).join(", "),
-    igreja.complemento,
-    igreja.bairro,
-    igreja.municipio,
-  ]
-    .filter(Boolean)
-    .join(" — ");
-}
-
-function horariosReuniao(destaque: EmbaixadaDestaque) {
-  if (destaque.horarios_reuniao.length === 0) {
-    return "Horário de reunião: a definir";
-  }
-  const rotulo = destaque.horarios_reuniao.length > 1 ? "Reuniões" : "Reunião";
-  const lista = destaque.horarios_reuniao.map((h) => `${h.dia_semana}, ${h.horario}`).join(" / ");
-  return `${rotulo}: ${lista}`;
-}
-
-function conselheirosResponsaveis(destaque: EmbaixadaDestaque) {
-  if (destaque.conselheiros_nomes.length === 0) {
-    return "Conselheiro: a definir";
-  }
-  const rotulo = destaque.conselheiros_nomes.length > 1 ? "Conselheiros" : "Conselheiro";
-  return `${rotulo}: ${destaque.conselheiros_nomes.join(", ")}`;
-}
 
 interface Props {
   igrejas: EmbaixadaDestaque[];
@@ -94,7 +68,7 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {igrejas.map((igreja) => (
-            <div key={igreja.id} className="min-w-0 flex-[0_0_100%]">
+            <div key={igreja.id} aria-hidden={igreja.id !== igrejaSelecionadaId} className="min-w-0 flex-[0_0_100%]">
               <p className="break-words font-heading text-xl font-semibold text-primary">{igreja.nome}</p>
               <p className="text-lg text-text-muted mt-3">Embaixada: {igreja.embaixada_nome}</p>
               <div className="mt-4 space-y-3 text-sm text-text-muted">
@@ -110,6 +84,9 @@ export function EmbaixadasCarrossel({ igrejas, igrejaSelecionadaId, onSelecionar
                   <User size={16} className="mt-0.5 flex-shrink-0 text-text-muted" aria-hidden="true" />
                   <span className="min-w-0 break-words leading-relaxed">{conselheirosResponsaveis(igreja)}</span>
                 </div>
+              </div>
+              <div className="mt-5">
+                <ComoChegar igreja={igreja} tabIndex={igreja.id === igrejaSelecionadaId ? undefined : -1} />
               </div>
             </div>
           ))}
