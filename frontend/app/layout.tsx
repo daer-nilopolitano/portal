@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Sora } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
+import { RegistroPwa } from "@/components/pwa/registro-pwa";
 import { NOME_SITE, TAGLINE } from "@/lib/content/site";
 import "./globals.css";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
+        <RegistroPwa />
       </body>
     </html>
   );

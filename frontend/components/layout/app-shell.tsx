@@ -11,6 +11,8 @@ import { NOME_SITE } from "@/lib/content/site";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { MenuUsuario } from "@/components/layout/menu-usuario";
 import { NavegacaoInferior } from "@/components/layout/navegacao-inferior";
+import { AvisoOffline } from "@/components/pwa/aviso-offline";
+import { BannerInstalar } from "@/components/pwa/banner-instalar";
 import { dividirParaBarra, itensDoTipo, rotaAtiva } from "@/components/layout/itens-nav";
 
 const ID_GAVETA = "navegacao-lateral";
@@ -159,7 +161,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <MenuUsuario variante="header" />
           </div>
         </header>
+        <AvisoOffline />
         <main className="flex-1 px-4 pt-4 pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pt-6 md:pb-6 lg:px-8 lg:pt-8 lg:pb-8">
+          {pathname === "/painel" && <BannerInstalar />}
           {children}
         </main>
       </div>

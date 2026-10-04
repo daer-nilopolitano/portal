@@ -21,6 +21,7 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ErroApi, apiFetch, registrarAoNaoAutorizado } from "@/lib/api";
+import { limparCachesDePaginas } from "@/lib/pwa";
 import { limparCache } from "@/lib/cache";
 
 export type Tipo = "conselheiro" | "auxiliar" | "embaixador_do_rei";
@@ -132,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           localStorage.removeItem(CHAVE_TOKEN);
           esquecerMembro();
           limparCache();
+          limparCachesDePaginas();
           setToken(null);
           setMembro(null);
         }
@@ -141,6 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     limparCache();
+    limparCachesDePaginas();
     localStorage.removeItem(CHAVE_TOKEN);
     esquecerMembro();
     setToken(null);

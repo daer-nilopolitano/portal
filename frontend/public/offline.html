@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#FAF9F6" />
+    <title>Sem conexão — DAER Nilopolitano</title>
+    <style>
+      /* Página autossuficiente: sem JS nem CSS do Next, para abrir mesmo sem nenhum arquivo em cache. */
+      :root {
+        --fundo: #faf9f6;
+        --texto: #1c1917;
+        --suave: #57524d;
+        --primaria: #1e40af;
+        --sobre-primaria: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fundo: #0d0c0b;
+          --texto: #f4f4f3;
+          --suave: #a19e9a;
+          --primaria: #60a5fa;
+          --sobre-primaria: #0f172a;
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: var(--fundo);
+        color: var(--texto);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+        text-align: center;
+      }
+      main { max-width: 22rem; }
+      img { width: 56px; height: auto; }
+      h1 { margin: 1rem 0 0.5rem; font-size: 1.5rem; line-height: 1.25; }
+      p { margin: 0 0 1.5rem; color: var(--suave); }
+      button {
+        min-height: 44px;
+        padding: 0 1.5rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background: var(--primaria);
+        color: var(--sobre-primaria);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/logo-daer.png" alt="" width="56" height="61" />
+      <h1>Você está sem conexão</h1>
+      <p>Não foi possível carregar esta página. Verifique sua internet e tente de novo.</p>
+      <button type="button" onclick="location.reload()">Tentar novamente</button>
+    </main>
+  </body>
+</html>
