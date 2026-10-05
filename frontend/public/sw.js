@@ -1,5 +1,5 @@
 /*
- * Service worker do APP do DAER Nilopolitano.
+ * Service worker do DAER Nilopolitano.
  *
  * O que ele faz:
  *  - guarda o "esqueleto" do app (arquivos estáticos e páginas já visitadas) para abrir mesmo sem internet;
@@ -8,6 +8,9 @@
  * O que ele NÃO faz (de propósito):
  *  - não toca na API: ela fica em outro domínio e leva o token (JWT) — nenhum dado de membro passa por aqui;
  *  - só trata requisições GET da mesma origem.
+ *
+ * Cursos baixados para leitura offline (caches `daer-cursos-*`, criados pelo próprio app) são procurados em
+ * todos os caches e nunca apagados na limpeza de versões antigas.
  *
  * Atualização: uma versão nova fica "esperando" até a pessoa tocar em "Atualizar" no aviso do app
  * (que envia PULAR_ESPERA). Se mudar a estratégia de cache, aumente VERSAO para limpar os caches antigos.
@@ -44,7 +47,9 @@ self.addEventListener("activate", (event) => {
     (async () => {
       const nomes = await caches.keys();
       await Promise.all(
-        nomes.filter((nome) => nome.startsWith("daer-") && !CACHES_ATUAIS.includes(nome)).map((nome) => caches.delete(nome)),
+        nomes
+          .filter((nome) => nome.startsWith("daer-") && !nome.startsWith("daer-cursos-") && !CACHES_ATUAIS.includes(nome))
+          .map((nome) => caches.delete(nome)),
       );
       await self.clients.claim();
     })(),
@@ -76,29 +81,46 @@ self.addEventListener("fetch", (event) => {
 });
 
 // Páginas: rede primeiro (sempre a versão mais nova quando há internet); sem rede, a última visitada; senão, /offline.html.
+// Se já existe uma cópia (ex.: curso baixado), a rede tem 4s: sinal ruim não deve prender a pessoa numa tela em branco.
+const ESPERA_DA_REDE_COM_COPIA_MS = 4000;
+
+function comLimite(promessa, ms) {
+  return new Promise((resolve, reject) => {
+    const tempo = setTimeout(() => reject(new Error("tempo esgotado")), ms);
+    promessa.then(
+      (valor) => {
+        clearTimeout(tempo);
+        resolve(valor);
+      },
+      (erro) => {
+        clearTimeout(tempo);
+        reject(erro);
+      },
+    );
+  });
+}
+
 async function paginaRedePrimeiro(req) {
+  const copia = await caches.match(req, { ignoreVary: true });
   try {
-    const resposta = await fetch(req);
+    const resposta = copia ? await comLimite(fetch(req), ESPERA_DA_REDE_COM_COPIA_MS) : await fetch(req);
     if (resposta.status === 200 && resposta.type === "basic" && !resposta.redirected) {
       const cache = await caches.open(CACHE_PAGINAS);
       await cache.put(req, resposta.clone());
       await limitar(cache, MAX_PAGINAS);
       return resposta;
     }
-    if (resposta.status >= 500) {
-      const guardada = await caches.match(req);
-      if (guardada) return guardada;
-    }
+    if (resposta.status >= 500 && copia) return copia;
     return resposta;
   } catch {
-    return (await caches.match(req)) || (await caches.match(PAGINA_OFFLINE)) || Response.error();
+    return copia || (await caches.match(PAGINA_OFFLINE)) || Response.error();
   }
 }
 
 // Arquivos com hash no nome nunca mudam: se está no cache, usa.
 async function cachePrimeiro(req, nome, max) {
   const cache = await caches.open(nome);
-  const guardada = await cache.match(req);
+  const guardada = (await cache.match(req)) || (await caches.match(req)); // também nos caches dos cursos baixados
   if (guardada) return guardada;
   const resposta = await fetch(req);
   if (resposta.status === 200) {
@@ -111,7 +133,7 @@ async function cachePrimeiro(req, nome, max) {
 // Arquivos de /public (logos, ícones): responde o do cache na hora e atualiza em segundo plano.
 async function velhoEnquantoAtualiza(event, req, nome, max) {
   const cache = await caches.open(nome);
-  const guardada = await cache.match(req);
+  const guardada = (await cache.match(req)) || (await caches.match(req)); // também nos caches dos cursos baixados
   const daRede = fetch(req)
     .then(async (resposta) => {
       if (resposta.status === 200) {

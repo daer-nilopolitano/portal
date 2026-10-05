@@ -21,6 +21,7 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ErroApi, apiFetch, registrarAoNaoAutorizado } from "@/lib/api";
+import { esquecerCarteirinha } from "@/lib/carteirinha-offline";
 import { limparCachesDePaginas } from "@/lib/pwa";
 import { limparCache } from "@/lib/cache";
 
@@ -132,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (recusado) {
           localStorage.removeItem(CHAVE_TOKEN);
           esquecerMembro();
+          esquecerCarteirinha();
           limparCache();
           limparCachesDePaginas();
           setToken(null);
@@ -146,6 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     limparCachesDePaginas();
     localStorage.removeItem(CHAVE_TOKEN);
     esquecerMembro();
+    esquecerCarteirinha();
     setToken(null);
     setMembro(null);
   }, []);
@@ -172,6 +175,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, senha }),
     });
     limparCache(); // nada de dados do usuário anterior sobrando em memória
+    esquecerCarteirinha();
     localStorage.setItem(CHAVE_TOKEN, dados.access_token);
     setToken(dados.access_token);
     try {

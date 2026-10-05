@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import CourseHeader from "../_components/CourseHeader";
 import CourseLayout from "../_components/CourseLayout";
 import CourseToc from "../_components/CourseToc";
+import OfflineControls from "../_components/OfflineControls";
 import { getCourse, getPublishedCourses } from "../_lib/courses";
+import { getPacoteOffline } from "../_lib/offline";
 
 type Params = Promise<{ curso: string }>;
 
@@ -34,6 +36,9 @@ export default async function CoursePage({
     <CourseLayout course={course}>
       <div className="c-column">
         <CourseHeader course={course} />
+        <div className="c-offline-slot">
+          <OfflineControls pacote={getPacoteOffline(course)} />
+        </div>
         <CourseToc course={course} />
         {course.about && (
           <footer className="c-about">

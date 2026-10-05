@@ -12,9 +12,9 @@ interface Props {
 export function ComoChegar({ igreja, tabIndex }: Props) {
   return (
     <div>
-      <p className="flex items-center gap-2 text-sm text-text-muted">
+      <p className="flex items-center gap-2 text-sm text-text-muted mb-3">
         <Navigation size={16} className="flex-shrink-0" aria-hidden="true" />
-        Como chegar
+        Como chegar:
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         <a
@@ -22,7 +22,7 @@ export function ComoChegar({ igreja, tabIndex }: Props) {
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={tabIndex}
-          className="btn-outline"
+          className="btn-outline h-8"
         >
           Google Maps
         </a>
@@ -31,7 +31,7 @@ export function ComoChegar({ igreja, tabIndex }: Props) {
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={tabIndex}
-          className="btn-ghost"
+          className="btn-ghost h-8"
         >
           Waze
         </a>

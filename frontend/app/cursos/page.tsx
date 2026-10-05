@@ -1,5 +1,7 @@
 import Link from "next/link";
+import OfflineControls, { ResumoOffline } from "./_components/OfflineControls";
 import { getCourses } from "./_lib/courses";
+import { getPacoteOffline } from "./_lib/offline";
 
 export default function CursosPage() {
   const courses = getCourses();
@@ -40,10 +42,12 @@ export default function CursosPage() {
               ) : (
                 <div className="c-card c-card--soon">{content}</div>
               )}
+              {published && <OfflineControls pacote={getPacoteOffline(course)} />}
             </li>
           );
         })}
       </ul>
+      <ResumoOffline />
     </main>
   );
 }

@@ -102,7 +102,7 @@ export function PaginaEmbaixadas({ igrejas }: { igrejas: EmbaixadaDestaque[] }) 
           className="flex h-11 flex-shrink-0 items-center gap-1 rounded-md px-2 text-sm text-text-muted hover:bg-surface-2 hover:text-text"
         >
           <ArrowLeft size={18} aria-hidden="true" />
-          Início
+          Voltar
         </Link>
         <h1 className="min-w-0 flex-1 truncate text-center font-heading text-base font-semibold text-primary md:pl-2 md:text-left">
           Embaixadas

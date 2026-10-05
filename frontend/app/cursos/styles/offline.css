@@ -1,0 +1,82 @@
+/* Leitura offline: botões de baixar/remover nos cards e na página do curso */
+
+/* Card + controles empilhados: o card ocupa o espaço que sobra e os controles ficam sempre embaixo. */
+.c-cards > li {
+  display: flex;
+  flex-direction: column;
+}
+.c-cards > li > .c-card {
+  flex: 1 1 auto;
+  height: auto;
+}
+
+.c-offline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 12px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.c-offline__status,
+.c-offline__erro,
+.c-offline__nota {
+  flex: 1 1 100%;
+}
+.c-offline__erro {
+  color: var(--wrong);
+}
+.c-offline__nota {
+  color: var(--muted);
+}
+.c-offline__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.c-offline__bar {
+  flex: 1 1 100%;
+  width: 100%;
+  height: 6px;
+  accent-color: var(--accent);
+}
+
+/* min-height 44px: área mínima de toque no celular */
+.c-offline__btn {
+  min-height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+.c-offline__btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+.c-offline__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.c-offline__btn--quiet {
+  color: var(--ink-2);
+  border-color: var(--line-strong);
+}
+.c-offline__size {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.c-offline-slot {
+  padding-top: 20px;
+}
+.c-offline-total {
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
